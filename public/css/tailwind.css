@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .btn-primary {
+    @apply border-2 border-transparent font-semibold rounded-lg text-white bg-gray-900 hover:bg-gray-700 transition-all duration-200;
+  }
+
+  .btn-outline {
+    @apply border-2 border-gray-400 hover:border-gray-900 font-semibold rounded-lg text-gray-700 hover:text-white bg-transparent hover:bg-gray-900 transition-all duration-200;
+  }
+
+  .input-primary {
+    @apply border-2 border-gray-200 rounded disabled:bg-gray-100;
+  }
+}
