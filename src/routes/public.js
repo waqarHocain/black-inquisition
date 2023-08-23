@@ -4,5 +4,6 @@ const router = require("express").Router();
 const publicController = require("../controllers/public.controller");
 
 router.get("/", publicController.homepage);
+router.get("/updates", publicController.updates);
 
 module.exports = router;
