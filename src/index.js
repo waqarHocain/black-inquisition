@@ -18,8 +18,9 @@ app.use(helmet());
 // allow images from twitter domains
 app.use(
   helmet.contentSecurityPolicy({
+    useDefaults: true,
     directives: {
-      "img-src": ["self"],
+      "img-src": ["'self'", "https: data: blob:"],
     },
   })
 );
