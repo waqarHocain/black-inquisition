@@ -21,6 +21,7 @@ app.use(
     useDefaults: true,
     directives: {
       "img-src": ["'self'", "https: data: blob:"],
+      "script-src": ["'self'", "'unsafe-inline'"],
     },
   })
 );
