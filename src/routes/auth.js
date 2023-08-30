@@ -4,7 +4,7 @@ const router = require("express").Router();
 const authController = require("../controllers/auth.controller");
 
 router
-  .route("/signup")
+  .route("/user/signup")
   .get(authController.renderSignupTemplate)
   .post(authController.signup);
 
