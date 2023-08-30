@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "cockroachdb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id(map: "primary") @db.Uuid
+  email     String   @unique
+  name      String
+  password  String
+  bio       String
+  photo     String?
+  active    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  role      Role     @default(USER)
+}
+
+model Company {
+  id        String            @id(map: "primary") @db.Uuid
+  email     String            @unique
+  name      String
+  password  String
+  phone     String
+  bio       String
+  photo     String?
+  active    Boolean           @default(false)
+  verified  Boolean           @default(false)
+  sources   ReputalbeSource[]
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+  role      Role              @default(COMPANY)
+}
+
+model ReputalbeSource {
+  id        String  @id(map: "primary") @db.Uuid
+  name      String
+  url       String?
+  comapny   Company @relation(fields: [companyId], references: [id])
+  companyId String  @db.Uuid
+}
+
+enum Role {
+  USER
+  COMPANY
+  ADMIN
+}
