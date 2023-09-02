@@ -1,3 +1,7 @@
+const bcrypt = require("bcrypt");
+
+// local imports
+const db = require("../services/db");
 const validateEmail = require("../utils/validateEmail");
 
 const renderLoginTemplate = (req, res) => {
@@ -13,8 +17,7 @@ const login = (req, res) => {
 const renderSignupTemplate = (req, res) => {
   res.render("signup");
 };
-const signup = (req, res) => {
-  // TODO: prepopulate form in case of errors
+const signup = async (req, res) => {
   const { fullname, email, password, confirmPassword, bio } = req.body;
 
   // data validation
@@ -32,9 +35,33 @@ const signup = (req, res) => {
     res.locals.errors = errors;
     res.locals.formData = { fullname, email, password, confirmPassword, bio };
     res.render("signup");
-  } else {
-    res.redirect("/");
+    return;
   }
+  const userExists = await db.user.findUnique({
+    where: {
+      email,
+    },
+  });
+  if (userExists) {
+    res.locals.formData = { fullname, email, password, confirmPassword, bio };
+    res.locals.errors = {
+      userExists: "User with this email address already has an account.",
+    };
+    res.render("signup");
+    return;
+  }
+
+  const saltRounds = 10;
+  const passwordHash = await bcrypt.hash(password, saltRounds);
+  const user = await db.user.create({
+    data: {
+      name: fullname,
+      password: passwordHash,
+      email,
+      bio,
+    },
+  });
+  res.redirect("/user/profile");
 };
 
 module.exports = {
