@@ -3,7 +3,7 @@ CREATE TYPE "Role" AS ENUM ('USER', 'COMPANY', 'ADMIN');
 
 -- CreateTable
 CREATE TABLE "User" (
-    "id" UUID NOT NULL,
+    "id" INT8 NOT NULL DEFAULT unique_rowid(),
     "email" STRING NOT NULL,
     "name" STRING NOT NULL,
     "password" STRING NOT NULL,
@@ -14,12 +14,12 @@ CREATE TABLE "User" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "role" "Role" NOT NULL DEFAULT 'USER',
 
-    CONSTRAINT "primary" PRIMARY KEY ("id")
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Company" (
-    "id" UUID NOT NULL,
+    "id" INT8 NOT NULL DEFAULT unique_rowid(),
     "email" STRING NOT NULL,
     "name" STRING NOT NULL,
     "password" STRING NOT NULL,
@@ -32,7 +32,7 @@ CREATE TABLE "Company" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "role" "Role" NOT NULL DEFAULT 'COMPANY',
 
-    CONSTRAINT "primary" PRIMARY KEY ("id")
+    CONSTRAINT "Company_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -40,7 +40,7 @@ CREATE TABLE "ReputalbeSource" (
     "id" UUID NOT NULL,
     "name" STRING NOT NULL,
     "url" STRING,
-    "companyId" UUID NOT NULL,
+    "companyId" INT8 NOT NULL,
 
     CONSTRAINT "primary" PRIMARY KEY ("id")
 );

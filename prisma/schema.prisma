@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id        String   @id(map: "primary") @db.Uuid
+  id        BigInt   @id @default(autoincrement())
   email     String   @unique
   name      String
   password  String
@@ -21,7 +21,7 @@ model User {
 }
 
 model Company {
-  id        String            @id(map: "primary") @db.Uuid
+  id        BigInt            @id @default(autoincrement())
   email     String            @unique
   name      String
   password  String
@@ -40,8 +40,8 @@ model ReputalbeSource {
   id        String  @id(map: "primary") @db.Uuid
   name      String
   url       String?
-  comapny   Company @relation(fields: [companyId], references: [id])
-  companyId String  @db.Uuid
+  Company   Company @relation(fields: [companyId], references: [id])
+  companyId BigInt
 }
 
 enum Role {
