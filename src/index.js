@@ -9,16 +9,18 @@ const cookieSession = require("cookie-session");
 // local imports
 const publicRouter = require("./routes/public");
 const authRouter = require("./routes/auth");
+const userProfileRouter = require("./routes/userProfile");
 const config = require("./config");
 
 const app = express();
 
 app.use(
   cookieSession({
+    name: "session",
     secret: config.SESSION_SECRET,
     maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
     secure: process.env.NODE_ENV === "production" ? true : false,
-    httpOnly: true,
+    //httpOnly: true,
   })
 );
 
@@ -57,8 +59,11 @@ app.use(morgan("tiny"));
 app.use(express.urlencoded({ extended: false }));
 
 // Routes
+// Public Routes
 app.use("/", publicRouter);
 app.use("/auth", authRouter);
+// Protected Routes
+app.use("/user", userProfileRouter);
 
 // enable cookies when serving behind a proxy
 //app.enable("trust proxy");

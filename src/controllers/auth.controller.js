@@ -10,6 +10,7 @@ const renderLoginTemplate = (req, res) => {
 
 const login = (req, res) => {
   const { email, password } = req.body;
+  // TODO
   console.log(email, password);
   res.redirect("/");
 };
@@ -17,6 +18,7 @@ const login = (req, res) => {
 const renderSignupTemplate = (req, res) => {
   res.render("signup");
 };
+
 const signup = async (req, res) => {
   const { fullname, email, password, confirmPassword, bio } = req.body;
 
@@ -61,6 +63,9 @@ const signup = async (req, res) => {
       bio,
     },
   });
+  req.session.id = user.id;
+  console.log("session ", req.session);
+  console.log("id ", req.session.id);
   res.redirect("/user/profile");
 };
 
