@@ -8,10 +8,31 @@ const renderLoginTemplate = (req, res) => {
   res.render("login");
 };
 
-const login = (req, res) => {
+const login = async (req, res) => {
   const { email, password } = req.body;
-  // TODO
-  console.log(email, password);
+  const user = await db.user.findUnique({
+    where: {
+      email,
+    },
+  });
+  if (!user) {
+    res.locals.error = "Incorrect email or password.";
+    res.render("login");
+    return;
+  }
+
+  const passwordMatches = await bcrypt.compare(password, user.password);
+  if (!passwordMatches) {
+    res.locals.error = "Incorrect email or password.";
+    res.render("login");
+    return;
+  }
+
+  if (passwordMatches) {
+    // TODO: use req.session
+    res.cookie("id", user.id);
+    return res.redirect("/user/profile");
+  }
   res.redirect("/");
 };
 
@@ -63,9 +84,8 @@ const signup = async (req, res) => {
       bio,
     },
   });
-  req.session.id = user.id;
-  console.log("session ", req.session);
-  console.log("id ", req.session.id);
+  // TODO: use req.session
+  res.cookie("id", user.id);
   res.redirect("/user/profile");
 };
 

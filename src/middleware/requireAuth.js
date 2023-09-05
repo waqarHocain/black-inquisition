@@ -1,11 +1,13 @@
 const db = require("../services/db");
+const getCookie = require("../utils/getCookie");
 
 const requireAuth = async (req, res, next) => {
-  console.log("middleware session ", req.session);
-  if (req.session.id) {
+  // TODO: use req.session instead
+  const id = getCookie(req, "id");
+  if (id) {
     const user = await db.user.findUnique({
       where: {
-        id: req.session.id,
+        id,
       },
     });
     if (user) return next();

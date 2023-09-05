@@ -14,18 +14,14 @@ const config = require("./config");
 
 const app = express();
 
+app.set("trust proxy", 1);
 app.use(
   cookieSession({
-    name: "session",
     secret: config.SESSION_SECRET,
     maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
     secure: process.env.NODE_ENV === "production" ? true : false,
-    //httpOnly: true,
   })
 );
-
-// enable cookies when serving behind a proxy
-app.enable("trust proxy");
 
 // set different http headers for security
 app.use(helmet());
@@ -33,7 +29,6 @@ app.use(helmet());
 // allow images from twitter domains
 app.use(
   helmet.contentSecurityPolicy({
-    useDefaults: true,
     directives: {
       "img-src": ["'self'", "https: data: blob:"],
       "script-src": ["'self'", "'unsafe-inline'"],
@@ -66,7 +61,7 @@ app.use("/auth", authRouter);
 app.use("/user", userProfileRouter);
 
 // enable cookies when serving behind a proxy
-//app.enable("trust proxy");
+// app.enable("trust proxy");
 
 // error handler
 app.use((err, req, res, next) => {
