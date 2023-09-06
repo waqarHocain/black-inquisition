@@ -22,6 +22,21 @@
 
           <div class="md:ml-auto mt-4 md:mt-0">
             <nav class="space-x-4">
+              <% if (locals.session.id) { %>
+              <a
+                href="/user/profile"
+                class="text-base font-medium text-gray-900 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-50 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
+              >
+                Profile
+              </a>
+              <a
+                href="/logout"
+                class="text-base font-medium text-gray-900 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-50 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
+              >
+                Logout
+              </a>
+              <% } else { %>
+
               <a
                 href="/updates"
                 class="text-base font-medium text-gray-900 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-50 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
@@ -41,10 +56,9 @@
               >
                 Sign up
               </a>
+              <% } %>
             </nav>
           </div>
         </div>
       </div>
     </header>
-  </body>
-</html>

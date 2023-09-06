@@ -53,6 +53,12 @@ app.use(morgan("tiny"));
 // parse form data
 app.use(express.urlencoded({ extended: false }));
 
+// for templates rendering (for logged in/out users)
+app.use(function (req, res, next) {
+  res.locals.session = req.session;
+  next();
+});
+
 // Routes
 // Public Routes
 app.use("/", publicRouter);
@@ -61,7 +67,7 @@ app.use("/auth", authRouter);
 app.use("/user", userProfileRouter);
 
 // enable cookies when serving behind a proxy
-// app.enable("trust proxy");
+app.enable("trust proxy");
 
 // error handler
 app.use((err, req, res, next) => {
