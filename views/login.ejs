@@ -8,7 +8,9 @@
     <p class="mt-5 text-lg text-gray-600">
       Please login to your account to continue.
     </p>
-
+    <% if (locals.error) { %>
+    <p class="text-red-600"><%= locals.error %></p>
+    <% } %>
     <form method="POST" action="/auth/login" class="max-w-sm mx-auto mt-8">
       <label class="block">
         <span class="block text-xs font-medium text-gray-500 text-left"

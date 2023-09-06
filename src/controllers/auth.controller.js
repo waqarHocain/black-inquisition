@@ -10,6 +10,12 @@ const renderLoginTemplate = (req, res) => {
 
 const login = async (req, res) => {
   const { email, password } = req.body;
+
+  if (!email || !password) {
+    res.locals.error = "Email or password is missing";
+    return res.render("login");
+  }
+
   const user = await db.user.findUnique({
     where: {
       email,
@@ -17,15 +23,13 @@ const login = async (req, res) => {
   });
   if (!user) {
     res.locals.error = "Incorrect email or password.";
-    res.render("login");
-    return;
+    return res.render("login");
   }
 
   const passwordMatches = await bcrypt.compare(password, user.password);
   if (!passwordMatches) {
     res.locals.error = "Incorrect email or password.";
-    res.render("login");
-    return;
+    return res.render("login");
   }
 
   if (passwordMatches) {
