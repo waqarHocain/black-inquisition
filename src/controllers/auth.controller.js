@@ -29,8 +29,7 @@ const login = async (req, res) => {
   }
 
   if (passwordMatches) {
-    // TODO: use req.session
-    res.cookie("id", user.id);
+    req.session.id = String(user.id);
     return res.redirect("/user/profile");
   }
   res.redirect("/");
@@ -84,8 +83,7 @@ const signup = async (req, res) => {
       bio,
     },
   });
-  // TODO: use req.session
-  res.cookie("id", user.id);
+  req.session.id = String(user.id);
   res.redirect("/user/profile");
 };
 
