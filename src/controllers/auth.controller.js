@@ -91,9 +91,14 @@ const signup = async (req, res) => {
   res.redirect("/user/profile");
 };
 
+const renderCompanySignupTemplate = (req, res) => {
+  res.render("companySignup");
+};
+
 module.exports = {
   login,
   signup,
   renderLoginTemplate,
   renderSignupTemplate,
+  renderCompanySignupTemplate,
 };

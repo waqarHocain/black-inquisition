@@ -8,6 +8,8 @@ router
   .get(authController.renderSignupTemplate)
   .post(authController.signup);
 
+router.route("/company/signup").get(authController.renderCompanySignupTemplate);
+
 router
   .route("/login")
   .get(authController.renderLoginTemplate)

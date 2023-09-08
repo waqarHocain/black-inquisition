@@ -1,0 +1,263 @@
+<%- include("./partials/header", {title: "Create Account"}) %>
+
+<section class="py-12 bg-gray-50 sm:py-16">
+  <div class="text-center mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <h1 class="text-4xl font-bold text-gray-900 sm:text-5xl lg:text-6xl">
+      Company Registration
+    </h1>
+    <p class="mt-6 text-lg text-gray-600">
+      Create a company account to get started.
+    </p>
+
+    <form method="POST" id="signupForm" class="max-w-md mx-auto mt-8">
+      <% if (locals.errors && locals.errors.companyExists) { %>
+      <p class="font-semibold text-red-600">
+        <%= locals.errors.companyExists %>
+      </p>
+      <% } %>
+      <label class="block">
+        <span class="block text-xs font-medium text-gray-500 text-left">
+          Company Name:
+        </span>
+        <input
+          type="text"
+          name="companyName"
+          placeholder="Enter your company name"
+          class="w-full p-3 mt-1 text-sm input-primary"
+          value="<%= (locals.formData && locals.formData.companyName) ? locals.formData.companyName : '' %>"
+          required
+        />
+        <small class="block text-left text-red-600">
+          <% if (locals.errors && locals.errors.companyName) { %> <%=
+          locals.errors.companyName %> <% } %>
+        </small>
+      </label>
+
+      <label class="block mt-6">
+        <span class="block text-xs font-medium text-gray-500 text-left"
+          >Email:</span
+        >
+        <input
+          type="email"
+          name="email"
+          placeholder="Enter your email"
+          class="w-full p-3 mt-1 text-sm input-primary"
+          value="<%= (locals.formData && locals.formData.email) ? locals.formData.email : '' %>"
+          required
+        />
+        <small class="block text-left text-red-600">
+          <% if (locals.errors && locals.errors.email) { %> <%=
+          locals.errors.email %> <% } %>
+        </small>
+      </label>
+
+      <label class="block mt-6">
+        <span class="block text-xs font-medium text-gray-500 text-left">
+          Password:</span
+        >
+        <input
+          class="w-full p-3 mt-1 text-sm input-primary"
+          type="password"
+          name="password"
+          placeholder="Enter your password"
+          value="<%= (locals.formData && locals.formData.password) ? locals.formData.password : '' %>"
+          required
+        />
+        <small class="block text-left text-red-600">
+          <% if (locals.errors && locals.errors.password) { %> <%=
+          locals.errors.password %> <% } %>
+        </small>
+      </label>
+
+      <label class="block mt-6">
+        <span class="block text-xs font-medium text-gray-500 text-left">
+          Confirm Password:</span
+        >
+        <input
+          class="w-full p-3 mt-1 text-sm input-primary"
+          type="password"
+          name="confirmPassword"
+          placeholder="Confirm your password"
+          value="<%= (locals.formData && locals.formData.confirmPassword) ? locals.formData.confirmPassword : '' %>"
+          required
+        />
+        <small class="block text-left text-red-600">
+          <% if (locals.errors && locals.errors.confirmPassword) { %> <%=
+          locals.errors.confirmPassword %> <% } %></small
+        >
+      </label>
+
+      <label class="block mt-6">
+        <span class="block text-xs font-medium text-gray-500 text-left">
+          Description (briefly describe your company):</span
+        >
+        <textarea
+          class="w-full h-[150px] p-3 mt-1 text-sm input-primary"
+          name="description"
+          placeholder="A brief description of your company"
+          required
+        >
+<%= (locals.formData && locals.formData.description) ? locals.formData.description : '' %></textarea
+        >
+
+        <small class="block text-left text-red-600">
+          <% if (locals.errors && locals.errors.description) { %> <%=
+          locals.errors.description %> <% } %>
+        </small>
+      </label>
+
+      <label class="block mt-6">
+        <span class="block text-xs font-medium text-gray-500 text-left">
+          Phone number:</span
+        >
+        <input
+          class="w-full p-3 mt-1 text-sm input-primary"
+          type="tel"
+          name="phone"
+          placeholder="Enter your phone number"
+          value="<%= (locals.formData && locals.formData.phone) ? locals.formData.phone : '' %>"
+          required
+        />
+        <small class="block text-left text-red-600">
+          <% if (locals.errors && locals.errors.phone) { %> <%=
+          locals.errors.phone %> <% } %>
+        </small>
+      </label>
+
+      <p class="mt-6 text-left text-gray-600 text-sm font-medium">
+        Please mention two sources who can vouch for you (can be a person or
+        company with whom you've done business).
+      </p>
+      <label class="block mt-6">
+        <span class="block text-xs font-medium text-gray-500 text-left">
+          Source 1
+        </span>
+        <input
+          class="w-full p-3 mt-1 text-sm input-primary"
+          type="text"
+          name="source1"
+          placeholder="Enter first source"
+          value="<%= (locals.formData && locals.formData.source1) ? locals.formData.source1 : '' %>"
+          required
+        />
+        <small class="block text-left text-red-600">
+          <% if (locals.errors && locals.errors.source1) { %> <%=
+          locals.errors.source1 %> <% } %>
+        </small>
+      </label>
+
+      <label class="block mt-6">
+        <span class="block text-xs font-medium text-gray-500 text-left">
+          Source 2
+        </span>
+        <input
+          class="w-full p-3 mt-1 text-sm input-primary"
+          type="text"
+          name="source2"
+          placeholder="Enter second source"
+          value="<%= (locals.formData && locals.formData.source2) ? locals.formData.source2 : '' %>"
+          required
+        />
+        <small class="block text-left text-red-600">
+          <% if (locals.errors && locals.errors.source2) { %> <%=
+          locals.errors.source2 %> <% } %>
+        </small>
+      </label>
+
+      <button type="submit" class="btn-primary px-5 py-2 block mt-6">
+        Create Account
+      </button>
+
+      <p class="mt-9 text-left">
+        Already have an account?
+        <a class="underline font-bold" href="/auth/login">Login</a>
+      </p>
+
+      <p class="mt-2 text-left">
+        Want to register for a personal account?
+        <a class="underline font-bold" href="/auth/user/signup">
+          Register here.</a
+        >
+      </p>
+    </form>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById("signupForm");
+
+  function clearErrMsgs() {
+    const msgContainers = document.querySelectorAll("label small");
+    console.log(msgContainers);
+    msgContainers.forEach((el) => (el.innerHTML = ""));
+  }
+
+  function showErrorMsg(msg, inputField) {
+    const msgContainer = inputField.parentNode.querySelector("small");
+    msgContainer.innerText = msg;
+  }
+
+  function validateEmail(email) {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    // clear previous error messages
+    clearErrMsgs();
+
+    let isError = false; // prevent form submition if there's an error
+
+    const nameField = form.elements["fullname"];
+    const emailField = form.elements["email"];
+    const passwordField = form.elements["password"];
+    const confirmPasswordField = form.elements["confirmPassword"];
+    const bioField = form.elements["bio"];
+
+    const name = nameField.value;
+    const email = emailField.value;
+    const password = passwordField.value;
+    const confirmPassword = confirmPasswordField.value;
+    const bio = bioField.value;
+
+    if (name.length < 4) {
+      showErrorMsg("Name must be 4 or more characters long", nameField);
+      isError = true;
+    }
+
+    if (password !== confirmPassword) {
+      showErrorMsg("Passwords don't match.", confirmPasswordField);
+      isError = true;
+    }
+
+    if (!validateEmail(email)) {
+      showErrorMsg("Please enter a valid email address", emailField);
+      isError = true;
+    }
+
+    if (password.length < 8) {
+      showErrorMsg(
+        "Passwords must be 8 or more characters long",
+        passwordField
+      );
+      isError = true;
+    }
+
+    if (bio.length < 20) {
+      showErrorMsg("Bio must be 20 or more characters long", bioField);
+      isError = true;
+    }
+
+    if (!isError) {
+      form.submit();
+    }
+  }
+
+  form.addEventListener("submit", handleSubmit);
+</script>
+
+<%- include("./partials/footer") %>
