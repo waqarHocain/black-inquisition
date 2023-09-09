@@ -95,10 +95,95 @@ const renderCompanySignupTemplate = (req, res) => {
   res.render("companySignup");
 };
 
+const companySignup = async (req, res) => {
+  const {
+    companyName,
+    email,
+    password,
+    confirmPassword,
+    description,
+    phone,
+    source1,
+    source2,
+  } = req.body;
+
+  // data validation
+  const errors = {};
+  if (companyName.length < 2)
+    errors.companyName = "Company must be 2 or more characters long";
+  if (password.length < 8)
+    errors.password = "Password must be 8 or more characters long";
+  if (password !== confirmPassword)
+    errors.confirmPassword = "Passwords don't match";
+  if (!validateEmail(email)) errors.email = "Email is not valid";
+  if (description.length < 20)
+    errors.description = "Description must be 20 or more characters long";
+  if (!source1) errors.source1 = "Source not provided.";
+  if (!source2) errors.source2 = "Source not provided.";
+  if (!phone) {
+    // TODO: validate phone number
+    errors.phone = "Phone number not provided";
+  }
+
+  if (Object.keys(errors).length !== 0) {
+    res.locals.errors = errors;
+    res.locals.formData = {
+      companyName,
+      email,
+      password,
+      confirmPassword,
+      description,
+      phone,
+      source1,
+      source2,
+    };
+    res.render("companySignup");
+    return;
+  }
+  const companyExists = await db.company.findUnique({
+    where: {
+      email,
+    },
+  });
+  if (companyExists) {
+    res.locals.formData = {
+      companyName,
+      email,
+      password,
+      confirmPassword,
+      description,
+    };
+    res.locals.errors = {
+      companyExists: "Company with this email address already has an account.",
+    };
+    res.render("companySignup");
+    return;
+  }
+
+  const saltRounds = 10;
+  const passwordHash = await bcrypt.hash(password, saltRounds);
+  const company = await db.company.create({
+    data: {
+      name: companyName,
+      password: passwordHash,
+      bio: description,
+      sources: {
+        create: [{ name: source1 }, { name: source2 }],
+      },
+      email,
+      phone,
+    },
+  });
+  req.session.id = String(company.id);
+  // TODO: redirect to profile / wait for verfication page
+  res.redirect("/auth/company/signup");
+};
+
 module.exports = {
   login,
   signup,
   renderLoginTemplate,
   renderSignupTemplate,
   renderCompanySignupTemplate,
+  companySignup,
 };
