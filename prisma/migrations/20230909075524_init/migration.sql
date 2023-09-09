@@ -37,12 +37,12 @@ CREATE TABLE "Company" (
 
 -- CreateTable
 CREATE TABLE "ReputalbeSource" (
-    "id" UUID NOT NULL,
+    "id" INT8 NOT NULL DEFAULT unique_rowid(),
     "name" STRING NOT NULL,
     "url" STRING,
     "companyId" INT8 NOT NULL,
 
-    CONSTRAINT "primary" PRIMARY KEY ("id")
+    CONSTRAINT "ReputalbeSource_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
