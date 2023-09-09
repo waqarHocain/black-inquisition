@@ -168,12 +168,12 @@
         Create Account
       </button>
 
-      <p class="mt-9 text-left">
+      <p class="mt-9 text-left text-sm text-gray-600">
         Already have an account?
         <a class="underline font-bold" href="/auth/login">Login</a>
       </p>
 
-      <p class="mt-2 text-left">
+      <p class="mt-2 text-left text-sm text-gray-600">
         Want to register for a personal account?
         <a class="underline font-bold" href="/auth/user/signup">
           Register here.</a
@@ -188,7 +188,6 @@
 
   function clearErrMsgs() {
     const msgContainers = document.querySelectorAll("label small");
-    console.log(msgContainers);
     msgContainers.forEach((el) => (el.innerHTML = ""));
   }
 
@@ -212,20 +211,26 @@
 
     let isError = false; // prevent form submition if there's an error
 
-    const nameField = form.elements["fullname"];
+    const nameField = form.elements["companyName"];
     const emailField = form.elements["email"];
     const passwordField = form.elements["password"];
     const confirmPasswordField = form.elements["confirmPassword"];
-    const bioField = form.elements["bio"];
+    const bioField = form.elements["description"];
+    const phoneField = form.elements["phone"];
+    const sourceField1 = form.elements["source1"];
+    const sourceField2 = form.elements["source2"];
 
     const name = nameField.value;
     const email = emailField.value;
     const password = passwordField.value;
     const confirmPassword = confirmPasswordField.value;
     const bio = bioField.value;
+    const phone = phoneField.value;
+    const source1 = sourceField1.value;
+    const source2 = sourceField2.value;
 
-    if (name.length < 4) {
-      showErrorMsg("Name must be 4 or more characters long", nameField);
+    if (name.length < 2) {
+      showErrorMsg("Name must be 2 or more characters long", nameField);
       isError = true;
     }
 
@@ -248,7 +253,22 @@
     }
 
     if (bio.length < 20) {
-      showErrorMsg("Bio must be 20 or more characters long", bioField);
+      showErrorMsg("Description must be 20 or more characters long", bioField);
+      isError = true;
+    }
+
+    if (!phone.trim()) {
+      showErrorMsg("Phone number not provided", phoneField);
+      isError = true;
+    }
+
+    if (!source1.trim()) {
+      showErrorMsg("Source 1 not provided", sourceField1);
+      isError = true;
+    }
+
+    if (!source2.trim()) {
+      showErrorMsg("Source 2 not provided", sourceField2);
       isError = true;
     }
 
