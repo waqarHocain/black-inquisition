@@ -10,6 +10,7 @@ const cookieSession = require("cookie-session");
 const publicRouter = require("./routes/public");
 const authRouter = require("./routes/auth");
 const userProfileRouter = require("./routes/userProfile");
+const jobsRouter = require("./routes/jobs");
 const config = require("./config");
 
 const app = express();
@@ -65,6 +66,7 @@ app.use("/", publicRouter);
 app.use("/auth", authRouter);
 // Protected Routes
 app.use("/user", userProfileRouter);
+app.use("/company/jobs", jobsRouter);
 
 // enable cookies when serving behind a proxy
 app.enable("trust proxy");
