@@ -1,7 +1,13 @@
 const db = require("../services/db");
 
-const getJobs = (req, res) => {
-  res.send("all jobs");
+const getJobs = async (req, res) => {
+  const jobs = await db.job.findMany({
+    where: {
+      companyId: req.session.id,
+    },
+  });
+  console.log(jobs);
+  res.render("jobs", { jobs });
 };
 
 module.exports = {
