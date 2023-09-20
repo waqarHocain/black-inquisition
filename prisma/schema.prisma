@@ -31,9 +31,22 @@ model Company {
   active    Boolean           @default(false)
   verified  Boolean           @default(false)
   sources   ReputalbeSource[]
+  jobs      Job[]
   createdAt DateTime          @default(now())
   updatedAt DateTime          @updatedAt
   role      Role              @default(COMPANY)
+}
+
+model Job {
+  id          BigInt        @id @default(autoincrement())
+  title       String
+  company     String
+  location    String
+  description String
+  workplace   WorkplaceType
+  type        JobType
+  Company     Company       @relation(fields: [companyId], references: [id])
+  companyId   BigInt
 }
 
 model ReputalbeSource {
@@ -48,4 +61,20 @@ enum Role {
   USER
   COMPANY
   ADMIN
+}
+
+enum JobType {
+  fullTime
+  partTime
+  contract
+  temporary
+  volunteer
+  internship
+  other
+}
+
+enum WorkplaceType {
+  onSite
+  hybrid
+  remote
 }
