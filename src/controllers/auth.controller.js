@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 
 // local imports
 const db = require("../services/db");
+const jwt = require("../services/jwt");
 const validateEmail = require("../utils/validateEmail");
 
 const renderLoginTemplate = (req, res) => {
@@ -33,6 +34,8 @@ const login = async (req, res) => {
   }
 
   if (passwordMatches) {
+    const token = jwt.generateToken({ email: user.email, id: String(user.id) });
+    req.session.token = token;
     req.session.id = String(user.id);
     return res.redirect("/user/profile");
   }
@@ -87,6 +90,8 @@ const signup = async (req, res) => {
       bio,
     },
   });
+  const token = jwt.generateToken({ email: user.email, id: String(user.id) });
+  req.session.token = token;
   req.session.id = String(user.id);
   res.redirect("/user/profile");
 };
@@ -174,6 +179,11 @@ const companySignup = async (req, res) => {
       phone,
     },
   });
+  const token = jwt.generateToken({
+    email: company.email,
+    id: String(company.id),
+  });
+  req.session.token = token;
   req.session.id = String(company.id);
   // TODO: redirect to profile / wait for verfication page
   res.redirect("/auth/company/signup");
