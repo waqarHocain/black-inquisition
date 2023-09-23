@@ -34,7 +34,11 @@ const login = async (req, res) => {
   }
 
   if (passwordMatches) {
-    const token = jwt.generateToken({ email: user.email, id: String(user.id) });
+    const token = jwt.generateToken({
+      email: user.email,
+      id: String(user.id),
+      role: user.role,
+    });
     req.session.token = token;
     req.session.id = String(user.id);
     return res.redirect("/user/profile");
@@ -90,7 +94,11 @@ const signup = async (req, res) => {
       bio,
     },
   });
-  const token = jwt.generateToken({ email: user.email, id: String(user.id) });
+  const token = jwt.generateToken({
+    email: user.email,
+    id: String(user.id),
+    role: user.role,
+  });
   req.session.token = token;
   req.session.id = String(user.id);
   res.redirect("/user/profile");
@@ -182,6 +190,7 @@ const companySignup = async (req, res) => {
   const token = jwt.generateToken({
     email: company.email,
     id: String(company.id),
+    role: company.role,
   });
   req.session.token = token;
   req.session.id = String(company.id);
