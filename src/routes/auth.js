@@ -20,4 +20,6 @@ router
   .get(authController.renderLoginTemplate)
   .post(authController.login);
 
+router.get("/logout", authController.logout);
+
 module.exports = router;
