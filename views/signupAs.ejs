@@ -1,0 +1,47 @@
+<%- include("./partials/header", {title: "Choose your role"}) %>
+
+<section class="py-12 bg-gray-100 sm:py-16">
+  <div class="text-center mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <h1 class="text-gray-600 text-center text-3xl mt-8 mb-4">
+      Signup to join community
+    </h1>
+
+    <div
+      class="bg-white max-w-md mx-auto text-gray-900 flex flex-col sm:flex-row"
+    >
+      <div class="w-full sm:w-1/2 text-center py-16">
+        <p>
+          <a href="/auth/user/signup">
+            <img
+              src="/images/userIcon.svg"
+              alt="Company icon"
+              class="bg-gray-900 w-16 h-16 inline p-3 rounded-full"
+            />
+            <span
+              class="block w-max mx-auto mt-4 border-b-2 border-gray-300 hover:border-gray-400"
+              >Personal Account</span
+            >
+          </a>
+        </p>
+      </div>
+      <div class="w-full sm:w-1/2 text-center py-16">
+        <p>
+          <a href="/auth/company/signup">
+            <img
+              src="/images/companyIcon.svg"
+              alt="Company icon"
+              class="bg-gray-900 w-16 h-16 inline p-3 rounded-full"
+            />
+            <span
+              class="block w-max mx-auto mt-4 border-b-2 border-gray-300 hover:border-gray-400"
+            >
+              Company Account</span
+            >
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include("./partials/footer") %>
