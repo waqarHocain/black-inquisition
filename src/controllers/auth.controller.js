@@ -22,28 +22,49 @@ const login = async (req, res) => {
       email,
     },
   });
-  if (!user) {
-    res.locals.error = "Incorrect email or password.";
-    return res.render("login");
+
+  if (user) {
+    const passwordMatches = await bcrypt.compare(password, user.password);
+    if (!passwordMatches) {
+      res.locals.error = "Incorrect email or password.";
+      return res.render("login");
+    }
+    if (passwordMatches) {
+      const token = jwt.generateToken({
+        email: user.email,
+        id: String(user.id),
+        role: user.role,
+      });
+      req.session.token = token;
+      req.session.id = String(user.id);
+      return res.redirect("/user/profile");
+    }
   }
 
-  const passwordMatches = await bcrypt.compare(password, user.password);
-  if (!passwordMatches) {
-    res.locals.error = "Incorrect email or password.";
-    return res.render("login");
+  const company = await db.company.findUnique({
+    where: {
+      email,
+    },
+  });
+  if (company) {
+    const passwordMatches = await bcrypt.compare(password, company.password);
+    if (!passwordMatches) {
+      res.locals.error = "Incorrect email or password.";
+      return res.render("login");
+    }
+    if (passwordMatches) {
+      const token = jwt.generateToken({
+        email: company.email,
+        id: String(company.id),
+        role: company.role,
+      });
+      req.session.token = token;
+      req.session.id = String(company.id);
+      return res.redirect("/company/profile");
+    }
   }
-
-  if (passwordMatches) {
-    const token = jwt.generateToken({
-      email: user.email,
-      id: String(user.id),
-      role: user.role,
-    });
-    req.session.token = token;
-    req.session.id = String(user.id);
-    return res.redirect("/user/profile");
-  }
-  res.redirect("/");
+  res.locals.error = "Incorrect email or password.";
+  return res.render("login");
 };
 
 const renderSignupTemplate = (req, res) => {
