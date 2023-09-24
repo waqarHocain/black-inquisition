@@ -9,8 +9,8 @@ const cookieSession = require("cookie-session");
 // local imports
 const publicRouter = require("./routes/public");
 const authRouter = require("./routes/auth");
-const userProfileRouter = require("./routes/userProfile");
-const jobsRouter = require("./routes/jobs");
+const userRouter = require("./routes/user");
+const companyRouter = require("./routes/company");
 const config = require("./config");
 const requireAuth = require("./middleware/requireAuth");
 
@@ -67,8 +67,8 @@ app.use("/", publicRouter);
 app.use("/auth", authRouter);
 
 // Protected Routes
-app.use("/user", requireAuth, userProfileRouter);
-app.use("/company/jobs", requireAuth, jobsRouter);
+app.use("/user", requireAuth, userRouter);
+app.use("/company", requireAuth, companyRouter);
 
 // enable cookies when serving behind a proxy
 app.enable("trust proxy");
