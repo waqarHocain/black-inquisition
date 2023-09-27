@@ -13,7 +13,7 @@ const userRouter = require("./routes/user");
 const companyRouter = require("./routes/company");
 const config = require("./config");
 const requireAuth = require("./middleware/requireAuth");
-const onlyCompanyAuthorized = require("./middleware/onlyCompanyAuthorized");
+const checkRole = require("./middleware/checkRole");
 
 const app = express();
 
@@ -63,13 +63,18 @@ app.use(function (req, res, next) {
 });
 
 // Routes
-// Public Routes
+// -- Public Routes
 app.use("/", publicRouter);
 app.use("/auth", authRouter);
 
-// Protected Routes
-app.use("/user", requireAuth, userRouter);
-app.use("/company", requireAuth, onlyCompanyAuthorized, companyRouter);
+// -- Protected Routes
+app.use("/user", requireAuth, checkRole(config.ROLES.USER), userRouter);
+app.use(
+  "/company",
+  requireAuth,
+  checkRole(config.ROLES.COMPANY),
+  companyRouter
+);
 
 // enable cookies when serving behind a proxy
 app.enable("trust proxy");
