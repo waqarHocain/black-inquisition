@@ -1,4 +1,3 @@
-const db = require("../services/db");
 const jwt = require("../services/jwt");
 
 const requireAuth = async (req, res, next) => {
@@ -8,7 +7,10 @@ const requireAuth = async (req, res, next) => {
   if (token && id) {
     const decodedToken = jwt.verifyToken(token);
 
-    if (decodedToken && decodedToken.id === id) return next();
+    if (decodedToken && decodedToken.id === id) {
+      req.role = decodedToken.role;
+      return next();
+    }
   }
   return res.sendStatus(401);
 };

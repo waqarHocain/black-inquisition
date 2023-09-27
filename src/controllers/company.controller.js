@@ -6,7 +6,6 @@ const getJobs = async (req, res) => {
       companyId: req.session.id,
     },
   });
-  console.log(jobs);
   res.render("jobs", { jobs });
 };
 

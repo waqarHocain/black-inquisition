@@ -13,6 +13,7 @@ const userRouter = require("./routes/user");
 const companyRouter = require("./routes/company");
 const config = require("./config");
 const requireAuth = require("./middleware/requireAuth");
+const onlyCompanyAuthorized = require("./middleware/onlyCompanyAuthorized");
 
 const app = express();
 
@@ -68,7 +69,7 @@ app.use("/auth", authRouter);
 
 // Protected Routes
 app.use("/user", requireAuth, userRouter);
-app.use("/company", requireAuth, companyRouter);
+app.use("/company", requireAuth, onlyCompanyAuthorized, companyRouter);
 
 // enable cookies when serving behind a proxy
 app.enable("trust proxy");
