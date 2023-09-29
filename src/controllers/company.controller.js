@@ -9,6 +9,20 @@ const getJobs = async (req, res) => {
   res.render("jobs", { jobs });
 };
 
+const jobDetail = async (req, res) => {
+  const { jobId } = req.params;
+
+  const job = await db.job.findUnique({
+    where: {
+      id: jobId,
+    },
+  });
+
+  if (!job) return res.redirect("/");
+
+  return res.render("jobDetail", { job });
+};
+
 const profile = async (req, res) => {
   const company = await db.company.findUnique({
     where: {
@@ -84,5 +98,6 @@ module.exports = {
   getJobs,
   renderCreateJobTemplate,
   createJob,
+  jobDetail,
   profile,
 };

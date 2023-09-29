@@ -1,0 +1,45 @@
+<%- include("./partials/header", {title: "Job Detail"}) %>
+
+<section class="py-12 bg-gray-50 sm:py-16">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <h1
+      class="text-center text-3xl font-bold text-gray-900 sm:text-4xl lg:text-5xl"
+    >
+      <%= job.title %>
+    </h1>
+    <p class="text-center mt-4 text-gray-700"><em>by</em> <%= job.company %></p>
+
+    <h3 class="text-xl font-semibold">Company:</h3>
+    <p class="text-lg ml-6 mb-3"><%= job.company %></p>
+
+    <h3 class="text-xl font-semibold">Location:</h3>
+    <p class="text-lg ml-6 mb-3"><%= job.location %></p>
+
+    <h3 class="text-xl font-semibold">Workplace type:</h3>
+    <p class="text-lg ml-6 mb-3">
+      <%= job.workplace == "onSite" ? "on-site" : job.workplace %>
+    </p>
+
+    <h3 class="text-xl font-semibold">Job type:</h3>
+    <p class="text-lg ml-6 mb-3"><%= job.type %></p>
+
+    <h3 class="text-xl font-semibold">Job Description:</h3>
+    <p class="text-lg ml-6 mb-3 max-w-md"><%= job.description %></p>
+
+    <%# TODO: implement edit / delete %>
+    <p class="mt-5">
+      <button
+        class="border-gray-200 border-2 rounded px-3 py-1 text-gray-500 font-semibold text-sm hover:bg-gray-100 transition-colors"
+      >
+        Edit
+      </button>
+      <button
+        class="border-red-200 border-2 rounded px-3 py-1 ml-3 text-red-400 font-semibold text-sm hover:bg-red-50 transition-colors"
+      >
+        Delete
+      </button>
+    </p>
+  </div>
+</section>
+
+<%- include("./partials/footer") %>
