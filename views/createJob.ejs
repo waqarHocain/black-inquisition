@@ -1,0 +1,204 @@
+<%- include("./partials/header", {title: "Jobs"}) %>
+
+<section class="py-12 bg-gray-50 sm:py-16">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <h1
+      class="text-center text-3xl font-bold text-gray-900 sm:text-4xl lg:text-5xl"
+    >
+      Post Job
+    </h1>
+    <p class="text-center mt-4 text-gray-700">Post a job for free</p>
+
+    <% if (locals.error) { %>
+    <p class="text-red-600 text-center mt-3"><%= locals.error %></p>
+    <% } %>
+
+    <form method="POST" id="jobCreateForm" class="max-w-md mx-auto mt-8">
+      <label class="block">
+        <span class="block text-xs font-medium text-gray-500 text-left"
+          >Job Title:</span
+        >
+        <input
+          type="text"
+          name="title"
+          placeholder="Job title..."
+          class="w-full p-3 mt-1 text-sm input-primary"
+          required
+        />
+        <small class="block text-left text-red-600">
+          <% if (locals.errors && locals.errors.title) { %> <%=
+          locals.errors.title %> <% } %>
+        </small>
+      </label>
+
+      <label class="block mt-5">
+        <span class="block text-xs font-medium text-gray-500 text-left"
+          >Company:</span
+        >
+        <input
+          type="text"
+          name="company"
+          placeholder="Company..."
+          class="w-full p-3 mt-1 text-sm input-primary"
+          required
+        />
+        <small class="block text-left text-red-600">
+          <% if (locals.errors && locals.errors.company) { %> <%=
+          locals.errors.company %> <% } %>
+        </small>
+      </label>
+
+      <label class="block mt-5">
+        <span class="block text-xs font-medium text-gray-500 text-left"
+          >Location:</span
+        >
+        <input
+          type="text"
+          name="location"
+          placeholder="Location..."
+          class="w-full p-3 mt-1 text-sm input-primary"
+          required
+        />
+        <small class="block text-left text-red-600">
+          <% if (locals.errors && locals.errors.location) { %> <%=
+          locals.errors.location %> <% } %>
+        </small>
+      </label>
+
+      <label class="block mt-5">
+        <span class="block text-xs font-medium text-gray-500 text-left"
+          >Workplace Type:</span
+        >
+        <select
+          class="mt-1 w-full p-2 cursor-pointer border-2 border-gray-200 bg-white"
+          name="workplace"
+        >
+          <option value="onSite">On-site</option>
+          <option value="hybrid">Hybrid</option>
+          <option value="remote">Remote</option>
+        </select>
+        <small class="block text-left text-red-600">
+          <% if (locals.errors && locals.errors.workplace) { %> <%=
+          locals.errors.workplace %> <% } %>
+        </small>
+      </label>
+
+      <label class="block mt-5">
+        <span class="block text-xs font-medium text-gray-500 text-left"
+          >Job Type:</span
+        >
+        <select
+          class="mt-1 w-full p-2 cursor-pointer border-2 border-gray-200 bg-white"
+          name="jobType"
+        >
+          <option value="fullTime">Full-time</option>
+          <option value="partTime">Part-time</option>
+          <option value="contract">Contract</option>
+          <option value="temporary">Temporary</option>
+          <option value="volunteer">Volunteer</option>
+          <option value="internship">Internship</option>
+          <option value="other">Other</option>
+        </select>
+        <small class="block text-left text-red-600"
+          ><% if (locals.errors && locals.errors.jobType) { %> <%=
+          locals.errors.jobType %> <% } %>
+        </small>
+      </label>
+
+      <label class="block mt-5">
+        <span class="block text-xs font-medium text-gray-500 text-left">
+          Description:</span
+        >
+        <textarea
+          class="w-full h-[150px] sm:h-[300px] p-3 mt-1 text-sm input-primary"
+          name="description"
+          placeholder="Provide a summary or role, responsibilities etc."
+          required
+        ></textarea>
+        <small class="block text-left text-red-600">
+          <% if (locals.errors && locals.errors.description) { %> <%=
+          locals.errors.description %> <% } %>
+        </small>
+      </label>
+
+      <button class="mt-5 btn-primary py-2 px-5" type="submit">Post Job</button>
+    </form>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById("jobCreateForm");
+
+  function clearErrMsgs() {
+    const msgContainers = document.querySelectorAll("label small");
+    msgContainers.forEach((el) => (el.innerHTML = ""));
+  }
+
+  function showErrorMsg(msg, inputField) {
+    const msgContainer = inputField.parentNode.querySelector("small");
+    msgContainer.innerText = msg;
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    // clear previous error messages
+    clearErrMsgs();
+
+    let isError = false; // prevent form submition if there's an error
+
+    const titleField = form.elements["title"];
+    const companyField = form.elements["company"];
+    const locationField = form.elements["location"];
+    const workplaceField = form.elements["workplace"];
+    const descriptionField = form.elements["description"];
+    const typeField = form.elements["jobType"];
+
+    const title = titleField.value;
+    const company = companyField.value;
+    const location = locationField.value;
+    const workplace = workplaceField.value;
+    const type = typeField.value;
+    const description = descriptionField.value;
+
+    if (title.length < 8) {
+      showErrorMsg("Job title must be 8 or more characters long", titleField);
+      isError = true;
+    }
+
+    if (!company.trim()) {
+      showErrorMsg("Company can't be empty.", companyField);
+      isError = true;
+    }
+
+    if (!location.trim()) {
+      showErrorMsg("Location can't be empty.", locationField);
+      isError = true;
+    }
+
+    if (!workplace) {
+      showErrorMsg("Please select a workplace type.", workplaceField);
+      isError = true;
+    }
+
+    if (!type) {
+      showErrorMsg("Please select a job type.", typeField);
+      isError = true;
+    }
+
+    if (description.length < 30) {
+      showErrorMsg(
+        "Description must be 30 or more characters long",
+        descriptionField
+      );
+      isError = true;
+    }
+
+    if (!isError) {
+      form.submit();
+    }
+  }
+
+  form.addEventListener("submit", handleSubmit);
+</script>
+
+<%- include("./partials/footer") %>
