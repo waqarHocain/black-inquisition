@@ -21,14 +21,25 @@
       You have not posted any jobs, start by creating a job ad for
       <strong>FREE</strong>.
     </p>
+    <% } else { %>
+    <ul class="mt-2 mb-3">
+      <% company.jobs.forEach(job => { %>
+      <li class="ml-5 mb-1 list-disc">
+        <a
+          class="text-lg underline text-gray-700 hover:text-gray-900"
+          href="/company/jobs/<%= job.id %>"
+          ><%= job.title %></a
+        >
+      </li>
+      <% }) %>
+    </ul>
+    <% } %>
+
     <p class="mt-1">
       <a class="btn-primary inline-block px-3 py-1" href="/company/jobs/new"
         >Post Job</a
       >
     </p>
-    <% } else { %> <% company.jobs.forEach(job => { %>
-    <p><%= job.title %></p>
-    <% }) %> <% } %>
   </div>
 </section>
 

@@ -15,7 +15,12 @@ const profile = async (req, res) => {
       id: req.session.id,
     },
     include: {
-      jobs: true,
+      jobs: {
+        select: {
+          id: true,
+          title: true,
+        },
+      },
     },
   });
 
