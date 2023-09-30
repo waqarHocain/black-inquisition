@@ -28,11 +28,12 @@
 
     <%# TODO: implement edit / delete %>
     <p class="mt-5">
-      <button
+      <a
+        href="/company/jobs/<%= job.id %>/edit"
         class="border-gray-200 border-2 rounded px-3 py-1 text-gray-500 font-semibold text-sm hover:bg-gray-100 transition-colors"
       >
         Edit
-      </button>
+      </a>
       <button
         class="border-red-200 border-2 rounded px-3 py-1 ml-3 text-red-400 font-semibold text-sm hover:bg-red-50 transition-colors"
       >

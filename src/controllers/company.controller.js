@@ -94,10 +94,81 @@ const createJob = async (req, res) => {
   return res.redirect("/company/profile");
 };
 
+const renderEditJobTemplate = async (req, res) => {
+  const job = await db.job.findUnique({
+    where: {
+      id: req.params.jobId,
+    },
+  });
+  if (!job) return res.redirect("/company/profile");
+  return res.render("editJob", { job });
+};
+
+const editJob = async (req, res) => {
+  const { title, company, location, workplace, jobType, description } =
+    req.body;
+
+  const errors = {};
+
+  if (title.trim().length < 8)
+    errors.title = "Title must be 8 or more characters long";
+  if (!company.trim()) errors.company = "Please enter company name";
+  if (!location.trim()) errors.location = "Please enter a valid location";
+  if (description.trim().length < 30)
+    errors.description = "Job description must be 30 or more charcters long";
+
+  const workplaceOptions = ["onSite", "hybrid", "remote"];
+  const jobTypeOptions = [
+    "fullTime",
+    "partTime",
+    "contract",
+    "temporary",
+    "volunteer",
+    "internship",
+    "other",
+  ];
+
+  if (!workplaceOptions.includes(workplace))
+    errors.workplace = "Invalid workplace type";
+  if (!jobTypeOptions.includes(jobType)) errors.jobType = "Invalid job type";
+
+  // if there're errors, render template with errors
+  if (Object.keys(errors).length !== 0) {
+    res.locals.errors = errors;
+    return res.render("editJob");
+  }
+
+  const jobId = req.params.jobId;
+  const job = await db.job.findUnique({
+    where: {
+      id: jobId,
+    },
+  });
+  if (!job) return res.sendStatus(404);
+
+  await db.job.update({
+    where: {
+      id: jobId,
+    },
+    data: {
+      title,
+      location,
+      company,
+      workplace,
+      description,
+      type: jobType,
+      companyId: req.session.id,
+    },
+  });
+  return res.redirect("/company/profile");
+};
+
 module.exports = {
   getJobs,
   renderCreateJobTemplate,
   createJob,
+  renderEditJobTemplate,
+  editJob,
   jobDetail,
   profile,
 };

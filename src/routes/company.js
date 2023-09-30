@@ -11,6 +11,11 @@ router
 
 // single job detail view
 router.get("/jobs/:jobId", companyController.jobDetail);
+
+router
+  .route("/jobs/:jobId/edit")
+  .get(companyController.renderEditJobTemplate)
+  .post(companyController.editJob);
 router.route("/profile").get(companyController.profile);
 
 module.exports = router;
