@@ -27,19 +27,27 @@
     <p class="text-lg ml-6 mb-3 max-w-md"><%= job.description %></p>
 
     <%# TODO: implement edit / delete %>
-    <p class="mt-5">
-      <a
-        href="/company/jobs/<%= job.id %>/edit"
-        class="border-gray-200 border-2 rounded px-3 py-1 text-gray-500 font-semibold text-sm hover:bg-gray-100 transition-colors"
+    <div class="mt-5">
+      <p class="inline-block">
+        <a
+          href="/company/jobs/<%= job.id %>/edit"
+          class="border-gray-200 border-2 rounded px-3 py-1 text-gray-500 font-semibold text-sm hover:bg-gray-100 transition-colors"
+        >
+          Edit
+        </a>
+      </p>
+      <form
+        method="post"
+        class="inline-block"
+        action="/company/jobs/<%= job.id %>/delete"
       >
-        Edit
-      </a>
-      <button
-        class="border-red-200 border-2 rounded px-3 py-1 ml-3 text-red-400 font-semibold text-sm hover:bg-red-50 transition-colors"
-      >
-        Delete
-      </button>
-    </p>
+        <button
+          class="border-red-200 border-2 rounded px-3 py-1 ml-3 text-red-400 font-semibold text-sm hover:bg-red-50 transition-colors"
+        >
+          Delete
+        </button>
+      </form>
+    </div>
   </div>
 </section>
 

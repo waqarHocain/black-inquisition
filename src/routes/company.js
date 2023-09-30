@@ -16,6 +16,9 @@ router
   .route("/jobs/:jobId/edit")
   .get(companyController.renderEditJobTemplate)
   .post(companyController.editJob);
+
+router.post("/jobs/:jobId/delete", companyController.deleteJob);
+
 router.route("/profile").get(companyController.profile);
 
 module.exports = router;

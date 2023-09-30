@@ -163,12 +163,22 @@ const editJob = async (req, res) => {
   return res.redirect("/company/profile");
 };
 
+const deleteJob = async (req, res) => {
+  await db.job.delete({
+    where: {
+      id: req.params.jobId,
+    },
+  });
+  return res.redirect("/company/profile");
+};
+
 module.exports = {
   getJobs,
   renderCreateJobTemplate,
   createJob,
   renderEditJobTemplate,
   editJob,
+  deleteJob,
   jobDetail,
   profile,
 };
