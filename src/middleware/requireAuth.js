@@ -8,7 +8,7 @@ const requireAuth = async (req, res, next) => {
     const decodedToken = jwt.verifyToken(token);
 
     if (decodedToken && decodedToken.id === id) {
-      req.role = decodedToken.role;
+      req.user = decodedToken;
       return next();
     }
   }

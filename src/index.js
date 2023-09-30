@@ -11,9 +11,11 @@ const publicRouter = require("./routes/public");
 const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
 const companyRouter = require("./routes/company");
+const accountRouter = require("./routes/account");
 const config = require("./config");
 const requireAuth = require("./middleware/requireAuth");
 const checkRole = require("./middleware/checkRole");
+const checkVerified = require("./middleware/checkVerified");
 
 const app = express();
 
@@ -29,7 +31,6 @@ app.use(
 // set different http headers for security
 app.use(helmet());
 
-// allow images from twitter domains
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
@@ -73,8 +74,11 @@ app.use(
   "/company",
   requireAuth,
   checkRole(config.ROLES.COMPANY),
+  checkVerified,
   companyRouter
 );
+
+app.use("/account", requireAuth, accountRouter);
 
 // enable cookies when serving behind a proxy
 app.enable("trust proxy");

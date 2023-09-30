@@ -57,6 +57,7 @@ const login = async (req, res) => {
         email: company.email,
         id: String(company.id),
         role: company.role,
+        verified: company.verified,
       });
       req.session.token = token;
       req.session.id = String(company.id);
@@ -212,6 +213,7 @@ const companySignup = async (req, res) => {
     email: company.email,
     id: String(company.id),
     role: company.role,
+    verified: company.verified,
   });
   req.session.token = token;
   req.session.id = String(company.id);
