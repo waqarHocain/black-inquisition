@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const db = require("../services/db");
 const jwt = require("../services/jwt");
 const validateEmail = require("../utils/validateEmail");
+const config = require("../config");
 
 const renderLoginTemplate = (req, res) => {
   res.render("login");
@@ -217,8 +218,7 @@ const companySignup = async (req, res) => {
   });
   req.session.token = token;
   req.session.id = String(company.id);
-  // TODO: redirect to profile / wait for verfication page
-  res.redirect("/auth/company/signup");
+  res.redirect("/company/profile");
 };
 
 const renderAdminLoginTemplate = (req, res) => {
@@ -239,7 +239,7 @@ const adminLogin = async (req, res) => {
     },
   });
 
-  if (admin && admin.role === "ADMIN") {
+  if (admin && admin.role === config.ROLES.ADMIN) {
     const passwordMatches = await bcrypt.compare(password, admin.password);
     if (!passwordMatches) {
       res.locals.error = "Incorrect email or password.";
