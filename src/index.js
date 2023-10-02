@@ -12,6 +12,8 @@ const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
 const companyRouter = require("./routes/company");
 const accountRouter = require("./routes/account");
+const adminRouter = require("./routes/admin");
+
 const config = require("./config");
 const requireAuth = require("./middleware/requireAuth");
 const checkRole = require("./middleware/checkRole");
@@ -77,6 +79,7 @@ app.use(
   checkVerified,
   companyRouter
 );
+app.use("/admin", requireAuth, checkRole(config.ROLES.ADMIN), adminRouter);
 
 app.use("/account", requireAuth, accountRouter);
 

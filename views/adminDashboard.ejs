@@ -1,0 +1,50 @@
+<%- include("./partials/header", {title: "Admin Dashboard"}) %>
+
+<section class="py-12 bg-gray-50 sm:py-16">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <h1 class="text-4xl font-bold text-gray-900 sm:text-5xl lg:text-6xl">
+      Dashboard
+    </h1>
+
+    <div class="mt-5">
+      <h2 class="text-2xl font-semibold text-gray-700">Company Accounts</h2>
+      <% if (companies.length == 0) { %>
+      <p class="text-lg text-gray-500 mt-2">
+        There are no new company accounts to approve, you're all good.
+      </p>
+      <% } else { %>
+      <ul class="mt-2 max-w-3xl">
+        <% companies.forEach(company => { %>
+        <li
+          class="my-3 border-2 border-gray-200 bg-white rounded shadow-sm w-full px-5 py-2 flex flex-col sm:flex-row sm:items-center justify-between"
+        >
+          <div class="">
+            <h3 class="text-lg font-semibold text-gray-600">
+              <a href="/admin/dashboard/<%= company.id %>">
+                <%= company.name %>
+              </a>
+            </h3>
+            <p class="text-sm text-gray-500 break-words my-1">
+              <%= company.bio %>
+            </p>
+            <p class="text-gray-500 text-xs">
+              Phone: <%= company.phone %> Email: <%= company.email %>
+            </p>
+          </div>
+
+          <p class="sm:ml-2">
+            <a
+              href="/admin/dashboard/<%= company.id %>"
+              class="underline font-bold text-gray-500 text-sm"
+              >View Details</a
+            >
+          </p>
+        </li>
+        <% }) %>
+      </ul>
+      <% } %>
+    </div>
+  </div>
+</section>
+
+<%- include("./partials/footer") %>

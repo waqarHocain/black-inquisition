@@ -5,6 +5,7 @@ const TOKEN_SECRET = process.env.TOKEN_SECRET;
 const ROLES = {
   COMPANY: "COMPANY",
   USER: "USER",
+  ADMIN: "ADMIN",
 };
 
 module.exports = {
