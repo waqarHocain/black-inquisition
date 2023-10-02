@@ -225,6 +225,42 @@ const renderAdminLoginTemplate = (req, res) => {
   res.render("adminLogin");
 };
 
+const adminLogin = async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    res.locals.error = "Email or password is missing";
+    return res.render("login");
+  }
+
+  const admin = await db.user.findUnique({
+    where: {
+      email,
+    },
+  });
+
+  if (admin && admin.role === "ADMIN") {
+    const passwordMatches = await bcrypt.compare(password, admin.password);
+    if (!passwordMatches) {
+      res.locals.error = "Incorrect email or password.";
+      return res.render("adminLogin");
+    }
+    if (passwordMatches) {
+      const token = jwt.generateToken({
+        email: admin.email,
+        id: String(admin.id),
+        role: admin.role,
+      });
+      req.session.token = token;
+      req.session.id = String(admin.id);
+      return res.redirect("/admin/dashboard");
+    }
+  }
+
+  res.locals.error = "Incorrect email or password.";
+  return res.render("adminLogin");
+};
+
 const logout = (req, res) => {
   req.session = null;
   res.redirect("/");
@@ -239,4 +275,5 @@ module.exports = {
   companySignup,
   logout,
   renderAdminLoginTemplate,
+  adminLogin,
 };

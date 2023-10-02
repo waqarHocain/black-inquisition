@@ -16,7 +16,10 @@ router
   .post(authController.companySignup);
 
 // admin login
-router.route("/admin/login").get(authController.renderAdminLoginTemplate);
+router
+  .route("/admin/login")
+  .get(authController.renderAdminLoginTemplate)
+  .post(authController.adminLogin);
 
 router
   .route("/login")
