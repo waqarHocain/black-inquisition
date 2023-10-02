@@ -221,6 +221,10 @@ const companySignup = async (req, res) => {
   res.redirect("/auth/company/signup");
 };
 
+const renderAdminLoginTemplate = (req, res) => {
+  res.render("adminLogin");
+};
+
 const logout = (req, res) => {
   req.session = null;
   res.redirect("/");
@@ -234,4 +238,5 @@ module.exports = {
   renderCompanySignupTemplate,
   companySignup,
   logout,
+  renderAdminLoginTemplate,
 };

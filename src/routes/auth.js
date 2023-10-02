@@ -15,6 +15,9 @@ router
   .get(authController.renderCompanySignupTemplate)
   .post(authController.companySignup);
 
+// admin login
+router.route("/admin/login").get(authController.renderAdminLoginTemplate);
+
 router
   .route("/login")
   .get(authController.renderLoginTemplate)
