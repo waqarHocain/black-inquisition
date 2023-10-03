@@ -6,6 +6,8 @@ const morgan = require("morgan");
 const helmet = require("helmet");
 const cookieSession = require("cookie-session");
 
+require("express-async-errors"); // handle async errors
+
 // local imports
 const publicRouter = require("./routes/public");
 const authRouter = require("./routes/auth");
