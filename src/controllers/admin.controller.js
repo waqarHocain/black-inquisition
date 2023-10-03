@@ -6,7 +6,19 @@ const renderDashboard = async (req, res) => {
       verified: false,
     },
   });
-  return res.render("adminDashboard", { companies });
+
+  const counts = await db.$transaction([
+    db.user.count(),
+    db.company.count(),
+    db.job.count(),
+  ]);
+
+  return res.render("adminDashboard", {
+    companies,
+    userCount: counts[0],
+    companyCount: counts[1],
+    jobCount: counts[2],
+  });
 };
 
 const renderCompanyProfile = async (req, res) => {
