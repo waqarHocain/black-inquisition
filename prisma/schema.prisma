@@ -45,7 +45,7 @@ model Job {
   description String
   workplace   WorkplaceType
   type        JobType
-  Company     Company       @relation(fields: [companyId], references: [id])
+  Company     Company       @relation(fields: [companyId], references: [id], onDelete: Cascade)
   companyId   BigInt
 }
 
@@ -53,7 +53,7 @@ model ReputalbeSource {
   id        BigInt  @id @default(autoincrement())
   name      String
   url       String?
-  Company   Company @relation(fields: [companyId], references: [id])
+  Company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
   companyId BigInt
 }
 
