@@ -38,6 +38,7 @@ const login = async (req, res) => {
       });
       req.session.token = token;
       req.session.id = String(user.id);
+      req.session.role = user.role;
       return res.redirect("/user/profile");
     }
   }
@@ -62,6 +63,7 @@ const login = async (req, res) => {
       });
       req.session.token = token;
       req.session.id = String(company.id);
+      req.session.role = company.role;
       return res.redirect("/company/profile");
     }
   }
@@ -124,6 +126,7 @@ const signup = async (req, res) => {
   });
   req.session.token = token;
   req.session.id = String(user.id);
+  req.session.role = user.role;
   res.redirect("/user/profile");
 };
 
@@ -218,6 +221,7 @@ const companySignup = async (req, res) => {
   });
   req.session.token = token;
   req.session.id = String(company.id);
+  req.session.role = company.role;
   res.redirect("/company/profile");
 };
 
@@ -253,6 +257,7 @@ const adminLogin = async (req, res) => {
       });
       req.session.token = token;
       req.session.id = String(admin.id);
+      req.session.role = admin.role;
       return res.redirect("/admin/dashboard");
     }
   }

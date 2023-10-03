@@ -61,7 +61,8 @@ app.use(express.urlencoded({ extended: false }));
 
 // for templates rendering (for logged in/out users)
 app.use(function (req, res, next) {
-  res.locals.session = req.session;
+  res.locals.userId = req.session.id;
+  res.locals.role = req.session.role;
   next();
 });
 

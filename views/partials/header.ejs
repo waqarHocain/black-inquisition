@@ -22,19 +22,37 @@
 
           <div class="md:ml-auto mt-4 md:mt-0">
             <nav class="space-x-4">
-              <% if (locals.session.id) { %>
+              <% if (locals.userId) { %>
               <a
                 href="/updates"
                 class="text-base font-medium text-gray-900 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-50 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
               >
                 Updates
               </a>
+
+              <% if (locals.role == "USER") { %>
               <a
                 href="/user/profile"
                 class="text-base font-medium text-gray-900 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-50 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
               >
                 Profile
               </a>
+              <% } else if (locals.role == "COMPANY") { %>
+              <a
+                href="/company/profile"
+                class="text-base font-medium text-gray-900 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-50 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
+              >
+                Profile
+              </a>
+              <% } else if (locals.role == "ADMIN") { %>
+              <a
+                href="/admin/dashboard"
+                class="text-base font-medium text-gray-900 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-50 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
+              >
+                Dashboard
+              </a>
+              <% } %>
+
               <a
                 href="/auth/logout"
                 class="text-base font-medium text-gray-900 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-50 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
