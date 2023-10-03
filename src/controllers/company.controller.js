@@ -100,6 +100,9 @@ const renderEditJobTemplate = async (req, res) => {
       id: req.params.jobId,
     },
   });
+  // check job belongs to current user
+  if (String(job.companyId) !== req.user.id) return res.sendStatus(403);
+
   if (!job) return res.redirect("/company/profile");
   return res.render("editJob", { job });
 };
@@ -146,6 +149,9 @@ const editJob = async (req, res) => {
   });
   if (!job) return res.sendStatus(404);
 
+  // check job belongs to current user
+  if (String(job.companyId) !== req.user.id) return res.sendStatus(403);
+
   await db.job.update({
     where: {
       id: jobId,
@@ -164,9 +170,19 @@ const editJob = async (req, res) => {
 };
 
 const deleteJob = async (req, res) => {
+  const { jobId } = req.params;
+  const job = await db.job.findUnique({
+    where: {
+      id: jobId,
+    },
+  });
+
+  // check job belongs to current user
+  if (String(job.companyId) !== req.user.id) return res.sendStatus(403);
+
   await db.job.delete({
     where: {
-      id: req.params.jobId,
+      id: jobId,
     },
   });
   return res.redirect("/company/profile");
