@@ -8,16 +8,17 @@ datasource db {
 }
 
 model User {
-  id        BigInt   @id @default(autoincrement())
-  email     String   @unique
-  name      String
-  password  String
-  bio       String
-  photo     String?
-  active    Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  role      Role     @default(USER)
+  id          BigInt        @id @default(autoincrement())
+  email       String        @unique
+  name        String
+  password    String
+  bio         String
+  photo       String?
+  active      Boolean       @default(false)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  role        Role          @default(USER)
+  jobsApplied Application[]
 }
 
 model Company {
@@ -38,17 +39,26 @@ model Company {
 }
 
 model Job {
-  id          BigInt        @id @default(autoincrement())
-  title       String
-  company     String
-  location    String
-  description String
-  workplace   WorkplaceType
-  type        JobType
-  Company     Company       @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  companyId   BigInt
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  id           BigInt        @id @default(autoincrement())
+  title        String
+  company      String
+  location     String
+  description  String
+  workplace    WorkplaceType
+  type         JobType
+  Company      Company       @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  companyId    BigInt
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  applications Application[]
+}
+
+model Application {
+  id        BigInt @id @default(autoincrement())
+  job       Job    @relation(fields: [jobId], references: [id])
+  candidate User   @relation(fields: [userId], references: [id])
+  jobId     BigInt
+  userId    BigInt
 }
 
 model ReputalbeSource {
