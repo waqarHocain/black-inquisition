@@ -12,7 +12,7 @@ const requireAuth = async (req, res, next) => {
       return next();
     }
   }
-  return res.sendStatus(401);
+  return res.redirect("/auth/login");
 };
 
 module.exports = requireAuth;
