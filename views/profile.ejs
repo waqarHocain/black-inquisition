@@ -1,12 +1,72 @@
 <%- include("./partials/header", {title: "Profile"}) %>
 
-
 <section class="py-12 bg-gray-50 sm:py-16">
-  <div class="text-center mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <h1 class="text-4xl font-bold text-gray-900 sm:text-5xl lg:text-6xl">
-      Profile
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="text-center w-full">
+      <img
+        src="/images/profilePlaceholder.svg"
+        alt="Your profile picture"
+        class="rounded-full w-12 h-12 inline"
+      />
+    </div>
+
+    <h1 class="mt-4 text-gray-900 text-center text-3xl md:text-4xl font-bold">
+      Howdy, <%= user.name %>
     </h1>
 
+    <div class="flex flex-col gap-4">
+      <div class="flex flex-col sm:flex-row gap-1 sm:gap-3 items-baseline">
+        <h4 class="font-semibold">Email:</h4>
+        <p class="flex-1"><%= user.email %></p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-1 sm:gap-3 items-baseline">
+        <h4 class="font-semibold">Bio:</h4>
+        <p class="flex-1"><%= user.bio %></p>
+      </div>
+    </div>
+
+    <h3 class="mt-6 text-lg font-medium">Recently Posted Jobs</h3>
+    <ul>
+      <% if (recentJobs.length > 0) { %>
+      <ul class="mt-2">
+        <% recentJobs.forEach(job => { %>
+        <li
+          class="my-3 border-2 border-gray-200 bg-white rounded shadow-sm max-w-3xl px-5 py-2"
+        >
+          <h3 class="text-lg font-semibold text-gray-600">
+            <a href="#"> <%= job.title %> </a>
+          </h3>
+          <p class="text-sm text-gray-500 break-words my-1">
+            <%= job.description.substring(0, 100) %>...
+          </p>
+          <p class="text-gray-500 text-xs mt-2">
+            <span class="bg-amber-200 text-gray-900 rounded-lg py-1 px-2 shadow"
+              ><%= job.location %></span
+            >
+            <span class="bg-green-200 text-gray-900 rounded-lg py-1 px-2 shadow"
+              ><%= job.workplace %></span
+            >
+            <span class="bg-teal-300 text-gray-900 rounded-lg py-1 px-2 shadow"
+              ><%= job.type %></span
+            >
+          </p>
+
+          <p class="mt-5 mb-2">
+            <a href="#" class="btn-primary py-1 px-2 text-sm">Apply</a>
+            <a href="#" class="ml-3 underline font-bold text-gray-500 text-sm"
+              >View Details</a
+            >
+          </p>
+        </li>
+        <% }) %>
+      </ul>
+      <% } else { %>
+      <p class="text-gray-500 text-sm">
+        Currently there are no jobs, please check back later.
+      </p>
+      <% } %>
+    </ul>
   </div>
 </section>
 
