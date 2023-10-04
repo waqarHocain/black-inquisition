@@ -21,9 +21,20 @@ const listJobs = async (req, res) => {
   res.render("allJobs", { jobs });
 };
 
+const jobDetails = async (req, res) => {
+  const job = await db.job.findUnique({
+    where: {
+      id: req.params.jobId,
+    },
+  });
+  if (!job) return res.sendStatus(404);
+  return res.render("publicJobDetail", { job });
+};
+
 module.exports = {
   homepage,
   updates,
   chooseRole,
   listJobs,
+  jobDetails,
 };

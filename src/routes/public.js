@@ -7,5 +7,6 @@ router.get("/", publicController.homepage);
 router.get("/updates", publicController.updates);
 router.get("/signup-as", publicController.chooseRole);
 router.get("/jobs", publicController.listJobs);
+router.get("/jobs/:jobId", publicController.jobDetails);
 
 module.exports = router;
