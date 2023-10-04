@@ -5,6 +5,9 @@ const getJobs = async (req, res) => {
     where: {
       companyId: req.session.id,
     },
+    include: {
+      applications: true,
+    },
   });
   res.render("jobs", { jobs });
 };
