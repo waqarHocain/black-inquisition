@@ -27,52 +27,55 @@
     </div>
 
     <h3 class="mt-6 text-lg font-medium">Recently Posted Jobs</h3>
-    <ul>
-      <% if (recentJobs.length > 0) { %>
-      <ul class="mt-2">
-        <% recentJobs.forEach(job => { %>
-        <li
-          class="my-3 border-2 border-gray-200 bg-white rounded shadow-sm max-w-3xl px-5 py-2"
-        >
-          <h3 class="text-lg font-semibold text-gray-600">
-            <a href="#"> <%= job.title %> </a>
-          </h3>
-          <p class="text-sm text-gray-500 break-words my-1">
-            <%= job.description.substring(0, 100) %>...
-          </p>
-          <p class="text-gray-500 text-xs mt-2">
-            <span class="bg-amber-200 text-gray-900 rounded-lg py-1 px-2 shadow"
-              ><%= job.location %></span
-            >
-            <span class="bg-green-200 text-gray-900 rounded-lg py-1 px-2 shadow"
-              ><%= job.workplace %></span
-            >
-            <span class="bg-teal-300 text-gray-900 rounded-lg py-1 px-2 shadow"
-              ><%= job.type %></span
-            >
-          </p>
+    <% if (recentJobs.length > 0) { %>
+    <ul class="mt-2">
+      <% recentJobs.forEach(job => { %>
+      <li
+        class="my-3 border-2 border-gray-200 bg-white rounded shadow-sm max-w-3xl px-5 py-2"
+      >
+        <h3 class="text-lg font-semibold text-gray-600">
+          <a href="/jobs/<%= job.id %>"> <%= job.title %> </a>
+        </h3>
+        <p class="text-sm text-gray-500 break-words my-1">
+          <%= job.description.substring(0, 100) %>...
+        </p>
+        <p class="text-gray-500 text-xs mt-2">
+          <span class="bg-amber-200 text-gray-900 rounded-lg py-1 px-2 shadow"
+            ><%= job.location %></span
+          >
+          <span class="bg-green-200 text-gray-900 rounded-lg py-1 px-2 shadow"
+            ><%= job.workplace %></span
+          >
+          <span class="bg-teal-300 text-gray-900 rounded-lg py-1 px-2 shadow"
+            ><%= job.type %></span
+          >
+        </p>
 
-          <p class="mt-5 mb-2">
-            <form action="/user/jobs/apply/<%= job.id %>" method="POST" class="inline">
-              <button
-              class="btn-primary py-1 px-2 text-sm"
-              type="submit"
-              >Apply</button
-              >
-            </form>
-            <a href="#" class="ml-3 underline font-bold text-gray-500 text-sm"
-              >View Details</a
-            >
-          </p>
-        </li>
-        <% }) %>
-      </ul>
-      <% } else { %>
-      <p class="text-gray-500 text-sm">
-        Currently there are no jobs, please check back later.
-      </p>
-      <% } %>
+        <div class="mt-5 mb-2">
+          <form
+            action="/user/jobs/apply/<%= job.id %>"
+            method="POST"
+            class="inline"
+          >
+            <button class="btn-primary py-1 px-2 text-sm" type="submit">
+              Apply
+            </button>
+          </form>
+          <a
+            href="/jobs/<%= job.id %>"
+            class="ml-3 underline font-semibold text-gray-500 text-sm"
+          >
+            View Details
+          </a>
+        </div>
+      </li>
+      <% }) %>
     </ul>
+    <% } else { %>
+    <p class="text-gray-500 text-sm">
+      Currently there are no jobs, please check back later.
+    </p>
+    <% } %>
   </div>
 </section>
 
