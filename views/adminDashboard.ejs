@@ -25,7 +25,7 @@
               </a>
             </h3>
             <p class="text-sm text-gray-500 break-words my-1">
-              <%= company.bio %>
+              <%= company.bio.substring(0, 100) %>...
             </p>
             <p class="text-gray-500 text-xs">
               Phone: <%= company.phone %> Email: <%= company.email %>
