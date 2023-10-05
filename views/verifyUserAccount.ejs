@@ -11,30 +11,20 @@
       If you decline any acocunt, it'll be deleted from database.
     </p>
 
-    <h2 class="text-2xl text-gray-800 font-semibold mt-5">
-      <%= company.name %>
-    </h2>
-    <p class="text-gray-700"><strong>Bio:</strong> <br /><%= company.bio %></p>
+    <h2 class="text-2xl text-gray-800 font-semibold mt-5"><%= user.name %></h2>
+    <p class="text-gray-700 max-w-3xl">
+      <strong>Bio:</strong> <br /><%= user.bio %>
+    </p>
 
     <h2 class="text-2xl text-gray-800 font-semibold mt-4">Contact Info:</h2>
     <ul class="text-gray-700 mt-2">
-      <li>Email: <em><%= company.email %></em></li>
-      <li>Phone: <em><%= company.phone %></em></li>
-    </ul>
-
-    <h2 class="text-2xl text-gray-800 font-semibold mt-4">
-      Reputable Sources:
-    </h2>
-    <ul class="text-gray-700 mt-2 list-decimal list-inside">
-      <% company.sources.forEach(source => { %>
-      <li><%= source.name %></li>
-      <% }) %>
+      <li>Email: <em><%= user.email %></em></li>
     </ul>
 
     <div class="mt-5">
       <form
         method="POST"
-        action="/admin/dashboard/<%= company.id %>/approve"
+        action="/admin/dashboard/u/<%= user.id %>/approve"
         class="inline-block"
       >
         <button class="btn-primary py-1 px-3" type="submit">Approve</button>
@@ -42,7 +32,7 @@
 
       <form
         method="POST"
-        action="/admin/dashboard/<%= company.id %>/decline"
+        action="/admin/dashboard/u/<%= user.id %>/decline"
         class="inline-block ml-4"
       >
         <button

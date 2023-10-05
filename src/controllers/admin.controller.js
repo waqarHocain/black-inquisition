@@ -7,7 +7,13 @@ const renderDashboard = async (req, res) => {
     },
   });
 
-  const counts = await db.$transaction([
+  const users = await db.user.findMany({
+    where: {
+      verified: false,
+    },
+  });
+
+  const [userCount, companyCount, jobCount] = await db.$transaction([
     db.user.count(),
     db.company.count(),
     db.job.count(),
@@ -15,9 +21,10 @@ const renderDashboard = async (req, res) => {
 
   return res.render("adminDashboard", {
     companies,
-    userCount: counts[0],
-    companyCount: counts[1],
-    jobCount: counts[2],
+    users,
+    userCount,
+    companyCount,
+    jobCount,
   });
 };
 
@@ -41,6 +48,19 @@ const renderCompanyProfile = async (req, res) => {
   return res.render("verifyAccount", { company });
 };
 
+const renderUserProfile = async (req, res) => {
+  const { userId } = req.params;
+
+  const user = await db.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+  if (!user) return res.sendStatus(404);
+
+  return res.render("verifyUserAccount", { user });
+};
+
 const approveCompany = async (req, res) => {
   const { companyId } = req.params;
   await db.company.update({
@@ -62,9 +82,33 @@ const deleteCompany = async (req, res) => {
   return res.redirect("/admin/dashboard");
 };
 
+const approveUser = async (req, res) => {
+  const { userId } = req.params;
+  await db.user.update({
+    where: { id: userId },
+    data: {
+      verified: true,
+    },
+  });
+  return res.redirect("/admin/dashboard");
+};
+
+const deleteUser = async (req, res) => {
+  const { userId } = req.params;
+  await db.user.delete({
+    where: {
+      id: userId,
+    },
+  });
+  return res.redirect("/admin/dashboard");
+};
+
 module.exports = {
   renderDashboard,
   renderCompanyProfile,
+  renderUserProfile,
   approveCompany,
   deleteCompany,
+  approveUser,
+  deleteUser,
 };

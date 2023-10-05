@@ -46,6 +46,41 @@
     </div>
 
     <div class="mt-5">
+      <h2 class="text-2xl font-semibold text-gray-700">User Accounts</h2>
+      <% if (users.length == 0) { %>
+      <p class="text-lg text-gray-500 mt-2">
+        There are no new user accounts to approve, you're all good.
+      </p>
+      <% } else { %>
+      <ul class="mt-2 max-w-3xl">
+        <% users.forEach(user => { %>
+        <li
+          class="my-3 border-2 border-gray-200 bg-white rounded shadow-sm w-full px-5 py-2 flex flex-col sm:flex-row sm:items-center justify-between"
+        >
+          <div class="">
+            <h3 class="text-lg font-semibold text-gray-600">
+              <a href="/admin/dashboard/u/<%= user.id %>"> <%= user.name %> </a>
+            </h3>
+            <p class="text-sm text-gray-500 break-words my-1">
+              <%= user.bio.substring(0, 100) %>...
+            </p>
+            <p class="text-gray-500 text-xs">Email: <%= user.email %></p>
+          </div>
+
+          <p class="sm:ml-2">
+            <a
+              href="/admin/dashboard/u/<%= user.id %>"
+              class="underline font-bold text-gray-500 text-sm"
+              >View Details</a
+            >
+          </p>
+        </li>
+        <% }) %>
+      </ul>
+      <% } %>
+    </div>
+
+    <div class="mt-5">
       <h2 class="text-2xl font-semibold text-gray-700">Stats</h2>
       <dl class="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-3">
         <div

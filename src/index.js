@@ -74,7 +74,13 @@ app.use("/", publicRouter);
 app.use("/auth", authRouter);
 
 // -- Protected Routes
-app.use("/user", requireAuth, checkRole(config.ROLES.USER), userRouter);
+app.use(
+  "/user",
+  requireAuth,
+  checkRole(config.ROLES.USER),
+  checkVerified,
+  userRouter
+);
 app.use(
   "/company",
   requireAuth,

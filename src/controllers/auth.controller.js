@@ -35,6 +35,7 @@ const login = async (req, res) => {
         email: user.email,
         id: String(user.id),
         role: user.role,
+        verified: user.verified,
       });
       req.session.token = token;
       req.session.id = String(user.id);
@@ -123,6 +124,7 @@ const signup = async (req, res) => {
     email: user.email,
     id: String(user.id),
     role: user.role,
+    verified: user.verified,
   });
   req.session.token = token;
   req.session.id = String(user.id);
