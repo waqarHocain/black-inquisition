@@ -19,9 +19,22 @@ const jobDetail = async (req, res) => {
     where: {
       id: jobId,
     },
+    include: {
+      applications: {
+        select: {
+          candidate: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+            },
+          },
+        },
+      },
+    },
   });
 
-  if (!job) return res.redirect("/");
+  if (!job) return res.sendStatus(404);
 
   return res.render("jobDetail", { job });
 };
@@ -36,6 +49,11 @@ const profile = async (req, res) => {
         select: {
           id: true,
           title: true,
+          _count: {
+            select: {
+              applications: true,
+            },
+          },
         },
       },
     },

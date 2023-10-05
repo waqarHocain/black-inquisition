@@ -29,11 +29,66 @@
         <h4 class="font-semibold">Job type:</h4>
         <p class="flex-1"><%= job.type %></p>
       </div>
+    </div>
 
-      <div class="flex flex-col sm:flex-row gap-1 sm:gap-3 items-baseline">
-        <h4 class="font-semibold">Job Description:</h4>
-        <p class="flex-1 max-w-xl"><%= job.description %></p>
+    <div class="mt-4">
+      <h4 class="font-semibold">Job Description:</h4>
+      <p class="max-w-3xl mt-1"><%= job.description %></p>
+    </div>
+
+    <div class="mt-4">
+      <h3 class="font-semibold text-xl">Candidates:</h3>
+      <p class="mt-1 text-gray-700">
+        Total applications received: <%= job.applications.length %>
+      </p>
+      <% if (job.applications.length == 0) { %>
+      <p class="font-semibold text-gray-700">
+        No one has applied for this job yet.
+      </p>
+      <% } else {%>
+
+      <div class="overflow-x-auto mt-4 max-w-3xl">
+        <table class="min-w-full divide-y-2 divide-gray-200 bg-white text-sm">
+          <thead>
+            <tr>
+              <th
+                class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 text-left"
+              >
+                Serial No.
+              </th>
+              <th
+                class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 text-left"
+              >
+                Candidate Name
+              </th>
+              <th
+                class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 text-left"
+              >
+                Candidate Email
+              </th>
+            </tr>
+          </thead>
+
+          <tbody class="divide-y divide-gray-200">
+            <% job.applications.forEach((application, index) => { %>
+
+            <tr>
+              <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+                <%= index + 1 %>
+              </td>
+              <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+                <%= application.candidate.name %>
+              </td>
+              <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+                <%= application.candidate.email %>
+              </td>
+            </tr>
+
+            <% }) %>
+          </tbody>
+        </table>
       </div>
+      <% } %>
     </div>
 
     <div class="mt-5">
