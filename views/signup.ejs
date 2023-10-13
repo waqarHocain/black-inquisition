@@ -7,11 +7,35 @@
     </h1>
     <p class="mt-6 text-lg text-gray-600">Create an account to get started</p>
 
-    <form method="POST" id="signupForm" class="max-w-md mx-auto mt-8">
+    <form
+      method="POST"
+      enctype="multipart/form-data"
+      id="signupForm"
+      class="max-w-md mx-auto mt-8"
+    >
       <% if (locals.errors && locals.errors.userExists) { %>
       <p class="font-semibold text-red-600"><%= locals.errors.userExists %></p>
       <% } %>
+
       <label class="block">
+        <span class="block text-xs font-medium text-gray-500 text-left">
+          Profile Picture:
+        </span>
+        <input
+          type="file"
+          name="avatar"
+          accept="image/*"
+          class="w-full p-3 mt-1 text-sm input-primary"
+          placeholder="Select your profile picture"
+          required
+        />
+        <small class="block text-left text-red-600">
+          <% if (locals.errors && locals.errors.avatar) { %> <%=
+          locals.errors.avatar %> <% } %>
+        </small>
+      </label>
+
+      <label class="block mt-6">
         <span class="block text-xs font-medium text-gray-500 text-left">
           Full Name:
         </span>

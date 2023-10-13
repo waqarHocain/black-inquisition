@@ -5,6 +5,7 @@ const db = require("../services/db");
 const jwt = require("../services/jwt");
 const validateEmail = require("../utils/validateEmail");
 const config = require("../config");
+const uploadFile = require("../services/uploadFile");
 
 const renderLoginTemplate = (req, res) => {
   res.render("login");
@@ -79,6 +80,12 @@ const renderSignupTemplate = (req, res) => {
 const signup = async (req, res) => {
   const { fullname, email, password, confirmPassword, bio } = req.body;
 
+  if (!req.file) {
+    res.locals.errors = { avatar: "No file / invalid file received" };
+    res.locals.formData = { fullname, email, password, confirmPassword, bio };
+    return res.render("signup");
+  }
+
   // data validation
   const errors = {};
   if (fullname.length < 4)
@@ -93,8 +100,7 @@ const signup = async (req, res) => {
   if (Object.keys(errors).length !== 0) {
     res.locals.errors = errors;
     res.locals.formData = { fullname, email, password, confirmPassword, bio };
-    res.render("signup");
-    return;
+    return res.render("signup");
   }
   const userExists = await db.user.findUnique({
     where: {
@@ -106,14 +112,21 @@ const signup = async (req, res) => {
     res.locals.errors = {
       userExists: "User with this email address already has an account.",
     };
-    res.render("signup");
-    return;
+    return res.render("signup");
+  }
+
+  const imageUrl = await uploadFile(req.file);
+  if (!imageUrl) {
+    res.locals.formData = { fullname, email, password, confirmPassword, bio };
+    res.locals.errors.avatar = "Error uploading image :(";
+    return res.render("signup");
   }
 
   const saltRounds = 10;
   const passwordHash = await bcrypt.hash(password, saltRounds);
   const user = await db.user.create({
     data: {
+      photo: imageUrl,
       name: fullname,
       password: passwordHash,
       email,
@@ -148,6 +161,21 @@ const companySignup = async (req, res) => {
     source2,
   } = req.body;
 
+  if (!req.file) {
+    res.locals.errors = { avatar: "No file / invalid file received" };
+    res.locals.formData = {
+      companyName,
+      email,
+      password,
+      confirmPassword,
+      description,
+      phone,
+      source1,
+      source2,
+    };
+    return res.render("companySignup");
+  }
+
   // data validation
   const errors = {};
   if (companyName.length < 2)
@@ -178,8 +206,7 @@ const companySignup = async (req, res) => {
       source1,
       source2,
     };
-    res.render("companySignup");
-    return;
+    return res.render("companySignup");
   }
   const companyExists = await db.company.findUnique({
     where: {
@@ -197,14 +224,30 @@ const companySignup = async (req, res) => {
     res.locals.errors = {
       companyExists: "Company with this email address already has an account.",
     };
-    res.render("companySignup");
-    return;
+    return res.render("companySignup");
+  }
+
+  const imageUrl = await uploadFile(req.file);
+  if (!imageUrl) {
+    res.locals.formData = {
+      companyName,
+      email,
+      password,
+      confirmPassword,
+      description,
+      phone,
+      source1,
+      source2,
+    };
+    res.locals.errors.avatar = "Error uploading image :(";
+    return res.render("companySignup");
   }
 
   const saltRounds = 10;
   const passwordHash = await bcrypt.hash(password, saltRounds);
   const company = await db.company.create({
     data: {
+      photo: imageUrl,
       name: companyName,
       password: passwordHash,
       bio: description,
