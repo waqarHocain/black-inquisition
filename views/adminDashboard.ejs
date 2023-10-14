@@ -2,9 +2,7 @@
 
 <section class="py-12 bg-gray-50 sm:py-16">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <h1 class="text-4xl font-bold text-gray-900 sm:text-5xl lg:text-6xl">
-      Dashboard
-    </h1>
+    <h1 class="text-4xl font-bold text-gray-900">Dashboard</h1>
 
     <div class="mt-5">
       <h2 class="text-2xl font-semibold text-gray-700">Company Accounts</h2>
@@ -13,35 +11,65 @@
         There are no new company accounts to approve, you're all good.
       </p>
       <% } else { %>
-      <ul class="mt-2 max-w-3xl">
-        <% companies.forEach(company => { %>
-        <li
-          class="my-3 border-2 border-gray-200 bg-white rounded shadow-sm w-full px-5 py-2 flex flex-col sm:flex-row sm:items-center justify-between"
-        >
-          <div class="">
-            <h3 class="text-lg font-semibold text-gray-600">
-              <a href="/admin/dashboard/<%= company.id %>">
-                <%= company.name %>
-              </a>
-            </h3>
-            <p class="text-sm text-gray-500 break-words my-1">
-              <%= company.bio.substring(0, 100) %>...
-            </p>
-            <p class="text-gray-500 text-xs">
-              Phone: <%= company.phone %> Email: <%= company.email %>
-            </p>
-          </div>
 
-          <p class="sm:ml-2">
-            <a
-              href="/admin/dashboard/<%= company.id %>"
-              class="underline font-bold text-gray-500 text-sm"
-              >View Details</a
-            >
-          </p>
-        </li>
-        <% }) %>
-      </ul>
+      <div class="overflow-x-auto mt-2">
+        <table class="min-w-full divide-y-2 divide-gray-200 bg-white text-sm">
+          <thead>
+            <tr class="text-left">
+              <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                #
+              </th>
+
+              <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                Name
+              </th>
+              <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                Email
+              </th>
+              <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                Phone
+              </th>
+
+              <th class="px-4 py-2"></th>
+            </tr>
+          </thead>
+
+          <tbody class="divide-y divide-gray-200">
+            <% companies.forEach((company, index) => { %>
+            <tr class="text-left">
+              <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                <%= index + 1 %>
+              </td>
+
+              <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                <a href="/admin/dashboard/<%= company.id %>">
+                  <img
+                    src="<%= company.photo %>"
+                    alt="company logo"
+                    class="rounded-full h-6 w-6 inline-block mr-2"
+                  />
+                  <span> <%= company.name %> </span>
+                </a>
+              </td>
+
+              <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+                <%= company.email %>
+              </td>
+              <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+                <%= company.phone %>
+              </td>
+              <td class="whitespace-nowrap px-4 py-2">
+                <a
+                  href="/admin/dashboard/<%= company.id %>"
+                  class="inline-block rounded bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700"
+                  >View</a
+                >
+              </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
       <% } %>
     </div>
 
@@ -52,31 +80,59 @@
         There are no new user accounts to approve, you're all good.
       </p>
       <% } else { %>
-      <ul class="mt-2 max-w-3xl">
-        <% users.forEach(user => { %>
-        <li
-          class="my-3 border-2 border-gray-200 bg-white rounded shadow-sm w-full px-5 py-2 flex flex-col sm:flex-row sm:items-center justify-between"
-        >
-          <div class="">
-            <h3 class="text-lg font-semibold text-gray-600">
-              <a href="/admin/dashboard/u/<%= user.id %>"> <%= user.name %> </a>
-            </h3>
-            <p class="text-sm text-gray-500 break-words my-1">
-              <%= user.bio.substring(0, 100) %>...
-            </p>
-            <p class="text-gray-500 text-xs">Email: <%= user.email %></p>
-          </div>
+      <div class="overflow-x-auto mt-2">
+        <table class="min-w-full divide-y-2 divide-gray-200 bg-white text-sm">
+          <thead>
+            <tr class="text-left">
+              <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                #
+              </th>
 
-          <p class="sm:ml-2">
-            <a
-              href="/admin/dashboard/u/<%= user.id %>"
-              class="underline font-bold text-gray-500 text-sm"
-              >View Details</a
-            >
-          </p>
-        </li>
-        <% }) %>
-      </ul>
+              <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                Name
+              </th>
+              <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                Email
+              </th>
+
+              <th class="px-4 py-2"></th>
+            </tr>
+          </thead>
+
+          <tbody class="divide-y divide-gray-200">
+            <% users.forEach((user, index) => { %>
+            <tr class="text-left">
+              <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                <%= index + 1 %>
+              </td>
+
+              <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                <a href="/admin/dashboard/u/<%= user.id %>">
+                  <img
+                    src="<%= user.photo %>"
+                    alt="user profile picture"
+                    class="rounded-full h-6 w-6 inline-block mr-2"
+                  />
+                  <span> <%= user.name %> </span>
+                </a>
+              </td>
+
+              <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+                <%= user.email %>
+              </td>
+
+              <td class="whitespace-nowrap px-4 py-2">
+                <a
+                  href="/admin/dashboard/u/<%= user.id %>"
+                  class="inline-block rounded bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700"
+                  >View</a
+                >
+              </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
       <% } %>
     </div>
 
