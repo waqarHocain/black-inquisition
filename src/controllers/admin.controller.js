@@ -1,4 +1,5 @@
 const db = require("../services/db");
+const { ROLES } = require("../config");
 
 const renderDashboard = async (req, res) => {
   const companies = await db.company.findMany({
@@ -10,6 +11,7 @@ const renderDashboard = async (req, res) => {
   const users = await db.user.findMany({
     where: {
       verified: false,
+      role: ROLES.USER,
     },
   });
 
