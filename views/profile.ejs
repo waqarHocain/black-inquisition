@@ -2,80 +2,254 @@
 
 <section class="py-12 bg-gray-50 sm:py-16">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <div class="text-center w-full">
+    <div
+      class="flex flex-col items-center gap-y-4 sm:flex-row sm:gap-x-3 bg-white border-[1px] border-gray-200 rounded p-4"
+    >
       <img
         src="<%= user.photo %>"
         alt="Your profile picture"
-        class="rounded-full w-20 h-20 inline ring-4"
+        class="rounded-full w-20 h-20 sm:w-12 sm:h-12 inline ring-4"
       />
+      <h1 class="text-gray-900 text-3xl font-semibold"><%= user.name %></h1>
     </div>
 
-    <h1 class="mt-4 text-gray-900 text-center text-3xl md:text-4xl font-bold">
-      Howdy, <%= user.name %>
-    </h1>
-
-    <div class="flex flex-col gap-4">
-      <div class="flex flex-col sm:flex-row gap-1 sm:gap-3 items-baseline">
-        <h4 class="font-semibold">Email:</h4>
-        <p class="flex-1"><%= user.email %></p>
+    <div
+      class="flex flex-col gap-4 sm:flex-row sm:gap-12 bg-white border-[1px] border-gray-200 border-t-0 rounded p-4"
+    >
+      <div class="sm:border-r-2 border-gray-200 sm:pr-4">
+        <h4 class="text-sm text-gray-600">Email:</h4>
+        <p><%= user.email %></p>
       </div>
 
-      <div class="flex flex-col sm:flex-row gap-1 sm:gap-3 items-baseline">
-        <h4 class="font-semibold">Bio:</h4>
-        <p class="max-w-3xl"><%= user.bio %></p>
+      <div class="sm:border-r-2 border-gray-200 sm:pr-4">
+        <h4 class="text-sm text-gray-600">Joined:</h4>
+        <p><%= user.createdAt.toDateString() %></p>
+      </div>
+
+      <div>
+        <h4 class="text-sm text-gray-600">Account Status:</h4>
+        <p><%= user.verified ? "Approved" : "Pending" %></p>
       </div>
     </div>
 
-    <h3 class="mt-6 text-lg font-medium">Recently Posted Jobs</h3>
-    <% if (recentJobs.length > 0) { %>
-    <ul class="mt-2">
-      <% recentJobs.forEach(job => { %>
-      <li
-        class="my-3 border-2 border-gray-200 bg-white rounded shadow-sm max-w-3xl px-5 py-2"
-      >
-        <h3 class="text-lg font-semibold text-gray-600">
-          <a href="/jobs/<%= job.id %>"> <%= job.title %> </a>
+    <div class="bg-white border-[1px] border-gray-200 rounded p-4 mt-8">
+      <h3 class="font-semibold border-b-[1px] border-gray-200 pb-2">About</h3>
+      <p class="pt-3 max-w-3xl"><%= user.bio %></p>
+    </div>
+
+    <div class="bg-white border-[1px] border-gray-200 rounded p-4 mt-8">
+      <h3 class="font-semibold border-b-[1px] border-gray-200 pb-2">Jobs</h3>
+
+      <div class="bg-white border-[1px] border-gray-200 rounded-md p-4 mt-8">
+        <h3 class="font-semibold border-b-[1px] border-gray-200 pb-2">
+          Recently Posted Jobs
         </h3>
-        <p class="text-sm text-gray-500 break-words my-1">
-          <%= job.description.substring(0, 100) %>...
-        </p>
-        <p class="text-gray-500 text-xs mt-2">
-          <span class="bg-amber-200 text-gray-900 rounded-lg py-1 px-2 shadow"
-            ><%= job.location %></span
-          >
-          <span class="bg-green-200 text-gray-900 rounded-lg py-1 px-2 shadow"
-            ><%= job.workplace %></span
-          >
-          <span class="bg-teal-300 text-gray-900 rounded-lg py-1 px-2 shadow"
-            ><%= job.type %></span
-          >
+
+        <p class="mt-2 text-gray-500 text-sm">
+          These are some recently posted jobs, to view all jobs available
+          <a href="/jobs" class="text-purple-700">click here.</a>
         </p>
 
-        <div class="mt-5 mb-2">
-          <form
-            action="/user/jobs/apply/<%= job.id %>"
-            method="POST"
-            class="inline"
-          >
-            <button class="btn-primary py-1 px-2 text-sm" type="submit">
-              Apply
-            </button>
-          </form>
-          <a
-            href="/jobs/<%= job.id %>"
-            class="ml-3 underline font-semibold text-gray-500 text-sm"
-          >
-            View Details
-          </a>
+        <% if (recentJobs.length > 0) { %>
+        <div class="overflow-x-auto mt-2">
+          <table class="min-w-full divide-y-2 divide-gray-200 bg-white text-sm">
+            <thead>
+              <tr class="text-left">
+                <th
+                  class="whitespace-nowrap px-4 py-2 font-medium text-gray-900"
+                >
+                  #
+                </th>
+
+                <th
+                  class="whitespace-nowrap px-4 py-2 font-medium text-gray-900"
+                >
+                  Title
+                </th>
+
+                <th
+                  class="whitespace-nowrap px-4 py-2 font-medium text-gray-900"
+                >
+                  Location
+                </th>
+
+                <th
+                  class="whitespace-nowrap px-4 py-2 font-medium text-gray-900"
+                >
+                  Type
+                </th>
+
+                <th
+                  class="whitespace-nowrap px-4 py-2 font-medium text-gray-900"
+                >
+                  Workplace
+                </th>
+
+                <th
+                  class="whitespace-nowrap px-4 py-2 font-medium text-gray-900"
+                >
+                  Company
+                </th>
+
+                <th class="px-4 py-2"></th>
+              </tr>
+            </thead>
+
+            <tbody class="divide-y divide-gray-200">
+              <% recentJobs.forEach((job, index) => { %>
+              <tr class="text-left">
+                <td
+                  class="whitespace-nowrap px-4 py-2 font-medium text-gray-900"
+                >
+                  <%= index + 1 %>
+                </td>
+
+                <td
+                  class="whitespace-nowrap px-4 py-2 font-medium text-gray-900"
+                >
+                  <a href="/jobs/<%= job.id %>"> <%= job.title %> </a>
+                </td>
+
+                <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+                  <%= job.location %>
+                </td>
+
+                <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+                  <%= job.type == "partTime" ? "Part-time" : job.type ==
+                  "fullTime" ? "Full-time" : job.type %>
+                </td>
+
+                <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+                  <%= job.workplace == "onSite" ? "on-site" : job.workplace %>
+                </td>
+
+                <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+                  <%= job.company %>
+                </td>
+
+                <td class="whitespace-nowrap px-4 py-2">
+                  <a
+                    href="/jobs/<%= job.id %>"
+                    class="inline-block rounded bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700"
+                    >View</a
+                  >
+                </td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
         </div>
-      </li>
-      <% }) %>
-    </ul>
-    <% } else { %>
-    <p class="text-gray-500 text-sm">
-      Currently there are no jobs, please check back later.
-    </p>
-    <% } %>
+        <% } else { %>
+        <p class="mt-3 text-gray-700">
+          Currently there are no jobs available, please check back later.
+        </p>
+        <% } %>
+      </div>
+
+      <div class="bg-white border-[1px] border-gray-200 rounded-md p-4 mt-8">
+        <h3 class="font-semibold border-b-[1px] border-gray-200 pb-2">
+          Applied Jobs
+        </h3>
+
+        <p class="mt-2 text-gray-500 text-sm">
+          These are jobs that you've applied, to view more jobs please
+          <a href="/jobs" class="text-purple-700">click here.</a>
+        </p>
+
+        <% if (jobsApplied.length > 0) { %>
+        <div class="overflow-x-auto mt-2">
+          <table class="min-w-full divide-y-2 divide-gray-200 bg-white text-sm">
+            <thead>
+              <tr class="text-left">
+                <th
+                  class="whitespace-nowrap px-4 py-2 font-medium text-gray-900"
+                >
+                  #
+                </th>
+
+                <th
+                  class="whitespace-nowrap px-4 py-2 font-medium text-gray-900"
+                >
+                  Title
+                </th>
+
+                <th
+                  class="whitespace-nowrap px-4 py-2 font-medium text-gray-900"
+                >
+                  Location
+                </th>
+
+                <th
+                  class="whitespace-nowrap px-4 py-2 font-medium text-gray-900"
+                >
+                  Type
+                </th>
+
+                <th
+                  class="whitespace-nowrap px-4 py-2 font-medium text-gray-900"
+                >
+                  Workplace
+                </th>
+
+                <th
+                  class="whitespace-nowrap px-4 py-2 font-medium text-gray-900"
+                >
+                  Company
+                </th>
+
+                <th class="px-4 py-2"></th>
+              </tr>
+            </thead>
+
+            <tbody class="divide-y divide-gray-200">
+              <% jobsApplied.forEach((job, index) => { %>
+              <tr class="text-left">
+                <td
+                  class="whitespace-nowrap px-4 py-2 font-medium text-gray-900"
+                >
+                  <%= index + 1 %>
+                </td>
+
+                <td
+                  class="whitespace-nowrap px-4 py-2 font-medium text-gray-900"
+                >
+                  <a href="/jobs/<%= job.id %>"> <%= job.title %> </a>
+                </td>
+
+                <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+                  <%= job.location %>
+                </td>
+
+                <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+                  <%= job.type == "partTime" ? "Part-time" : job.type ==
+                  "fullTime" ? "Full-time" : job.type %>
+                </td>
+
+                <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+                  <%= job.workplace == "onSite" ? "on-site" : job.workplace %>
+                </td>
+
+                <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+                  <%= job.company %>
+                </td>
+
+                <td class="whitespace-nowrap px-4 py-2">
+                  <a
+                    href="/jobs/<%= job.id %>"
+                    class="inline-block rounded bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700"
+                    >View</a
+                  >
+                </td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+        <% } else { %>
+        <p class="mt-3 text-gray-700">You haven't applied to any job yet.</p>
+        <% } %>
+      </div>
+    </div>
   </div>
 </section>
 

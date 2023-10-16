@@ -15,7 +15,24 @@ const profile = async (req, res) => {
     },
   });
 
-  res.render("profile", { user, recentJobs });
+  const userApplications = await db.application.findMany({
+    where: {
+      userId: req.user.id,
+    },
+  });
+
+  let jobsApplied = [];
+  if (userApplications.length > 0) {
+    jobsApplied = await db.job.findMany({
+      where: {
+        id: {
+          in: userApplications.map((ua) => ua.jobId),
+        },
+      },
+    });
+  }
+
+  res.render("profile", { user, recentJobs, jobsApplied });
 };
 
 const applyJob = async (req, res) => {
