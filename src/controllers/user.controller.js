@@ -42,7 +42,37 @@ const renderSettingsTemplate = async (req, res) => {
     },
   });
   if (!user) throw new Error("Couldn't find user");
-  res.render("profileSettings", { user });
+  res.render("profileSettings", { user, errors: {} });
+};
+
+const updateBio = async (req, res) => {
+  const { bio } = req.body;
+  const user = await db.user.findUnique({
+    where: {
+      id: req.user.id,
+    },
+  });
+  if (!user) throw new Error("Couldn't find user");
+
+  const errors = {};
+
+  if (bio.trim().length < 20) {
+    errors.bio = "Bio must be 20 or more characters long.";
+    return res.render("profileSettings", {
+      user,
+      errors,
+    });
+  }
+
+  await db.user.update({
+    where: {
+      id: req.user.id,
+    },
+    data: {
+      bio: bio,
+    },
+  });
+  res.redirect("/user/profile");
 };
 
 const applyJob = async (req, res) => {
@@ -88,4 +118,5 @@ module.exports = {
   applyJob,
   applyJobSuccess,
   renderSettingsTemplate,
+  updateBio,
 };
