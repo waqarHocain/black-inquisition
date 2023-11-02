@@ -1,0 +1,87 @@
+<%- include("./partials/header", {title: "Profile"}) %>
+
+<section class="py-12 bg-gray-50 sm:py-16">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <form
+      method="POST"
+      action="/user/profile/settings"
+      class="text-center sm:text-left text-sm"
+    >
+      <div
+        class="flex flex-col items-center gap-y-4 sm:flex-row sm:gap-x-3 bg-white border-[1px] border-gray-200 rounded p-4"
+      >
+        <img
+          src="<%= user.photo %>"
+          alt="Your profile picture"
+          class="rounded-full w-20 h-20 sm:w-12 sm:h-12 inline ring-4"
+        />
+        <div>
+          <h1 class="text-gray-900 text-3xl font-semibold"><%= user.name %></h1>
+          <label>
+            <span
+              class="cursor-pointer text-purple-700 bg-purple-100 hover:bg-purple-50 px-3 py-1 rounded-md"
+            >
+              Change Photo
+            </span>
+            <input type="file" class="hidden" name="avatar" accept="image/*" />
+          </label>
+        </div>
+      </div>
+
+      <div
+        class="flex flex-col gap-4 sm:flex-row sm:gap-12 bg-white border-[1px] border-gray-200 border-t-0 rounded p-4"
+      >
+        <div class="sm:border-r-2 border-gray-200 sm:pr-4">
+          <h4 class="text-sm text-gray-600">Email:</h4>
+          <p><%= user.email %></p>
+        </div>
+
+        <div class="sm:border-r-2 border-gray-200 sm:pr-4">
+          <h4 class="text-sm text-gray-600">Joined:</h4>
+          <p><%= user.createdAt.toDateString() %></p>
+        </div>
+
+        <div>
+          <h4 class="text-sm text-gray-600">Account Status:</h4>
+          <p><%= user.verified ? "Approved" : "Pending" %></p>
+        </div>
+      </div>
+
+      <div class="bg-white border-[1px] border-gray-200 rounded p-4 mt-8">
+        <h3 class="font-semibold border-b-[1px] border-gray-200 pb-2">About</h3>
+        <textarea
+          class="w-full min-h-[150px] p-3 mt-1 text-sm border-[1px] border-gray-400"
+          name="bio"
+        >
+<%= user.bio %></textarea
+        >
+      </div>
+
+      <div class="bg-white border-[1px] border-gray-200 rounded p-4 mt-8">
+        <button
+          type="submit"
+          class="text-white bg-purple-600 hover:bg-purple-700 px-4 py-1 rounded transition-all duration-200"
+        >
+          Save Changes
+        </button>
+        <button
+          class="bg-gray-100 hover:bg-gray-200 px-4 py-1 rounded transition-all duration-200"
+          type="reset"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+
+    <p class="mt-8 text-right text-sm">
+      Go back to
+      <a
+        href="/user/profile"
+        class="text-purple-700 bg-purple-100 hover:bg-purple-50 px-3 py-1 rounded-md"
+        >Profile page
+      </a>
+    </p>
+  </div>
+</section>
+
+<%- include("./partials/footer") %>

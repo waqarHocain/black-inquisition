@@ -35,6 +35,16 @@ const profile = async (req, res) => {
   res.render("profile", { user, recentJobs, jobsApplied });
 };
 
+const renderSettingsTemplate = async (req, res) => {
+  const user = await db.user.findUnique({
+    where: {
+      id: req.user.id,
+    },
+  });
+  if (!user) throw new Error("Couldn't find user");
+  res.render("profileSettings", { user });
+};
+
 const applyJob = async (req, res) => {
   const { jobId } = req.params;
   const userId = req.user.id;
@@ -77,4 +87,5 @@ module.exports = {
   profile,
   applyJob,
   applyJobSuccess,
+  renderSettingsTemplate,
 };

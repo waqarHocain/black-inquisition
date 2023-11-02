@@ -4,6 +4,7 @@ const router = require("express").Router();
 const userController = require("../controllers/user.controller");
 
 router.get("/profile", userController.profile);
+router.route("/profile/settings").get(userController.renderSettingsTemplate);
 
 router.post("/jobs/apply/:jobId", userController.applyJob);
 router.get("/jobs/apply/:jobId/success", userController.applyJobSuccess);
