@@ -49,6 +49,9 @@ const profile = async (req, res) => {
         select: {
           id: true,
           title: true,
+          location: true,
+          workplace: true,
+          type: true,
           _count: {
             select: {
               applications: true,
