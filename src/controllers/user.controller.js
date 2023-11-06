@@ -1,4 +1,5 @@
 const db = require("../services/db");
+const uploadFile = require("../services/uploadFile");
 
 const profile = async (req, res) => {
   const user = await db.user.findUnique({
@@ -75,6 +76,43 @@ const updateBio = async (req, res) => {
   res.redirect("/user/profile");
 };
 
+const updateAvatar = async (req, res) => {
+  const user = await db.user.findUnique({
+    where: {
+      id: req.user.id,
+    },
+  });
+  if (!user) throw new Error("Couldn't find user");
+
+  const errors = {};
+
+  if (!req.file) {
+    errors.avatar = "No or invalid file selected.";
+    return res.render("profileSettings", {
+      user,
+      errors,
+    });
+  }
+
+  const imgUrl = await uploadFile(req.file);
+  if (!imgUrl) throw new Error("There was a problem uploading image.");
+
+  try {
+    await db.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        photo: imgUrl,
+      },
+    });
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
+  return res.redirect("/user/profile");
+};
+
 const applyJob = async (req, res) => {
   const { jobId } = req.params;
   const userId = req.user.id;
@@ -119,4 +157,5 @@ module.exports = {
   applyJobSuccess,
   renderSettingsTemplate,
   updateBio,
+  updateAvatar,
 };

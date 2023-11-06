@@ -12,14 +12,14 @@
       />
       <div>
         <h1 class="text-gray-900 text-3xl font-semibold"><%= user.name %></h1>
-        <label>
-          <span
-            class="cursor-pointer text-purple-700 bg-purple-100 hover:bg-purple-50 px-3 py-1 rounded-md"
+        <p class="text-center sm:text-left text-sm">
+          <a
+            href="/user/profile/"
+            class="text-purple-700 bg-purple-100 hover:bg-purple-50 px-3 py-1 rounded-md"
           >
-            Change Photo
-          </span>
-          <input type="file" class="hidden" name="avatar" accept="image/*" />
-        </label>
+            Profile
+          </a>
+        </p>
       </div>
     </div>
 
@@ -40,6 +40,46 @@
         <h4 class="text-sm text-gray-600">Account Status:</h4>
         <p><%= user.verified ? "Approved" : "Pending" %></p>
       </div>
+    </div>
+
+    <div class="bg-white border-[1px] border-gray-200 rounded p-4 mt-8">
+      <form
+        method="POST"
+        enctype="multipart/form-data"
+        action="/user/profile/settings/avatar"
+      >
+        <h3 class="font-semibold border-b-[1px] border-gray-200 pb-2">
+          Update Profile Picture:
+        </h3>
+        <label class="block">
+          <input
+            type="file"
+            name="avatar"
+            accept="image/*"
+            class="mt-4 text-sm"
+            placeholder="Select your profile picture"
+            required
+          />
+        </label>
+        <% if (errors && errors.avatar) { %>
+        <p class="text-red-600 text-sm mt-1"><%= errors.avatar %></p>
+        <% } %>
+
+        <div class="mt-2 text-right">
+          <button
+            type="submit"
+            class="text-white bg-purple-600 hover:bg-purple-700 px-4 py-1 rounded transition-all duration-200"
+          >
+            Change Picture
+          </button>
+          <button
+            class="bg-gray-100 hover:bg-gray-200 px-4 py-1 rounded transition-all duration-200"
+            type="reset"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
     </div>
 
     <div class="bg-white border-[1px] border-gray-200 rounded p-4 mt-8">
