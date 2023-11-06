@@ -1,4 +1,5 @@
 const db = require("../services/db");
+const uploadFile = require("../services/uploadFile");
 
 const getJobs = async (req, res) => {
   const jobs = await db.job.findMany({
@@ -63,6 +64,89 @@ const profile = async (req, res) => {
   });
 
   res.render("companyProfile", { company });
+};
+
+const renderSettingsTemplate = async (req, res) => {
+  const company = await db.company.findUnique({
+    where: {
+      id: req.session.id,
+    },
+  });
+  if (!company) throw new Error("Invalid company id");
+  res.render("companyProfileSettings", { company, errors: {} });
+};
+
+const updateBio = async (req, res) => {
+  const { bio } = req.body;
+
+  const company = await db.company.findUnique({
+    where: {
+      id: req.session.id,
+    },
+  });
+  if (!company) throw new Error("Couldn't find company, invalid id.");
+
+  const errors = {};
+  if (bio.trim().length < 20) {
+    errors.bio = "Bio must be 20 or more characters long.";
+    return res.render("companyProfileSettings", {
+      company,
+      errors,
+    });
+  }
+
+  try {
+    await db.company.update({
+      where: {
+        id: company.id,
+      },
+      data: {
+        bio: bio,
+      },
+    });
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
+
+  res.redirect("/company/profile");
+};
+
+const updateAvatar = async (req, res) => {
+  const company = await db.company.findUnique({
+    where: {
+      id: req.session.id,
+    },
+  });
+  if (!company) throw new Error("Couldn't find company, invaid id.");
+
+  const errors = {};
+
+  if (!req.file) {
+    errors.avatar = "No or invalid file selected.";
+    return res.render("companyProfileSettings", {
+      company,
+      errors,
+    });
+  }
+
+  const imgUrl = await uploadFile(req.file);
+  if (!imgUrl) throw new Error("There was a problem uploading image.");
+
+  try {
+    await db.company.update({
+      where: {
+        id: company.id,
+      },
+      data: {
+        photo: imgUrl,
+      },
+    });
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
+  return res.redirect("/company/profile");
 };
 
 const renderCreateJobTemplate = (req, res) => {
@@ -221,4 +305,7 @@ module.exports = {
   deleteJob,
   jobDetail,
   profile,
+  renderSettingsTemplate,
+  updateAvatar,
+  updateBio,
 };

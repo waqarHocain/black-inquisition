@@ -2,6 +2,7 @@ const router = require("express").Router();
 
 // local imports
 const companyController = require("../controllers/company.controller");
+const uploader = require("../middleware/multer");
 
 router.route("/jobs").get(companyController.getJobs);
 router
@@ -20,5 +21,10 @@ router
 router.post("/jobs/:jobId/delete", companyController.deleteJob);
 
 router.route("/profile").get(companyController.profile);
+router.route("/profile/settings").get(companyController.renderSettingsTemplate);
+router.route("/profile/settings/bio").post(companyController.updateBio);
+router
+  .route("/profile/settings/avatar")
+  .post(uploader.single("avatar"), companyController.updateAvatar);
 
 module.exports = router;
