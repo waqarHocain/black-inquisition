@@ -148,7 +148,7 @@ const applyJobSuccess = async (req, res) => {
     },
   });
   if (!application) return res.sendStatus(403);
-  return res.render("appliedJob");
+  return res.render("appliedJob", { error: null });
 };
 
 module.exports = {
