@@ -16,6 +16,14 @@ const STORAGE = {
   PUBLIC_URL: process.env.R2_PUBLIC_URL,
 };
 
+const EMAIL = {
+  HOST: process.env.EMAIL_HOST,
+  PORT: process.env.EMAIL_PORT,
+  USER: process.env.EMAIL_USER,
+  PASSWORD: process.env.EMAIL_PASSWORD,
+  FROM: process.env.EMAIL_FROM,
+};
+
 const REDIS_URL = process.env.REDIS_URL || "redis://127.0.0.1:6379";
 
 module.exports = {
@@ -25,4 +33,5 @@ module.exports = {
   ROLES,
   STORAGE,
   REDIS_URL,
+  EMAIL,
 };
