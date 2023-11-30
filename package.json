@@ -16,6 +16,7 @@
     "@aws-sdk/client-s3": "^3.427.0",
     "@prisma/client": "^5.2.0",
     "bcrypt": "^5.1.1",
+    "bull": "^4.11.5",
     "cookie-session": "^2.0.0",
     "dotenv": "^16.3.1",
     "ejs": "^3.1.9",

@@ -16,10 +16,13 @@ const STORAGE = {
   PUBLIC_URL: process.env.R2_PUBLIC_URL,
 };
 
+const REDIS_URL = process.env.REDIS_URL || "redis://127.0.0.1:6379";
+
 module.exports = {
   PORT,
   SESSION_SECRET,
   TOKEN_SECRET,
   ROLES,
   STORAGE,
+  REDIS_URL,
 };
