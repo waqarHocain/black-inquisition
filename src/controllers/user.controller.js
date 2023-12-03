@@ -1,5 +1,8 @@
 const db = require("../services/db");
 const uploadFile = require("../services/uploadFile");
+const mailQueue = require("../services/mailQueue");
+const { newCandidate } = require("../utils/emailTemplates/newCandidate");
+const { EMAIL } = require("../config");
 
 const profile = async (req, res) => {
   const user = await db.user.findUnique({
@@ -136,6 +139,39 @@ const applyJob = async (req, res) => {
       userId,
     },
   });
+
+  const [user, job] = await db.$transaction([
+    db.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        name: true,
+        email: true,
+      },
+    }),
+    db.job.findUnique({
+      where: {
+        id: jobId,
+      },
+      include: {
+        Company: {
+          select: {
+            email: true,
+          },
+        },
+      },
+    }),
+  ]);
+
+  const mailBody = newCandidate(user);
+  const mailData = {
+    from: EMAIL.FROM,
+    to: job.Company.email,
+    subject: "BlackInquisition - New job application received",
+    html: mailBody,
+  };
+  await mailQueue.add(mailData);
 
   return res.redirect(`/user/jobs/apply/${jobId}/success`);
 };
