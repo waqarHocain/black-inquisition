@@ -55,11 +55,12 @@ model Job {
 }
 
 model Application {
-  id        BigInt @id @default(autoincrement())
-  job       Job    @relation(fields: [jobId], references: [id], onDelete: Cascade)
-  candidate User   @relation(fields: [userId], references: [id])
+  id        BigInt  @id @default(autoincrement())
+  job       Job     @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  candidate User    @relation(fields: [userId], references: [id])
   jobId     BigInt
   userId    BigInt
+  accepted  Boolean @default(false)
 }
 
 model ReputalbeSource {
