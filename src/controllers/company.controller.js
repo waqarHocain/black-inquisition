@@ -1,5 +1,8 @@
 const db = require("../services/db");
 const uploadFile = require("../services/uploadFile");
+const { EMAIL } = require("../config");
+const mailQueue = require("../services/mailQueue");
+const { jobSelection } = require("../utils/emailTemplates/jobSelection");
 
 const getJobs = async (req, res) => {
   const jobs = await db.job.findMany({
@@ -44,6 +47,7 @@ const jobDetail = async (req, res) => {
   job.applications.map((app) => {
     if (app.accepted) isApplicationAccepted = true;
   });
+
   // if isApplicationAccepted is true, set acceptedCandidate
   let acceptedCandidate = null;
   if (isApplicationAccepted) {
@@ -322,17 +326,37 @@ const acceptCandidate = async (req, res) => {
       id: jobId,
     },
     select: {
-      companyId: true,
+      id: true,
+      title: true,
+      location: true,
+      type: true,
+      workplace: true,
+      Company: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          phone: true,
+        },
+      },
       applications: {
         select: {
           id: true,
           accepted: true,
+          candidate: {
+            select: {
+              email: true,
+            },
+          },
         },
       },
     },
   });
+
+  const company = job.Company;
+
   // make sure that job belongs to the company
-  if (String(job.companyId) !== req.session.id) {
+  if (String(company.id) !== req.session.id) {
     return res.sendStatus(403);
   }
 
@@ -362,6 +386,23 @@ const acceptCandidate = async (req, res) => {
       accepted: true,
     },
   });
+
+  const candidateEmail = application[0].candidate.email;
+  const mailBody = jobSelection(company, {
+    id: job.id,
+    title: job.title,
+    location: job.location,
+    type: job.type,
+    workplace: job.workplace,
+  });
+  const mailData = {
+    from: EMAIL.FROM,
+    to: candidateEmail,
+    subject: "BlackInquisition - You've been selected for a job!",
+    html: mailBody,
+  };
+  await mailQueue.add(mailData);
+
   return res.redirect(`/company/jobs/${req.params.jobId}`);
 };
 
