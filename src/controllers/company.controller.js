@@ -30,6 +30,8 @@ const jobDetail = async (req, res) => {
               email: true,
             },
           },
+          accepted: true,
+          id: true,
         },
       },
     },
@@ -37,7 +39,24 @@ const jobDetail = async (req, res) => {
 
   if (!job) return res.sendStatus(404);
 
-  return res.render("jobDetail", { job });
+  // if there's a accepted application
+  let isApplicationAccepted = false;
+  job.applications.map((app) => {
+    if (app.accepted) isApplicationAccepted = true;
+  });
+  // if isApplicationAccepted is true, set acceptedCandidate
+  let acceptedCandidate = null;
+  if (isApplicationAccepted) {
+    acceptedCandidate = job.applications.filter(
+      (app) => app.accepted === true
+    )[0].candidate;
+  }
+
+  return res.render("jobDetail", {
+    job,
+    isApplicationAccepted,
+    acceptedCandidate,
+  });
 };
 
 const profile = async (req, res) => {
@@ -296,6 +315,56 @@ const deleteJob = async (req, res) => {
   return res.redirect("/company/profile");
 };
 
+const acceptCandidate = async (req, res) => {
+  const { jobId, applicationId } = req.params;
+  const job = await db.job.findUnique({
+    where: {
+      id: jobId,
+    },
+    select: {
+      companyId: true,
+      applications: {
+        select: {
+          id: true,
+          accepted: true,
+        },
+      },
+    },
+  });
+  // make sure that job belongs to the company
+  if (String(job.companyId) !== req.session.id) {
+    return res.sendStatus(403);
+  }
+
+  // application is for this job
+  const application = job.applications.filter(
+    (appl) => String(appl.id) === applicationId
+  );
+  if (application.length !== 1) {
+    return res.sendStatus(403);
+  }
+
+  // no other applications have been accepted previously
+  const acceptedApps = job.applications.filter(
+    (appl) => appl.accepted === true
+  );
+  if (acceptedApps.length > 0) {
+    return res.json({
+      error: "You've already accepted an application",
+    });
+  }
+
+  await db.application.update({
+    where: {
+      id: applicationId,
+    },
+    data: {
+      accepted: true,
+    },
+  });
+  return res.redirect(`/company/jobs/${req.params.jobId}`);
+};
+
 module.exports = {
   getJobs,
   renderCreateJobTemplate,
@@ -308,4 +377,5 @@ module.exports = {
   renderSettingsTemplate,
   updateAvatar,
   updateBio,
+  acceptCandidate,
 };

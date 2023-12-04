@@ -41,13 +41,43 @@
       <p class="mt-1 text-gray-700">
         Total applications received: <%= job.applications.length %>
       </p>
-      <% if (job.applications.length == 0) { %>
+      <% if (acceptedCandidate) { %>
+      <h4 class="mt-2 font-medium">Selected Candidate:</h4>
+      <div class="overflow-x-auto mt-2 max-w-3xl">
+        <table class="min-w-full divide-y-2 divide-gray-200 bg-white text-sm">
+          <thead>
+            <tr>
+              <th
+                class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 text-left"
+              >
+                Name
+              </th>
+              <th
+                class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 text-left"
+              >
+                Email
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+                <%= acceptedCandidate.name %>
+              </td>
+              <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+                <%= acceptedCandidate.email %>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <% } %> <% if (job.applications.length == 0) { %>
       <p class="font-semibold text-gray-700">
         No one has applied for this job yet.
       </p>
       <% } else {%>
-
-      <div class="overflow-x-auto mt-4 max-w-3xl">
+      <h4 class="mt-4 font-medium">All Candidates:</h4>
+      <div class="overflow-x-auto mt-2 max-w-3xl">
         <table class="min-w-full divide-y-2 divide-gray-200 bg-white text-sm">
           <thead>
             <tr>
@@ -66,6 +96,11 @@
               >
                 Candidate Email
               </th>
+              <th
+                class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 text-left"
+              >
+                Accept Candidate
+              </th>
             </tr>
           </thead>
 
@@ -81,6 +116,25 @@
               </td>
               <td class="whitespace-nowrap px-4 py-2 text-gray-700">
                 <%= application.candidate.email %>
+              </td>
+              <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+                <% if (!isApplicationAccepted) { %>
+                <form
+                  method="post"
+                  action="/company/jobs/<%= job.id %>/accept/<%= application.id %>"
+                >
+                  <button
+                    type="submit"
+                    class="inline-block rounded bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700"
+                  >
+                    Accept
+                  </button>
+                </form>
+                <% } else { %>
+                <button class="bg-gray-300 px-3 py-1 rounded" disabled>
+                  Aready Selected
+                </button>
+                <% } %>
               </td>
             </tr>
 

@@ -20,6 +20,11 @@ router
 
 router.post("/jobs/:jobId/delete", companyController.deleteJob);
 
+router.post(
+  "/jobs/:jobId/accept/:applicationId",
+  companyController.acceptCandidate
+);
+
 router.route("/profile").get(companyController.profile);
 router.route("/profile/settings").get(companyController.renderSettingsTemplate);
 router.route("/profile/settings/bio").post(companyController.updateBio);
