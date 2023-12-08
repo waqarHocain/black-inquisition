@@ -8,7 +8,8 @@
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
     "tailwind": "npx tailwindcss -i ./public/css/tailwind.css -o ./public/css/style.css --watch --minify",
-    "concurrently": "concurrently \"npm:dev\" \"npm:tailwind\""
+    "concurrently": "concurrently \"npm:dev\" \"npm:tailwind\"",
+    "seed": "node prisma/seed.js"
   },
   "author": "",
   "license": "ISC",
