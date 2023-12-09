@@ -7,6 +7,7 @@ const main = async () => {
   // delete previously stored data
   await db.company.deleteMany({});
   await db.user.deleteMany({});
+  await db.post.deleteMany({});
 
   // store new data
   const users = [
