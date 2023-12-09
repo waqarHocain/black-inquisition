@@ -1,0 +1,117 @@
+<%- include("./partials/header", {title: "Create new post"}) %>
+<section class="py-12 bg-gray-50 sm:py-16">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <h1
+      class="text-center text-3xl font-bold text-gray-900 sm:text-4xl lg:text-5xl"
+    >
+      Create new post
+    </h1>
+    <div class="max-w-3xl mx-auto mt-5">
+      <form method="post" action="<%= action_url %>" id="postForm">
+        <label class="block">
+          <span class="block text-sm font-medium text-gray-500 text-left">
+            Title:
+          </span>
+          <input
+            type="text"
+            name="title"
+            class="w-full p-2 mt-1 border-[1px] border-gray-300"
+            placeholder="Title for your new post..."
+            required
+          />
+          <small class="block text-left text-red-600"></small>
+        </label>
+
+        <label class="block mt-3">
+          <span class="block text-sm mb-1 font-medium text-gray-500 text-left">
+            Post Body:
+          </span>
+          <textarea
+            id="editor"
+            name="body"
+            minlength="20"
+            placeholder="Minimum 20 characters"
+          ></textarea>
+          <small class="block text-left text-red-600"></small>
+        </label>
+
+        <div class="mt-3">
+          <button
+            type="submit"
+            class="text-white bg-purple-600 hover:bg-purple-700 px-4 py-1 transition-all duration-200"
+          >
+            Create Post
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script src="/js/ckeditor.js"></script>
+<script>
+  let editor;
+
+  ClassicEditor.create(document.querySelector("#editor"), {
+    toolbar: {
+      removeItems: ["image", "mediaEmbed"],
+    },
+  })
+    .then((newEditor) => {
+      editor = newEditor;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+
+  function clearErrMsgs() {
+    const msgContainers = document.querySelectorAll("label small");
+    msgContainers.forEach((el) => (el.innerHTML = ""));
+  }
+
+  function showErrorMsg(msg, inputField) {
+    const msgContainer = inputField.parentNode.querySelector("small");
+    msgContainer.innerText = msg;
+  }
+
+  const form = document.getElementById("postForm");
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    // clear previous error messages
+    clearErrMsgs();
+
+    let isError = false; // prevent form submition if there's an error
+
+    const titleField = form.elements["title"];
+    const bodyField = form.elements["body"];
+
+    const title = titleField.value;
+    const body = bodyField.value;
+
+    if (title.length < 4) {
+      showErrorMsg("Title must be 4 or more characters long", titleField);
+      isError = true;
+    }
+
+    // 7 characters are for opening and closing html tags in body
+    if (body.length < 27) {
+      showErrorMsg("Post content must be 20 or more characters", bodyField);
+      isError = true;
+    }
+
+    if (!isError) {
+      form.submit();
+    }
+  }
+
+  form.addEventListener("submit", handleSubmit);
+</script>
+
+<style>
+  .ck-editor__editable {
+    min-height: 250px;
+  }
+</style>
+
+<%- include("./partials/footer") %>

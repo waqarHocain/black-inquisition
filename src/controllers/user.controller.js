@@ -187,6 +187,31 @@ const applyJobSuccess = async (req, res) => {
   return res.render("appliedJob", { error: null });
 };
 
+const createPost = async (req, res) => {
+  const { title, body } = req.body;
+  // body length 27 including html tags, inner text should be 20 if body.length is 27
+  if (title.length < 4 || body.length < 27) {
+    return res.status(400).json({
+      error: "Either post body or title is too short / invalid.",
+      statusCode: 400,
+    });
+  }
+
+  await db.post.create({
+    data: {
+      title,
+      body,
+      userId: req.session.id,
+    },
+  });
+
+  return res.redirect("/user/posts");
+};
+
+const createPostForm = async (req, res) => {
+  res.render("createPost", { action_url: "/user/posts" });
+};
+
 module.exports = {
   profile,
   applyJob,
@@ -194,4 +219,6 @@ module.exports = {
   renderSettingsTemplate,
   updateBio,
   updateAvatar,
+  createPost,
+  createPostForm,
 };

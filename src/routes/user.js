@@ -14,4 +14,8 @@ router
 router.post("/jobs/apply/:jobId", userController.applyJob);
 router.get("/jobs/apply/:jobId/success", userController.applyJobSuccess);
 
+// blog posts
+router.route("/posts").post(userController.createPost);
+router.get("/posts/new", userController.createPostForm);
+
 module.exports = router;
