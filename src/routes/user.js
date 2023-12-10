@@ -20,5 +20,6 @@ router
   .get(userController.listPosts)
   .post(userController.createPost);
 router.get("/posts/new", userController.createPostForm);
+router.get("/posts/:postId", userController.viewPost);
 
 module.exports = router;

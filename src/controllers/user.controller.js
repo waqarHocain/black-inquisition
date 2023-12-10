@@ -223,6 +223,19 @@ const listPosts = async (req, res) => {
   return res.render("posts", { urlPrefix: "/user/posts", posts });
 };
 
+const viewPost = async (req, res) => {
+  const { postId } = req.params;
+  const post = await db.post.findUnique({
+    where: {
+      id: postId,
+    },
+  });
+
+  if (!post) return res.sendStatus(404);
+
+  return res.render("post", { post });
+};
+
 module.exports = {
   profile,
   applyJob,
@@ -233,4 +246,5 @@ module.exports = {
   createPost,
   createPostForm,
   listPosts,
+  viewPost,
 };

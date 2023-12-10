@@ -1,0 +1,92 @@
+<%- include("./partials/header", {title: post.title}) %>
+<section class="py-12 bg-gray-50 sm:py-16">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <h1 class="text-4xl font-bold text-gray-900 lg:text-5xl max-w-prose">
+      <%= post.title %>
+    </h1>
+
+    <p class="mt-2 text-gray-500 text-sm">
+      Last Updated: <%= post.updatedAt.toDateString() %>
+    </p>
+    <p class="post-content text-lg mt-5 text-gray-500 max-w-prose">
+      <%= post.body %>
+    </p>
+  </div>
+</section>
+
+<style>
+  .post-content > * {
+    margin-top: 20px;
+  }
+  .post-content > h1,
+  .post-content > h2,
+  .post-content > h3,
+  .post-content > h4 {
+    font-weight: bold;
+    color: #4b5563;
+  }
+  .post-content > h1,
+  .post-content > h2 {
+    font-size: 32px;
+  }
+
+  .post-content > h3 {
+    font-size: 26px;
+  }
+  .post-content > h4 {
+    font-size: 24px;
+  }
+
+  .post-content > blockquote {
+    font-weight: bold;
+    font-style: italic;
+    margin-left: 20px;
+    position: relative;
+    max-width: max-content;
+  }
+  .post-content > blockquote:before {
+    content: '"';
+    position: absolute;
+    top: -5px;
+    left: -10px;
+  }
+  .post-content > blockquote::after {
+    content: '"';
+    position: absolute;
+    right: -7px;
+    bottom: -40%;
+  }
+
+  .post-content ul {
+    list-style-type: disc;
+    margin-left: 10px;
+    list-style-position: inside;
+  }
+  .post-content ol {
+    list-style-type: decimal;
+    margin-left: 10px;
+    list-style-position: inside;
+  }
+</style>
+
+<script>
+  const paraNode = document.querySelector(".post-content");
+  const outElms = [];
+
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(paraNode.textContent, "text/html");
+  const allNodes = doc.querySelectorAll("body > *");
+  console.log(allNodes);
+  for (node of allNodes) {
+    if (node.innerHTML !== "&nbsp;") outElms.push(node.outerHTML);
+  }
+
+  console.log(outElms);
+
+  // clear content
+  paraNode.innerHTML = " ";
+
+  // populate again
+  outElms.forEach((node) => (paraNode.innerHTML += node));
+</script>
+<%- include("./partials/footer") %>
