@@ -212,6 +212,17 @@ const createPostForm = async (req, res) => {
   res.render("createPost", { action_url: "/user/posts" });
 };
 
+const listPosts = async (req, res) => {
+  const userId = req.session.id;
+  const posts = await db.post.findMany({
+    where: {
+      userId,
+    },
+  });
+
+  return res.render("posts", { urlPrefix: "/user/posts", posts });
+};
+
 module.exports = {
   profile,
   applyJob,
@@ -221,4 +232,5 @@ module.exports = {
   updateAvatar,
   createPost,
   createPostForm,
+  listPosts,
 };

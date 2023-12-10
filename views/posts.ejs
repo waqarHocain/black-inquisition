@@ -1,0 +1,38 @@
+<%- include("./partials/header", {title: "Posts"}) %>
+<section class="py-12 bg-gray-50 sm:py-16">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <h1 class="text-4xl font-bold text-gray-900 lg:text-4xl">Posts</h1>
+
+    <% if (posts.length === 0) { %>
+    <p class="text-lg text-gray-700 mt-14">
+      There are no posts yet, start by creating one.
+    </p>
+    <% } else { %> <% posts.forEach((post) => { %>
+    <div class="mt-14 post">
+      <h3>
+        <a
+          href="<%= urlPrefix %>/<%= post.id %>"
+          class="text-2xl font-bold underline"
+          ><%= post.title %></a
+        >
+      </h3>
+      <p class="mt-2 text-gray-500 max-w-prose">
+        <%= post.body.substring(0, 200) %>...
+      </p>
+      <p class="mt-2">
+        <a
+          href="<%= urlPrefix %>/<%= post.id %>"
+          class="text-sm text-indigo-700 underline"
+          >Read More &gt;</a
+        >
+      </p>
+    </div>
+    <% }) %> <% } %>
+  </div>
+</section>
+
+<script>
+  const paraNodes = document.querySelectorAll(".post p:first-of-type");
+  paraNodes.forEach((p) => (p.innerHTML = p.textContent.trim()));
+</script>
+<%- include("./partials/footer") %>
