@@ -406,6 +406,54 @@ const acceptCandidate = async (req, res) => {
   return res.redirect(`/company/jobs/${req.params.jobId}`);
 };
 
+const listPosts = async (req, res) => {
+  const companyId = req.session.id;
+  const posts = await db.post.findMany({
+    where: {
+      companyId,
+    },
+  });
+
+  return res.render("posts", { urlPrefix: "/company/posts", posts });
+};
+
+const createPost = async (req, res) => {
+  const { title, body } = req.body;
+  // body length 27 including html tags, inner text should be 20 if body.length is 27
+  if (title.length < 4 || body.length < 27) {
+    return res.status(400).json({
+      error: "Either post body or title is too short / invalid.",
+      statusCode: 400,
+    });
+  }
+
+  await db.post.create({
+    data: {
+      title,
+      body,
+      companyId: req.session.id,
+    },
+  });
+
+  return res.redirect("/company/posts");
+};
+const createPostForm = async (req, res) => {
+  res.render("createPost", { action_url: "/company/posts" });
+};
+
+const viewPost = async (req, res) => {
+  const { postId } = req.params;
+  const post = await db.post.findUnique({
+    where: {
+      id: postId,
+    },
+  });
+
+  if (!post) return res.sendStatus(404);
+
+  return res.render("post", { post });
+};
+
 module.exports = {
   getJobs,
   renderCreateJobTemplate,
@@ -419,4 +467,8 @@ module.exports = {
   updateAvatar,
   updateBio,
   acceptCandidate,
+  listPosts,
+  createPost,
+  createPostForm,
+  viewPost,
 };

@@ -32,4 +32,13 @@ router
   .route("/profile/settings/avatar")
   .post(uploader.single("avatar"), companyController.updateAvatar);
 
+// blog posts
+router
+  .route("/posts")
+  .get(companyController.listPosts)
+  .post(companyController.createPost);
+
+router.get("/posts/new", companyController.createPostForm);
+router.get("/posts/:postId", companyController.viewPost);
+
 module.exports = router;
