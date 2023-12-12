@@ -76,12 +76,10 @@
   const parser = new DOMParser();
   const doc = parser.parseFromString(paraNode.textContent, "text/html");
   const allNodes = doc.querySelectorAll("body > *");
-  console.log(allNodes);
+
   for (node of allNodes) {
     if (node.innerHTML !== "&nbsp;") outElms.push(node.outerHTML);
   }
-
-  console.log(outElms);
 
   // clear content
   paraNode.innerHTML = " ";
