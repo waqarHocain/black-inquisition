@@ -30,6 +30,7 @@ RUN npx prisma generate
 
 # Copy application code
 COPY --link . .
+RUN npx prisma migrate dev
 
 # Remove development dependencies
 RUN npm prune --production
