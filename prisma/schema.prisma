@@ -8,37 +8,36 @@ datasource db {
 }
 
 model User {
-  id          BigInt        @id @default(autoincrement())
-  email       String        @unique
-  name        String
-  password    String
-  bio         String
-  photo       String?
-  active      Boolean       @default(false)
-  verified    Boolean       @default(false)
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  role        Role          @default(USER)
-  jobsApplied Application[]
-  posts       Post[]
-}
-
-model Company {
   id        BigInt            @id @default(autoincrement())
   email     String            @unique
   name      String
   password  String
-  phone     String
   bio       String
   photo     String?
+  phone     String?
   active    Boolean           @default(false)
   verified  Boolean           @default(false)
-  sources   ReputalbeSource[]
-  jobs      Job[]
   createdAt DateTime          @default(now())
   updatedAt DateTime          @updatedAt
-  role      Role              @default(COMPANY)
+  role      Role
   posts     Post[]
+  person    Person?
+  company   Company?
+  sources   ReputalbeSource[]
+}
+
+model Person {
+  id          BigInt        @id @default(autoincrement())
+  jobsApplied Application[]
+  user        User          @relation(fields: [userId], references: [id])
+  userId      BigInt        @unique
+}
+
+model Company {
+  id     BigInt @id @default(autoincrement())
+  jobs   Job[]
+  user   User   @relation(fields: [userId], references: [id])
+  userId BigInt @unique
 }
 
 model Job {
@@ -59,30 +58,28 @@ model Job {
 model Application {
   id        BigInt  @id @default(autoincrement())
   job       Job     @relation(fields: [jobId], references: [id], onDelete: Cascade)
-  candidate User    @relation(fields: [userId], references: [id])
   jobId     BigInt
-  userId    BigInt
   accepted  Boolean @default(false)
+  candidate Person  @relation(fields: [personId], references: [id])
+  personId  BigInt
 }
 
 model Post {
   id        BigInt   @id @default(autoincrement())
   title     String
   body      String
-  Company   Company? @relation(fields: [companyId], references: [id])
-  companyId BigInt?
-  User      User?    @relation(fields: [userId], references: [id])
-  userId    BigInt?
+  User      User     @relation(fields: [userId], references: [id])
+  userId    BigInt   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model ReputalbeSource {
-  id        BigInt  @id @default(autoincrement())
-  name      String
-  url       String?
-  Company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  companyId BigInt
+  id     BigInt  @id @default(autoincrement())
+  name   String
+  url    String?
+  User   User    @relation(fields: [userId], references: [id])
+  userId BigInt  @unique
 }
 
 enum Role {
