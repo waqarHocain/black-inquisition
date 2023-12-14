@@ -24,16 +24,16 @@ RUN apt-get update -qq && \
 COPY --link package.json .
 RUN npm install --production=false
 
-# generate prisma client
-COPY --link prisma .
-RUN npx prisma generate
-
 # Copy application code
 COPY --link . .
-RUN npx prisma migrate dev
 
 # Remove development dependencies
 RUN npm prune --production
+
+RUN --mount=type=secret,id=db_secret \
+    DATABASE_URL="$(cat /run/secrets/db_secret)" \
+        npx prisma migrate deploy \
+        && npx prisma generate
 
 # Final stage for app image
 FROM base
