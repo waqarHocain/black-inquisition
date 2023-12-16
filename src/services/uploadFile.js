@@ -30,11 +30,11 @@ const uploadFile = async (fileObj) => {
         ACL: "public-read",
       })
     );
-    // make sure PUBLIC_URL has a trailing slash
+
     if (STORAGE.PUBLIC_URL.endsWith("/")) {
-      return `${STORAGE.PUBLIC_URL}${filename}`;
+      return `${STORAGE.PUBLIC_URL}${STORAGE.BUCKET}/${filename}`;
     } else {
-      return `${STORAGE.PUBLIC_URL}/${filename}`;
+      return `${STORAGE.PUBLIC_URL}/${STORAGE.BUCKET}/${filename}`;
     }
   } catch (e) {
     console.error(e);
