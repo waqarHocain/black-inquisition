@@ -25,52 +25,27 @@ const login = async (req, res) => {
     },
   });
 
-  if (user) {
-    const passwordMatches = await bcrypt.compare(password, user.password);
-    if (!passwordMatches) {
-      res.locals.error = "Incorrect email or password.";
-      return res.render("login");
-    }
-    if (passwordMatches) {
-      const token = jwt.generateToken({
-        email: user.email,
-        id: String(user.id),
-        role: user.role,
-        verified: user.verified,
-      });
-      req.session.token = token;
-      req.session.id = String(user.id);
-      req.session.role = user.role;
-      return res.redirect("/user/profile");
-    }
+  if (!user) {
+    res.locals.error = "Incorrect email or password.";
+    return res.render("login");
   }
 
-  const company = await db.company.findUnique({
-    where: {
-      email,
-    },
-  });
-  if (company) {
-    const passwordMatches = await bcrypt.compare(password, company.password);
-    if (!passwordMatches) {
-      res.locals.error = "Incorrect email or password.";
-      return res.render("login");
-    }
-    if (passwordMatches) {
-      const token = jwt.generateToken({
-        email: company.email,
-        id: String(company.id),
-        role: company.role,
-        verified: company.verified,
-      });
-      req.session.token = token;
-      req.session.id = String(company.id);
-      req.session.role = company.role;
-      return res.redirect("/company/profile");
-    }
+  const passwordMatches = await bcrypt.compare(password, user.password);
+  if (!passwordMatches) {
+    res.locals.error = "Incorrect email or password.";
+    return res.render("login");
   }
-  res.locals.error = "Incorrect email or password.";
-  return res.render("login");
+
+  const token = jwt.generateToken({
+    email: user.email,
+    id: String(user.id),
+    role: user.role,
+    verified: user.verified,
+  });
+  req.session.token = token;
+  req.session.id = String(user.id);
+  req.session.role = user.role;
+  return res.redirect(`/${user.role.toLowerCase()}/profile`);
 };
 
 const renderSignupTemplate = (req, res) => {
@@ -131,6 +106,13 @@ const signup = async (req, res) => {
       password: passwordHash,
       email,
       bio,
+      role: config.ROLES.USER,
+    },
+  });
+  // create user profile
+  await db.person.create({
+    data: {
+      userId: user.id,
     },
   });
   const token = jwt.generateToken({
@@ -208,7 +190,8 @@ const companySignup = async (req, res) => {
     };
     return res.render("companySignup");
   }
-  const companyExists = await db.company.findUnique({
+
+  const companyExists = await db.user.findUnique({
     where: {
       email,
     },
@@ -245,7 +228,7 @@ const companySignup = async (req, res) => {
 
   const saltRounds = 10;
   const passwordHash = await bcrypt.hash(password, saltRounds);
-  const company = await db.company.create({
+  const company = await db.user.create({
     data: {
       photo: imageUrl,
       name: companyName,
@@ -256,6 +239,13 @@ const companySignup = async (req, res) => {
       },
       email,
       phone,
+      role: config.ROLES.COMPANY,
+    },
+  });
+  // create company profile
+  await db.company.create({
+    data: {
+      userId: company.id,
     },
   });
   const token = jwt.generateToken({

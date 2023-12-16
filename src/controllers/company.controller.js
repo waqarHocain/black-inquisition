@@ -64,7 +64,7 @@ const jobDetail = async (req, res) => {
 };
 
 const profile = async (req, res) => {
-  const company = await db.company.findUnique({
+  const company = await db.user.findUnique({
     where: {
       id: req.session.id,
     },

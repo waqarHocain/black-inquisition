@@ -5,9 +5,12 @@ const { newCandidate } = require("../utils/emailTemplates/newCandidate");
 const { EMAIL } = require("../config");
 
 const profile = async (req, res) => {
-  const user = await db.user.findUnique({
+  const { user } = await db.person.findUnique({
     where: {
-      id: req.user.id,
+      userId: req.user.id,
+    },
+    select: {
+      user: true,
     },
   });
   if (!user) throw new Error("Couldn't find user");
@@ -21,7 +24,7 @@ const profile = async (req, res) => {
 
   const userApplications = await db.application.findMany({
     where: {
-      userId: req.user.id,
+      personId: req.user.id,
     },
   });
 
@@ -98,6 +101,7 @@ const updateAvatar = async (req, res) => {
   }
 
   const imgUrl = await uploadFile(req.file);
+  console.log({ imgUrl });
   if (!imgUrl) throw new Error("There was a problem uploading image.");
 
   try {

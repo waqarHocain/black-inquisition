@@ -2,9 +2,10 @@ const db = require("../services/db");
 const { ROLES } = require("../config");
 
 const renderDashboard = async (req, res) => {
-  const companies = await db.company.findMany({
+  const companies = await db.user.findMany({
     where: {
       verified: false,
+      role: ROLES.COMPANY,
     },
   });
 
@@ -16,8 +17,16 @@ const renderDashboard = async (req, res) => {
   });
 
   const [userCount, companyCount, jobCount] = await db.$transaction([
-    db.user.count(),
-    db.company.count(),
+    db.user.count({
+      where: {
+        role: ROLES.USER,
+      },
+    }),
+    db.user.count({
+      where: {
+        role: ROLES.COMPANY,
+      },
+    }),
     db.job.count(),
   ]);
 
@@ -33,7 +42,7 @@ const renderDashboard = async (req, res) => {
 const renderCompanyProfile = async (req, res) => {
   const { companyId } = req.params;
 
-  const company = await db.company.findUnique({
+  const company = await db.user.findUnique({
     where: {
       id: companyId,
     },
@@ -65,7 +74,7 @@ const renderUserProfile = async (req, res) => {
 
 const approveCompany = async (req, res) => {
   const { companyId } = req.params;
-  await db.company.update({
+  await db.user.update({
     where: { id: companyId },
     data: {
       verified: true,
@@ -76,7 +85,7 @@ const approveCompany = async (req, res) => {
 
 const deleteCompany = async (req, res) => {
   const { companyId } = req.params;
-  await db.company.delete({
+  await db.user.delete({
     where: {
       id: companyId,
     },
