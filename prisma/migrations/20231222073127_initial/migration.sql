@@ -26,22 +26,6 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
-CREATE TABLE "Person" (
-    "id" INT8 NOT NULL DEFAULT unique_rowid(),
-    "userId" INT8 NOT NULL,
-
-    CONSTRAINT "Person_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Company" (
-    "id" INT8 NOT NULL DEFAULT unique_rowid(),
-    "userId" INT8 NOT NULL,
-
-    CONSTRAINT "Company_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "Job" (
     "id" INT8 NOT NULL DEFAULT unique_rowid(),
     "title" STRING NOT NULL,
@@ -50,9 +34,9 @@ CREATE TABLE "Job" (
     "description" STRING NOT NULL,
     "workplace" "WorkplaceType" NOT NULL,
     "type" "JobType" NOT NULL,
-    "companyId" INT8 NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "userId" INT8 NOT NULL,
 
     CONSTRAINT "Job_pkey" PRIMARY KEY ("id")
 );
@@ -62,7 +46,7 @@ CREATE TABLE "Application" (
     "id" INT8 NOT NULL DEFAULT unique_rowid(),
     "jobId" INT8 NOT NULL,
     "accepted" BOOL NOT NULL DEFAULT false,
-    "personId" INT8 NOT NULL,
+    "userId" INT8 NOT NULL,
 
     CONSTRAINT "Application_pkey" PRIMARY KEY ("id")
 );
@@ -92,35 +76,17 @@ CREATE TABLE "ReputalbeSource" (
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
--- CreateIndex
-CREATE UNIQUE INDEX "Person_userId_key" ON "Person"("userId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Company_userId_key" ON "Company"("userId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Post_userId_key" ON "Post"("userId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "ReputalbeSource_userId_key" ON "ReputalbeSource"("userId");
-
 -- AddForeignKey
-ALTER TABLE "Person" ADD CONSTRAINT "Person_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Company" ADD CONSTRAINT "Company_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Job" ADD CONSTRAINT "Job_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Job" ADD CONSTRAINT "Job_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Application" ADD CONSTRAINT "Application_jobId_fkey" FOREIGN KEY ("jobId") REFERENCES "Job"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Application" ADD CONSTRAINT "Application_personId_fkey" FOREIGN KEY ("personId") REFERENCES "Person"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Application" ADD CONSTRAINT "Application_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Post" ADD CONSTRAINT "Post_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Post" ADD CONSTRAINT "Post_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ReputalbeSource" ADD CONSTRAINT "ReputalbeSource_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
