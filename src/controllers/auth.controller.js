@@ -2,10 +2,10 @@ const bcrypt = require("bcrypt");
 
 // local imports
 const db = require("../services/db");
-const jwt = require("../services/jwt");
-const validateEmail = require("../utils/validateEmail");
 const config = require("../config");
 const uploadFile = require("../services/uploadFile");
+const { validateUser } = require("../utils/validateUser");
+const { validateCompany } = require("../utils/validateCompany");
 
 const renderLoginTemplate = (req, res) => {
   res.render("login");
@@ -36,15 +36,12 @@ const login = async (req, res) => {
     return res.render("login");
   }
 
-  const token = jwt.generateToken({
-    email: user.email,
-    id: String(user.id),
-    role: user.role,
-    verified: user.verified,
-  });
-  req.session.token = token;
   req.session.id = String(user.id);
   req.session.role = user.role;
+  req.session.verified = user.verified;
+  req.session.email = user.email;
+  req.session.idHash = Buffer.from(String(user.id)).toString("base64"); // for checking id integrity
+
   return res.redirect(`/${user.role.toLowerCase()}/profile`);
 };
 
@@ -62,21 +59,19 @@ const signup = async (req, res) => {
   }
 
   // data validation
-  const errors = {};
-  if (fullname.length < 4)
-    errors.fullname = "Username must be 4 or more characters long";
-  if (password.length < 8)
-    errors.password = "Password must be 8 or more characters long";
-  if (password !== confirmPassword)
-    errors.confirmPassword = "Passwords don't match";
-  if (!validateEmail(email)) errors.email = "Email is not valid";
-  if (bio.length < 20) errors.bio = "Bio must be 20 or more characters long";
-
-  if (Object.keys(errors).length !== 0) {
+  const errors = validateUser({
+    fullname,
+    email,
+    password,
+    confirmPassword,
+    bio,
+  });
+  if (errors) {
     res.locals.errors = errors;
     res.locals.formData = { fullname, email, password, confirmPassword, bio };
     return res.render("signup");
   }
+
   const userExists = await db.user.findUnique({
     where: {
       email,
@@ -97,6 +92,7 @@ const signup = async (req, res) => {
     return res.render("signup");
   }
 
+  // create user in db
   const saltRounds = 10;
   const passwordHash = await bcrypt.hash(password, saltRounds);
   const user = await db.user.create({
@@ -109,21 +105,15 @@ const signup = async (req, res) => {
       role: config.ROLES.USER,
     },
   });
-  // create user profile
-  await db.person.create({
-    data: {
-      userId: user.id,
-    },
-  });
-  const token = jwt.generateToken({
-    email: user.email,
-    id: String(user.id),
-    role: user.role,
-    verified: user.verified,
-  });
-  req.session.token = token;
+
+  // store session info
   req.session.id = String(user.id);
   req.session.role = user.role;
+  req.session.verified = user.verified;
+  req.session.email = user.email;
+
+  req.session.idHash = Buffer.from(String(user.id)).toString("base64"); // for checking id integrity
+
   res.redirect("/user/profile");
 };
 
@@ -132,78 +122,38 @@ const renderCompanySignupTemplate = (req, res) => {
 };
 
 const companySignup = async (req, res) => {
-  const {
-    companyName,
-    email,
-    password,
-    confirmPassword,
-    description,
-    phone,
-    source1,
-    source2,
-  } = req.body;
+  const reqData = {
+    companyName: req.body.companyName,
+    email: req.body.email,
+    password: req.body.password,
+    confirmPassword: req.body.confirmPassword,
+    description: req.body.description,
+    phone: req.body.phone,
+    source1: req.body.source1,
+    source2: req.body.source2,
+  };
 
   if (!req.file) {
     res.locals.errors = { avatar: "No file / invalid file received" };
-    res.locals.formData = {
-      companyName,
-      email,
-      password,
-      confirmPassword,
-      description,
-      phone,
-      source1,
-      source2,
-    };
+    res.locals.formData = reqData;
     return res.render("companySignup");
   }
 
   // data validation
-  const errors = {};
-  if (companyName.length < 2)
-    errors.companyName = "Company must be 2 or more characters long";
-  if (password.length < 8)
-    errors.password = "Password must be 8 or more characters long";
-  if (password !== confirmPassword)
-    errors.confirmPassword = "Passwords don't match";
-  if (!validateEmail(email)) errors.email = "Email is not valid";
-  if (description.length < 20)
-    errors.description = "Description must be 20 or more characters long";
-  if (!source1) errors.source1 = "Source not provided.";
-  if (!source2) errors.source2 = "Source not provided.";
-  if (!phone) {
-    // TODO: validate phone number
-    errors.phone = "Phone number not provided";
-  }
-
-  if (Object.keys(errors).length !== 0) {
+  const errors = validateCompany(reqData);
+  if (errors) {
     res.locals.errors = errors;
-    res.locals.formData = {
-      companyName,
-      email,
-      password,
-      confirmPassword,
-      description,
-      phone,
-      source1,
-      source2,
-    };
+    res.locals.formData = reqData;
     return res.render("companySignup");
   }
 
   const companyExists = await db.user.findUnique({
     where: {
-      email,
+      email: reqData.email,
     },
   });
   if (companyExists) {
-    res.locals.formData = {
-      companyName,
-      email,
-      password,
-      confirmPassword,
-      description,
-    };
+    res.locals.formData = reqData;
     res.locals.errors = {
       companyExists: "Company with this email address already has an account.",
     };
@@ -212,51 +162,37 @@ const companySignup = async (req, res) => {
 
   const imageUrl = await uploadFile(req.file);
   if (!imageUrl) {
-    res.locals.formData = {
-      companyName,
-      email,
-      password,
-      confirmPassword,
-      description,
-      phone,
-      source1,
-      source2,
-    };
+    res.locals.formData = reqData;
     res.locals.errors.avatar = "Error uploading image :(";
     return res.render("companySignup");
   }
 
+  // create company account
   const saltRounds = 10;
-  const passwordHash = await bcrypt.hash(password, saltRounds);
+  const passwordHash = await bcrypt.hash(reqData.password, saltRounds);
   const company = await db.user.create({
     data: {
       photo: imageUrl,
-      name: companyName,
+      name: reqData.companyName,
       password: passwordHash,
-      bio: description,
-      sources: {
-        create: [{ name: source1 }, { name: source2 }],
-      },
-      email,
-      phone,
+      bio: reqData.description,
+      email: reqData.email,
+      phone: reqData.phone,
       role: config.ROLES.COMPANY,
+      sources: {
+        create: [{ name: reqData.source1 }, { name: reqData.source2 }],
+      },
     },
   });
-  // create company profile
-  await db.company.create({
-    data: {
-      userId: company.id,
-    },
-  });
-  const token = jwt.generateToken({
-    email: company.email,
-    id: String(company.id),
-    role: company.role,
-    verified: company.verified,
-  });
-  req.session.token = token;
+
+  // store info in session
   req.session.id = String(company.id);
   req.session.role = company.role;
+  req.session.verified = company.verified;
+  req.session.email = company.email;
+
+  req.session.idHash = Buffer.from(String(company.id)).toString("base64"); // for checking id integrity
+
   res.redirect("/company/profile");
 };
 
@@ -278,27 +214,22 @@ const adminLogin = async (req, res) => {
     },
   });
 
-  if (admin && admin.role === config.ROLES.ADMIN) {
-    const passwordMatches = await bcrypt.compare(password, admin.password);
-    if (!passwordMatches) {
-      res.locals.error = "Incorrect email or password.";
-      return res.render("adminLogin");
-    }
-    if (passwordMatches) {
-      const token = jwt.generateToken({
-        email: admin.email,
-        id: String(admin.id),
-        role: admin.role,
-      });
-      req.session.token = token;
-      req.session.id = String(admin.id);
-      req.session.role = admin.role;
-      return res.redirect("/admin/dashboard");
-    }
+  if (admin && admin.role !== config.ROLES.ADMIN) {
+    res.locals.error = "Incorrect email or password.";
+    return res.render("adminLogin");
   }
 
-  res.locals.error = "Incorrect email or password.";
-  return res.render("adminLogin");
+  const passwordMatches = await bcrypt.compare(password, admin.password);
+  if (!passwordMatches) {
+    res.locals.error = "Incorrect email or password.";
+    return res.render("adminLogin");
+  }
+
+  req.session.id = String(admin.id);
+  req.session.role = admin.role;
+  req.session.email = admin.email;
+  req.session.idHash = Buffer.from(String(admin.id)).toString("base64"); // for checking id integrity
+  return res.redirect("/admin/dashboard");
 };
 
 const logout = (req, res) => {
