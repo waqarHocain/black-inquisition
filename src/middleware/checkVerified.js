@@ -1,28 +1,21 @@
 const db = require("../services/db");
-const jwt = require("../services/jwt");
 const { ROLES } = require("../config");
 
 const checkVerified = async (req, res, next) => {
-  if (req.user && req.user.verified) {
+  if (req.session.verified) {
     return next();
   }
 
   // refetch latest user state
   const user = await db.user.findUnique({
     where: {
-      id: req.user.id,
+      id: req.session.id,
     },
   });
 
   if (user && user.verified) {
     // update value in session
-    const token = jwt.generateToken({
-      id: req.user.id,
-      email: req.user.email,
-      role: req.user.role,
-      verified: true,
-    });
-    req.session.token = token;
+    req.session.verified = true;
     return next();
   }
 

@@ -5,14 +5,12 @@ const { newCandidate } = require("../utils/emailTemplates/newCandidate");
 const { EMAIL } = require("../config");
 
 const profile = async (req, res) => {
-  const { user } = await db.person.findUnique({
+  const user = await db.user.findUnique({
     where: {
-      userId: req.user.id,
-    },
-    select: {
-      user: true,
+      id: req.session.id,
     },
   });
+
   if (!user) throw new Error("Couldn't find user");
 
   const recentJobs = await db.job.findMany({
@@ -24,7 +22,7 @@ const profile = async (req, res) => {
 
   const userApplications = await db.application.findMany({
     where: {
-      personId: req.user.id,
+      userId: user.id,
     },
   });
 
@@ -45,7 +43,7 @@ const profile = async (req, res) => {
 const renderSettingsTemplate = async (req, res) => {
   const user = await db.user.findUnique({
     where: {
-      id: req.user.id,
+      id: req.session.id,
     },
   });
   if (!user) throw new Error("Couldn't find user");
@@ -56,7 +54,7 @@ const updateBio = async (req, res) => {
   const { bio } = req.body;
   const user = await db.user.findUnique({
     where: {
-      id: req.user.id,
+      id: req.session.id,
     },
   });
   if (!user) throw new Error("Couldn't find user");
@@ -73,7 +71,7 @@ const updateBio = async (req, res) => {
 
   await db.user.update({
     where: {
-      id: req.user.id,
+      id: req.session.id,
     },
     data: {
       bio: bio,
@@ -85,7 +83,7 @@ const updateBio = async (req, res) => {
 const updateAvatar = async (req, res) => {
   const user = await db.user.findUnique({
     where: {
-      id: req.user.id,
+      id: req.session.id,
     },
   });
   if (!user) throw new Error("Couldn't find user");
@@ -101,7 +99,6 @@ const updateAvatar = async (req, res) => {
   }
 
   const imgUrl = await uploadFile(req.file);
-  console.log({ imgUrl });
   if (!imgUrl) throw new Error("There was a problem uploading image.");
 
   try {
@@ -122,12 +119,16 @@ const updateAvatar = async (req, res) => {
 
 const applyJob = async (req, res) => {
   const { jobId } = req.params;
-  const userId = req.user.id;
+  const user = await db.user.findUnique({
+    where: {
+      id: req.session.id,
+    },
+  });
 
   const jobApplication = await db.application.findFirst({
     where: {
       jobId,
-      userId,
+      userId: user.id,
     },
   });
 
@@ -140,38 +141,27 @@ const applyJob = async (req, res) => {
   await db.application.create({
     data: {
       jobId,
-      userId,
+      userId: user.id,
     },
   });
 
-  const [user, job] = await db.$transaction([
-    db.user.findUnique({
-      where: {
-        id: userId,
-      },
-      select: {
-        name: true,
-        email: true,
-      },
-    }),
-    db.job.findUnique({
-      where: {
-        id: jobId,
-      },
-      include: {
-        Company: {
-          select: {
-            email: true,
-          },
+  const job = await db.job.findUnique({
+    where: {
+      id: jobId,
+    },
+    include: {
+      User: {
+        select: {
+          email: true,
         },
       },
-    }),
-  ]);
+    },
+  });
 
   const mailBody = newCandidate(user);
   const mailData = {
     from: EMAIL.FROM,
-    to: job.Company.email,
+    to: job.User.email,
     subject: "BlackInquisition - New job application received",
     html: mailBody,
   };
@@ -181,10 +171,16 @@ const applyJob = async (req, res) => {
 };
 
 const applyJobSuccess = async (req, res) => {
+  const user = await db.user.findUnique({
+    where: {
+      id: req.session.id,
+    },
+  });
+
   const application = await db.application.findFirst({
     where: {
       jobId: req.params.jobId,
-      userId: req.user.id,
+      userId: user.id,
     },
   });
   if (!application) return res.sendStatus(403);

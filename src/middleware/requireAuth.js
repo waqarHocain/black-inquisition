@@ -1,16 +1,10 @@
-const jwt = require("../services/jwt");
-
 const requireAuth = async (req, res, next) => {
-  const token = req.session.token;
   const id = req.session.id;
+  const idHash = req.session.idHash;
 
-  if (token && id) {
-    const decodedToken = jwt.verifyToken(token);
-
-    if (decodedToken && decodedToken.id === id) {
-      req.user = decodedToken;
-      return next();
-    }
+  if (id && idHash) {
+    const decodedId = Buffer.from(idHash, "base64").toString("ascii");
+    if (decodedId === id) return next();
   }
   return res.redirect("/auth/login");
 };

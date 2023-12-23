@@ -59,7 +59,7 @@
 
       <p class="mt-2 text-gray-500 text-sm">Jobs that you've posted.</p>
 
-      <% if (company.jobs.length > 0) { %>
+      <% if (jobs.length > 0) { %>
       <div class="overflow-x-auto mt-2">
         <table class="min-w-full divide-y-2 divide-gray-200 bg-white text-sm">
           <thead>
@@ -93,7 +93,7 @@
           </thead>
 
           <tbody class="divide-y divide-gray-200">
-            <% company.jobs.forEach((job, index) => { %>
+            <% jobs.forEach((job, index) => { %>
             <tr class="text-left">
               <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
                 <%= index + 1 %>

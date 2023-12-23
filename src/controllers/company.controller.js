@@ -1,13 +1,13 @@
 const db = require("../services/db");
 const uploadFile = require("../services/uploadFile");
-const { EMAIL } = require("../config");
+const { EMAIL, ROLES } = require("../config");
 const mailQueue = require("../services/mailQueue");
 const { jobSelection } = require("../utils/emailTemplates/jobSelection");
 
 const getJobs = async (req, res) => {
   const jobs = await db.job.findMany({
     where: {
-      companyId: req.session.id,
+      userId: req.session.id,
     },
     include: {
       applications: true,
@@ -26,15 +26,15 @@ const jobDetail = async (req, res) => {
     include: {
       applications: {
         select: {
-          candidate: {
+          id: true,
+          accepted: true,
+          User: {
             select: {
               id: true,
               name: true,
               email: true,
             },
           },
-          accepted: true,
-          id: true,
         },
       },
     },
@@ -53,7 +53,7 @@ const jobDetail = async (req, res) => {
   if (isApplicationAccepted) {
     acceptedCandidate = job.applications.filter(
       (app) => app.accepted === true
-    )[0].candidate;
+    )[0].User;
   }
 
   return res.render("jobDetail", {
@@ -86,11 +86,11 @@ const profile = async (req, res) => {
     },
   });
 
-  res.render("companyProfile", { company });
+  res.render("companyProfile", { company: company, jobs: company.jobs });
 };
 
 const renderSettingsTemplate = async (req, res) => {
-  const company = await db.company.findUnique({
+  const company = await db.user.findUnique({
     where: {
       id: req.session.id,
     },
@@ -102,7 +102,7 @@ const renderSettingsTemplate = async (req, res) => {
 const updateBio = async (req, res) => {
   const { bio } = req.body;
 
-  const company = await db.company.findUnique({
+  const company = await db.user.findUnique({
     where: {
       id: req.session.id,
     },
@@ -119,7 +119,7 @@ const updateBio = async (req, res) => {
   }
 
   try {
-    await db.company.update({
+    await db.user.update({
       where: {
         id: company.id,
       },
@@ -136,7 +136,7 @@ const updateBio = async (req, res) => {
 };
 
 const updateAvatar = async (req, res) => {
-  const company = await db.company.findUnique({
+  const company = await db.user.findUnique({
     where: {
       id: req.session.id,
     },
@@ -157,7 +157,7 @@ const updateAvatar = async (req, res) => {
   if (!imgUrl) throw new Error("There was a problem uploading image.");
 
   try {
-    await db.company.update({
+    await db.user.update({
       where: {
         id: company.id,
       },
@@ -180,8 +180,8 @@ const createJob = async (req, res) => {
   const { title, company, location, workplace, jobType, description } =
     req.body;
 
+  // TODO: move validation to a separate file
   const errors = {};
-
   if (title.trim().length < 8)
     errors.title = "Title must be 8 or more characters long";
   if (!company.trim()) errors.company = "Please enter company name";
@@ -210,6 +210,12 @@ const createJob = async (req, res) => {
     return res.render("createJob");
   }
 
+  // make sure a company user is logged in
+  if (req.session.role !== ROLES.COMPANY) {
+    req.session = null; // invalidate session
+    return res.redirect("/auth/login");
+  }
+
   const job = await db.job.create({
     data: {
       title,
@@ -218,7 +224,7 @@ const createJob = async (req, res) => {
       workplace,
       description,
       type: jobType,
-      companyId: req.session.id,
+      userId: req.session.id,
     },
   });
 
@@ -226,13 +232,20 @@ const createJob = async (req, res) => {
 };
 
 const renderEditJobTemplate = async (req, res) => {
-  const job = await db.job.findUnique({
-    where: {
-      id: req.params.jobId,
-    },
-  });
+  const [job, company] = await db.$transaction([
+    db.job.findUnique({
+      where: {
+        id: req.params.jobId,
+      },
+    }),
+    db.user.findUnique({
+      where: {
+        id: req.session.id,
+      },
+    }),
+  ]);
   // check job belongs to current user
-  if (String(job.companyId) !== req.user.id) return res.sendStatus(403);
+  if (job.userId !== company.id) return res.sendStatus(403);
 
   if (!job) return res.redirect("/company/profile");
   return res.render("editJob", { job });
@@ -273,15 +286,22 @@ const editJob = async (req, res) => {
   }
 
   const jobId = req.params.jobId;
-  const job = await db.job.findUnique({
-    where: {
-      id: jobId,
-    },
-  });
+  const [job, companyModel] = await db.$transaction([
+    db.job.findUnique({
+      where: {
+        id: jobId,
+      },
+    }),
+    db.user.findUnique({
+      where: {
+        id: req.session.id,
+      },
+    }),
+  ]);
   if (!job) return res.sendStatus(404);
 
   // check job belongs to current user
-  if (String(job.companyId) !== req.user.id) return res.sendStatus(403);
+  if (job.userId !== companyModel.id) return res.sendStatus(403);
 
   await db.job.update({
     where: {
@@ -294,7 +314,6 @@ const editJob = async (req, res) => {
       workplace,
       description,
       type: jobType,
-      companyId: req.session.id,
     },
   });
   return res.redirect("/company/profile");
@@ -302,14 +321,21 @@ const editJob = async (req, res) => {
 
 const deleteJob = async (req, res) => {
   const { jobId } = req.params;
-  const job = await db.job.findUnique({
-    where: {
-      id: jobId,
-    },
-  });
+  const [job, company] = await db.$transaction([
+    db.job.findUnique({
+      where: {
+        id: jobId,
+      },
+    }),
+    db.user.findUnique({
+      where: {
+        id: req.session.id,
+      },
+    }),
+  ]);
 
   // check job belongs to current user
-  if (String(job.companyId) !== req.user.id) return res.sendStatus(403);
+  if (job.userId !== company.id) return res.sendStatus(403);
 
   await db.job.delete({
     where: {
@@ -331,11 +357,11 @@ const acceptCandidate = async (req, res) => {
       location: true,
       type: true,
       workplace: true,
-      Company: {
+      User: {
         select: {
           id: true,
-          name: true,
           email: true,
+          name: true,
           phone: true,
         },
       },
@@ -343,8 +369,9 @@ const acceptCandidate = async (req, res) => {
         select: {
           id: true,
           accepted: true,
-          candidate: {
+          User: {
             select: {
+              id: true,
               email: true,
             },
           },
@@ -353,7 +380,7 @@ const acceptCandidate = async (req, res) => {
     },
   });
 
-  const company = job.Company;
+  const company = job.User;
 
   // make sure that job belongs to the company
   if (String(company.id) !== req.session.id) {
@@ -387,7 +414,7 @@ const acceptCandidate = async (req, res) => {
     },
   });
 
-  const candidateEmail = application[0].candidate.email;
+  const candidateEmail = application[0].User.email;
   const mailBody = jobSelection(company, {
     id: job.id,
     title: job.title,
@@ -407,10 +434,9 @@ const acceptCandidate = async (req, res) => {
 };
 
 const listPosts = async (req, res) => {
-  const companyId = req.session.id;
   const posts = await db.post.findMany({
     where: {
-      companyId,
+      userId: req.session.id,
     },
   });
 
@@ -431,7 +457,7 @@ const createPost = async (req, res) => {
     data: {
       title,
       body,
-      companyId: req.session.id,
+      userId: req.session.id,
     },
   });
 
