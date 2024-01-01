@@ -1,9 +1,9 @@
 <%- include("./partials/header", {title: "Profile"}) %>
 
-<section class="py-12 bg-gray-50 sm:py-16">
+<section class="py-12 sm:py-16">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div
-      class="flex flex-col items-center gap-y-4 sm:flex-row sm:gap-x-3 bg-white border-[1px] border-gray-200 rounded p-4"
+      class="flex flex-col items-center gap-y-4 sm:flex-row sm:gap-x-3 bg-gray-800 border-[1px] border-gray-700 rounded p-4"
     >
       <img
         src="<%= company.photo %>"
@@ -11,14 +11,9 @@
         class="rounded-full w-20 h-20 sm:w-12 sm:h-12 inline ring-4"
       />
       <div>
-        <h1 class="text-gray-900 text-3xl font-semibold">
-          <%= company.name %>
-        </h1>
+        <h1 class="text-white text-3xl font-semibold"><%= company.name %></h1>
         <p class="text-center sm:text-left text-sm">
-          <a
-            href="/company/profile/"
-            class="text-purple-700 bg-purple-100 hover:bg-purple-50 px-3 py-1 rounded-md"
-          >
+          <a href="/company/profile/" class="btn-outline px-2 rounded-md">
             Profile
           </a>
         </p>
@@ -26,35 +21,37 @@
     </div>
 
     <div
-      class="flex flex-col gap-4 sm:flex-row sm:gap-12 bg-white border-[1px] border-gray-200 border-t-0 rounded p-4"
+      class="flex flex-col gap-4 sm:flex-row sm:gap-12 text-white bg-gray-800 border-[1px] border-gray-700 border-t-0 rounded p-4"
     >
-      <div class="sm:border-r-2 border-gray-200 sm:pr-4">
-        <h4 class="text-sm text-gray-600">Email:</h4>
+      <div class="sm:border-r-2 border-gray-500 sm:pr-4">
+        <h4 class="text-sm text-gray-300">Email:</h4>
         <p><%= company.email %></p>
       </div>
 
-      <div class="sm:border-r-2 border-gray-200 sm:pr-4">
-        <h4 class="text-sm text-gray-600">Phone:</h4>
+      <div class="sm:border-r-2 border-gray-500 sm:pr-4">
+        <h4 class="text-sm text-gray-300">Phone:</h4>
         <p><%= company.phone %></p>
       </div>
 
-      <div class="sm:border-r-2 border-gray-200 sm:pr-4">
-        <h4 class="text-sm text-gray-600">Joined:</h4>
+      <div class="sm:border-r-2 border-gray-500 sm:pr-4">
+        <h4 class="text-sm text-gray-300">Joined:</h4>
         <p><%= company.createdAt.toDateString() %></p>
       </div>
 
       <div>
-        <h4 class="text-sm text-gray-600">Account Status:</h4>
+        <h4 class="text-sm text-gray-300">Account Status:</h4>
         <p><%= company.verified ? "Approved" : "Pending" %></p>
       </div>
     </div>
-    <div class="bg-white border-[1px] border-gray-200 rounded p-4 mt-8">
+    <div class="bg-gray-800 border-[1px] border-gray-700 rounded p-4 mt-8">
       <form
         method="POST"
         enctype="multipart/form-data"
         action="/company/profile/settings/avatar"
       >
-        <h3 class="font-semibold border-b-[1px] border-gray-200 pb-2">
+        <h3
+          class="font-semibold border-b-[1px] text-gray-300 border-gray-500 pb-2"
+        >
           Update Profile Picture:
         </h3>
         <label class="block">
@@ -62,7 +59,7 @@
             type="file"
             name="avatar"
             accept="image/*"
-            class="mt-4 text-sm"
+            class="mt-4 text-sm text-gray-300 cursor-pointer"
             placeholder="Select your profile picture"
             required
           />
@@ -74,23 +71,22 @@
         <div class="mt-2 text-right">
           <button
             type="submit"
-            class="text-white bg-purple-600 hover:bg-purple-700 px-4 py-1 rounded transition-all duration-200"
+            class="btn-primary px-4 py-1 text-sm rounded-md"
           >
             Change Picture
           </button>
-          <button
-            class="bg-gray-100 hover:bg-gray-200 px-4 py-1 rounded transition-all duration-200"
-            type="reset"
-          >
+          <button type="reset" class="btn-outline px-4 py-1 text-sm rounded-md">
             Cancel
           </button>
         </div>
       </form>
     </div>
 
-    <div class="bg-white border-[1px] border-gray-200 rounded p-4 mt-8">
+    <div class="bg-gray-800 border-[1px] border-gray-700 rounded p-4 mt-8">
       <form method="POST" action="/company/profile/settings/bio">
-        <h3 class="font-semibold border-b-[1px] border-gray-200 pb-2">
+        <h3
+          class="font-semibold border-b-[1px] text-gray-300 border-gray-500 pb-2"
+        >
           Update Bio:
         </h3>
         <textarea
@@ -106,27 +102,20 @@
         <div class="mt-2 text-right">
           <button
             type="submit"
-            class="text-white bg-purple-600 hover:bg-purple-700 px-4 py-1 rounded transition-all duration-200"
+            class="btn-primary px-4 py-1 text-sm rounded-md"
           >
             Update Bio
           </button>
-          <button
-            class="bg-gray-100 hover:bg-gray-200 px-4 py-1 rounded transition-all duration-200"
-            type="reset"
-          >
+          <button class="btn-outline px-4 py-1 text-sm rounded-md" type="reset">
             Cancel
           </button>
         </div>
       </form>
     </div>
 
-    <p class="mt-8 text-right text-sm">
+    <p class="mt-8 text-right text-sm text-gray-300">
       Go back to
-      <a
-        href="/company/profile"
-        class="text-purple-700 bg-purple-100 hover:bg-purple-50 px-3 py-1 rounded-md"
-        >Profile page
-      </a>
+      <a href="/company/profile" class="btn-outline px-3 py-1">Profile page </a>
     </p>
   </div>
 </section>

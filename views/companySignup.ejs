@@ -1,11 +1,11 @@
 <%- include("./partials/header", {title: "Create Account"}) %>
 
-<section class="py-12 bg-gray-50 sm:py-16">
+<section class="py-12 sm:py-16">
   <div class="text-center mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <h1 class="text-4xl font-bold text-gray-900 sm:text-5xl lg:text-6xl">
+    <h1 class="text-4xl font-bold text-gray-50 sm:text-5xl lg:text-6xl">
       Company Registration
     </h1>
-    <p class="mt-6 text-lg text-gray-600">
+    <p class="mt-6 text-lg text-gray-200">
       Create a company account to get started.
     </p>
 
@@ -22,14 +22,14 @@
       <% } %>
 
       <label class="block">
-        <span class="block text-xs font-medium text-gray-500 text-left">
+        <span class="block text-xs font-medium text-gray-200 text-left">
           Profile Picture:
         </span>
         <input
           type="file"
           name="avatar"
           accept="image/*"
-          class="w-full p-3 mt-1 text-sm input-primary"
+          class="w-full p-3 mt-1 text-sm input-primary cursor-pointer"
           placeholder="Select your profile picture"
           required
         />
@@ -40,13 +40,13 @@
       </label>
 
       <label class="block mt-6">
-        <span class="block text-xs font-medium text-gray-500 text-left">
+        <span class="block text-xs font-medium text-gray-200 text-left">
           Company Name:
         </span>
         <input
           type="text"
           name="companyName"
-          placeholder="Enter your company name"
+          placeholder="Minimum 4 characters"
           class="w-full p-3 mt-1 text-sm input-primary"
           value="<%= (locals.formData && locals.formData.companyName) ? locals.formData.companyName : '' %>"
           required
@@ -58,7 +58,7 @@
       </label>
 
       <label class="block mt-6">
-        <span class="block text-xs font-medium text-gray-500 text-left"
+        <span class="block text-xs font-medium text-gray-200 text-left"
           >Email:</span
         >
         <input
@@ -76,14 +76,14 @@
       </label>
 
       <label class="block mt-6">
-        <span class="block text-xs font-medium text-gray-500 text-left">
+        <span class="block text-xs font-medium text-gray-200 text-left">
           Password:</span
         >
         <input
           class="w-full p-3 mt-1 text-sm input-primary"
           type="password"
           name="password"
-          placeholder="Enter your password"
+          placeholder="Minimum 8 characters"
           value="<%= (locals.formData && locals.formData.password) ? locals.formData.password : '' %>"
           required
         />
@@ -94,14 +94,14 @@
       </label>
 
       <label class="block mt-6">
-        <span class="block text-xs font-medium text-gray-500 text-left">
+        <span class="block text-xs font-medium text-gray-200 text-left">
           Confirm Password:</span
         >
         <input
           class="w-full p-3 mt-1 text-sm input-primary"
           type="password"
           name="confirmPassword"
-          placeholder="Confirm your password"
+          placeholder="Minimum 8 characters"
           value="<%= (locals.formData && locals.formData.confirmPassword) ? locals.formData.confirmPassword : '' %>"
           required
         />
@@ -112,13 +112,13 @@
       </label>
 
       <label class="block mt-6">
-        <span class="block text-xs font-medium text-gray-500 text-left">
+        <span class="block text-xs font-medium text-gray-200 text-left">
           Description (briefly describe your company):</span
         >
         <textarea
           class="w-full h-[150px] p-3 mt-1 text-sm input-primary"
           name="description"
-          placeholder="A brief description of your company"
+          placeholder="Minimum 20 characters"
           required
         >
 <%= (locals.formData && locals.formData.description) ? locals.formData.description : '' %></textarea
@@ -131,7 +131,7 @@
       </label>
 
       <label class="block mt-6">
-        <span class="block text-xs font-medium text-gray-500 text-left">
+        <span class="block text-xs font-medium text-gray-200 text-left">
           Phone number:</span
         >
         <input
@@ -148,12 +148,12 @@
         </small>
       </label>
 
-      <p class="mt-6 text-left text-gray-600 text-sm font-medium">
+      <p class="mt-6 text-left text-gray-300 text-sm font-medium">
         Please mention two sources who can vouch for you (can be a person or
         company with whom you've done business).
       </p>
       <label class="block mt-6">
-        <span class="block text-xs font-medium text-gray-500 text-left">
+        <span class="block text-xs font-medium text-gray-200 text-left">
           Source 1
         </span>
         <input
@@ -171,7 +171,7 @@
       </label>
 
       <label class="block mt-6">
-        <span class="block text-xs font-medium text-gray-500 text-left">
+        <span class="block text-xs font-medium text-gray-200 text-left">
           Source 2
         </span>
         <input
@@ -192,12 +192,12 @@
         Create Account
       </button>
 
-      <p class="mt-9 text-left text-sm text-gray-600">
+      <p class="mt-9 text-left text-sm text-gray-200">
         Already have an account?
         <a class="underline font-bold" href="/auth/login">Login</a>
       </p>
 
-      <p class="mt-2 text-left text-sm text-gray-600">
+      <p class="mt-2 text-left text-sm text-gray-200">
         Want to register for a personal account?
         <a class="underline font-bold" href="/auth/user/signup">
           Register here.</a

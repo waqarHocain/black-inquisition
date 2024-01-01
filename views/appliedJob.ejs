@@ -1,19 +1,21 @@
 <%- include("./partials/header", {title: "Jobs"}) %>
 
-<section class="py-12 bg-gray-50 sm:py-16">
+<section class="py-12 sm:py-16">
   <div class="text-center mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <% if (error) { %>
-    <h1 class="text-3xl font-bold text-gray-900">Already in!</h1>
-    <p class="text-lg text-gray-600 mt-5"><%= error %></p>
+    <h1 class="text-3xl font-bold text-white">Already in!</h1>
+    <p class="text-lg text-gray-300 mt-5"><%= error %></p>
     <% } else { %>
-    <h1 class="text-3xl font-bold text-gray-900 lg:text-4xl">Success</h1>
-    <p class="text-lg text-gray-600 mt-5">
+    <h1 class="text-3xl font-bold text-white lg:text-4xl">Success</h1>
+    <p class="text-lg text-gray-300 mt-5">
       Your profile has been shared with company.
     </p>
     <% } %>
 
     <p class="mt-2">
-      <a class="underline" href="/user/profile">Go back to profile</a>
+      <a class="underline text-golden" href="/user/profile"
+        >Go back to profile</a
+      >
     </p>
   </div>
 </section>

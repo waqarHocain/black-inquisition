@@ -1,37 +1,51 @@
 <%- include("./partials/header", {title: "Jobs"}) %>
 
-<section class="py-12 bg-gray-50 sm:py-16">
+<section class="py-12 sm:py-16">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <h1 class="text-3xl text-center font-bold text-gray-900 lg:text-4xl">
-      Jobs
-    </h1>
+    <h1 class="text-3xl text-center font-bold text-white lg:text-4xl">Jobs</h1>
 
     <% if (jobs.length === 0) { %>
-    <p class="text-lg text-gray-700 text-center">
+    <p class="text-lg text-gray-300 text-center mt-5">
       There are no jobs, start by creating one.
+
+      <a
+        href="/company/jobs/new"
+        class="block mx-auto mt-4 btn-primary px-4 py-1 max-w-fit"
+        >Post New Job</a
+      >
     </p>
     <% } else { %>
+    <p class="mt-5 max-w-3xl mx-auto text-gray-300">
+      Post a
+      <a
+        href="/company/jobs/new"
+        class="btn-primary px-2 py-1 text-xs rounded-md"
+        >New Job</a
+      >
+    </p>
     <ul class="max-w-3xl mx-auto mt-5">
       <% jobs.forEach(job => { %>
       <li
-        class="my-3 border-2 border-gray-200 bg-white rounded shadow-sm w-full px-5 py-2 flex flex-col sm:flex-row sm:items-center justify-between"
+        class="my-3 border-2 border-gray-700 bg-gray-800 rounded shadow-sm w-full px-5 py-2 flex flex-col sm:flex-row sm:items-center justify-between"
       >
         <div>
-          <h3 class="text-lg font-semibold text-gray-600">
+          <h3 class="text-lg font-semibold text-gray-100">
             <a href="/company/jobs/<%= job.id %>"> <%= job.title %> </a>
           </h3>
-          <p class="text-sm text-gray-500 break-words my-1">
+          <p class="text-sm text-gray-300 break-words my-1">
             <%= job.description.substring(0, 100) %>...
           </p>
-          <p class="text-gray-500 text-xs">
-            Job Type: <%= job.type %> Workplace: <%= job.workplace %>
+          <p class="text-gray-100 text-xs">
+            <span class="font-bold text-gray-400">Job Type:</span> <%= job.type
+            %> <span class="font-bold text-gray-400">Workplace:</span> <%=
+            job.workplace %>
           </p>
         </div>
 
         <p class="sm:ml-2">
           <a
             href="/company/jobs/<%= job.id %>"
-            class="underline font-bold text-gray-500 text-sm"
+            class="underline font-bold text-golden text-sm"
             >View Details</a
           >
         </p>

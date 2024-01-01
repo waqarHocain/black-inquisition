@@ -4,14 +4,27 @@
 
 @layer components {
   .btn-primary {
-    @apply border-2 border-transparent font-semibold rounded-lg text-white bg-gray-900 hover:bg-gray-700 transition-all duration-200;
+    @apply text-white transition-all duration-200 bg-lightBlue border-2 border-transparent rounded-xl hover:bg-blueDark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blueDark;
   }
 
   .btn-outline {
-    @apply border-2 border-gray-400 hover:border-gray-900 font-semibold rounded-lg text-gray-700 hover:text-white bg-transparent hover:bg-gray-900 transition-all duration-200;
+    @apply border-2 border-lightBlue hover:border-blueDark font-semibold rounded-md text-lightBlue hover:text-white bg-transparent hover:bg-blueDark transition-all duration-200;
   }
 
   .input-primary {
     @apply border-2 border-gray-200 rounded disabled:bg-gray-100;
+  }
+  .body-bg {
+    background-color: rgb(31, 41, 55);
+    background-image: radial-gradient(
+        at 73% 81%,
+        rgb(31, 41, 55) 0,
+        transparent 28%
+      ),
+      radial-gradient(at 52% 80%, rgb(63, 63, 70) 0, transparent 97%),
+      radial-gradient(at 53% 41%, rgb(88, 28, 135) 0, transparent 46%),
+      radial-gradient(at 84% 8%, rgb(17, 24, 39) 0, transparent 84%),
+      radial-gradient(at 38% 80%, rgb(88, 28, 135) 0, transparent 36%),
+      radial-gradient(at 64% 52%, rgb(88, 28, 135) 0, transparent 40%);
   }
 }

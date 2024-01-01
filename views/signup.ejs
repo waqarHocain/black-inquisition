@@ -1,11 +1,11 @@
 <%- include("./partials/header", {title: "Create Account"}) %>
 
-<section class="py-12 bg-gray-50 sm:py-16">
+<section class="py-12 sm:py-16">
   <div class="text-center mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <h1 class="text-4xl font-bold text-gray-900 sm:text-5xl lg:text-6xl">
+    <h1 class="text-4xl font-bold text-gray-50 sm:text-5xl lg:text-6xl">
       User Registration
     </h1>
-    <p class="mt-6 text-lg text-gray-600">Create an account to get started</p>
+    <p class="mt-6 text-lg text-gray-200">Create an account to get started</p>
 
     <form
       method="POST"
@@ -18,14 +18,14 @@
       <% } %>
 
       <label class="block">
-        <span class="block text-xs font-medium text-gray-500 text-left">
+        <span class="block text-xs font-medium text-gray-200 text-left">
           Profile Picture:
         </span>
         <input
           type="file"
           name="avatar"
           accept="image/*"
-          class="w-full p-3 mt-1 text-sm input-primary"
+          class="w-full p-3 mt-1 text-sm input-primary cursor-pointer"
           placeholder="Select your profile picture"
           required
         />
@@ -36,14 +36,14 @@
       </label>
 
       <label class="block mt-6">
-        <span class="block text-xs font-medium text-gray-500 text-left">
+        <span class="block text-xs font-medium text-gray-200 text-left">
           Full Name:
         </span>
         <input
           type="text"
           name="fullname"
           class="w-full p-3 mt-1 text-sm input-primary"
-          placeholder="Enter your fullname"
+          placeholder="Minimum 4 characters"
           value="<%= (locals.formData && locals.formData.fullname) ? locals.formData.fullname : '' %>"
           required
         />
@@ -54,7 +54,7 @@
       </label>
 
       <label class="block mt-6">
-        <span class="block text-xs font-medium text-gray-500 text-left"
+        <span class="block text-xs font-medium text-gray-200 text-left"
           >Email:</span
         >
         <input
@@ -72,14 +72,14 @@
       </label>
 
       <label class="block mt-6">
-        <span class="block text-xs font-medium text-gray-500 text-left">
+        <span class="block text-xs font-medium text-gray-200 text-left">
           Password:</span
         >
         <input
           class="w-full p-3 mt-1 text-sm input-primary"
           type="password"
           name="password"
-          placeholder="Enter your password"
+          placeholder="Minimum 8 characters"
           value="<%= (locals.formData && locals.formData.password) ? locals.formData.password : '' %>"
           required
         />
@@ -90,14 +90,14 @@
       </label>
 
       <label class="block mt-6">
-        <span class="block text-xs font-medium text-gray-500 text-left">
+        <span class="block text-xs font-medium text-gray-200 text-left">
           Confirm Password:</span
         >
         <input
           class="w-full p-3 mt-1 text-sm input-primary"
           type="password"
           name="confirmPassword"
-          placeholder="Confirm your password"
+          placeholder="Minimum 8 characters"
           value="<%= (locals.formData && locals.formData.confirmPassword) ? locals.formData.confirmPassword : '' %>"
           required
         />
@@ -108,13 +108,13 @@
       </label>
 
       <label class="block mt-6">
-        <span class="block text-xs font-medium text-gray-500 text-left">
+        <span class="block text-xs font-medium text-gray-200 text-left">
           Bio (brief description of your work):</span
         >
         <textarea
           class="w-full h-[150px] p-3 mt-1 text-sm input-primary"
           name="bio"
-          placeholder="Your bio"
+          placeholder="Minimum 20 characters"
           required
         >
 <%= (locals.formData && locals.formData.bio) ? locals.formData.bio : '' %></textarea
@@ -129,12 +129,12 @@
         Create Account
       </button>
 
-      <p class="mt-9 text-left">
+      <p class="mt-9 text-left text-gray-200">
         Already have an account?
         <a class="underline font-bold" href="/auth/login">Login</a>
       </p>
 
-      <p class="mt-2 text-left">
+      <p class="mt-2 text-left text-gray-200">
         Want to register for a company account?
         <a class="underline font-bold" href="/auth/company/signup">
           Register here.</a

@@ -1,9 +1,9 @@
 <%- include("./partials/header", {title: "Profile"}) %>
 
-<section class="py-12 bg-gray-50 sm:py-16">
+<section class="py-12 sm:py-16">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div
-      class="flex flex-col items-center gap-y-4 sm:flex-row sm:gap-x-3 bg-white border-[1px] border-gray-200 rounded p-4"
+      class="flex flex-col items-center gap-y-4 sm:flex-row sm:gap-x-3 bg-gray-800 border-[1px] border-gray-700 rounded p-4"
     >
       <img
         src="<%= company.photo %>"
@@ -11,13 +11,11 @@
         class="rounded-full w-20 h-20 sm:w-12 sm:h-12 inline ring-4"
       />
       <div>
-        <h1 class="text-gray-900 text-3xl font-semibold">
-          <%= company.name %>
-        </h1>
+        <h1 class="text-white text-3xl font-semibold"><%= company.name %></h1>
         <p class="text-center sm:text-left text-sm">
           <a
             href="/company/profile/settings"
-            class="text-purple-700 bg-purple-100 hover:bg-purple-50 px-3 py-1 rounded-md"
+            class="btn-outline px-2 rounded-md"
           >
             Settings
           </a>
@@ -26,65 +24,85 @@
     </div>
 
     <div
-      class="flex flex-col gap-4 sm:flex-row sm:gap-12 bg-white border-[1px] border-gray-200 border-t-0 rounded p-4"
+      class="flex flex-col gap-4 sm:flex-row sm:gap-12 text-gray-50 bg-gray-800 border-[1px] border-gray-700 border-t-0 rounded p-4"
     >
-      <div class="sm:border-r-2 border-gray-200 sm:pr-4">
-        <h4 class="text-sm text-gray-600">Email:</h4>
+      <div class="sm:border-r-2 border-gray-500 sm:pr-4">
+        <h4 class="text-sm text-gray-300">Email:</h4>
         <p><%= company.email %></p>
       </div>
 
-      <div class="sm:border-r-2 border-gray-200 sm:pr-4">
-        <h4 class="text-sm text-gray-600">Phone:</h4>
+      <div class="sm:border-r-2 border-gray-500 sm:pr-4">
+        <h4 class="text-sm text-gray-300">Phone:</h4>
         <p><%= company.phone %></p>
       </div>
 
-      <div class="sm:border-r-2 border-gray-200 sm:pr-4">
-        <h4 class="text-sm text-gray-600">Joined:</h4>
+      <div class="sm:border-r-2 border-gray-500 sm:pr-4">
+        <h4 class="text-sm text-gray-300">Joined:</h4>
         <p><%= company.createdAt.toDateString() %></p>
       </div>
 
       <div>
-        <h4 class="text-sm text-gray-600">Account Status:</h4>
+        <h4 class="text-sm text-gray-300">Account Status:</h4>
         <p><%= company.verified ? "Approved" : "Pending" %></p>
       </div>
     </div>
 
-    <div class="bg-white border-[1px] border-gray-200 rounded p-4 mt-8">
-      <h3 class="font-semibold border-b-[1px] border-gray-200 pb-2">About</h3>
-      <p class="pt-3 max-w-3xl"><%= company.bio %></p>
+    <div class="bg-gray-800 border-[1px] border-gray-700 rounded p-4 mt-8">
+      <h3
+        class="font-semibold border-b-[1px] text-gray-300 border-gray-500 pb-2"
+      >
+        About
+      </h3>
+      <p class="pt-3 max-w-3xl text-gray-100"><%= company.bio %></p>
     </div>
 
-    <div class="bg-white border-[1px] border-gray-200 rounded p-4 mt-8">
-      <h3 class="font-semibold border-b-[1px] border-gray-200 pb-2">Jobs</h3>
+    <div class="bg-gray-800 border-[1px] border-gray-700 rounded p-4 mt-8">
+      <h3
+        class="font-semibold border-b-[1px] text-gray-300 border-gray-500 pb-2"
+      >
+        Jobs
+      </h3>
 
-      <p class="mt-2 text-gray-500 text-sm">Jobs that you've posted.</p>
+      <p class="mt-2 text-gray-100 text-sm">Jobs that you've posted.</p>
 
       <% if (jobs.length > 0) { %>
       <div class="overflow-x-auto mt-2">
-        <table class="min-w-full divide-y-2 divide-gray-200 bg-white text-sm">
+        <table class="min-w-full divide-y-2 divide-gray-400 text-sm">
           <thead>
             <tr class="text-left">
-              <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+              <th
+                class="whitespace-nowrap px-4 py-2 font-semibold text-gray-100"
+              >
                 #
               </th>
 
-              <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+              <th
+                class="whitespace-nowrap px-4 py-2 font-semibold text-gray-100"
+              >
                 Title
               </th>
 
-              <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+              <th
+                class="whitespace-nowrap px-4 py-2 font-semibold text-gray-100"
+              >
                 Location
               </th>
 
-              <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+              <th
+                class="whitespace-nowrap px-4 py-2 font-semibold text-gray-100"
+              >
                 Type
               </th>
 
-              <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+              <th
+                class="whitespace-nowrap px-4 py-2 font-semibold text-gray-100"
+              >
                 Workplace
               </th>
 
-              <th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+              <th
+                class="whitespace-nowrap px-4 py-2 font-semibold text-gray-100"
+              >
                 Applications
               </th>
 
@@ -92,40 +110,40 @@
             </tr>
           </thead>
 
-          <tbody class="divide-y divide-gray-200">
+          <tbody class="divide-y divide-gray-400">
             <% jobs.forEach((job, index) => { %>
             <tr class="text-left">
-              <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+              <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-300">
                 <%= index + 1 %>
               </td>
 
-              <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+              <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-300">
                 <a href="/company/jobs/<%= job.id %>">
                   <%= job.title.substring(0, 50) %>
                 </a>
               </td>
 
-              <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+              <td class="whitespace-nowrap px-4 py-2 text-gray-300">
                 <%= job.location %>
               </td>
 
-              <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+              <td class="whitespace-nowrap px-4 py-2 text-gray-300">
                 <%= job.type == "partTime" ? "Part-time" : job.type ==
                 "fullTime" ? "Full-time" : job.type %>
               </td>
 
-              <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+              <td class="whitespace-nowrap px-4 py-2 text-gray-300">
                 <%= job.workplace == "onSite" ? "on-site" : job.workplace %>
               </td>
 
-              <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+              <td class="whitespace-nowrap px-4 py-2 text-gray-300">
                 <%= job._count.applications %>
               </td>
 
               <td class="whitespace-nowrap px-4 py-2">
                 <a
                   href="/company/jobs/<%= job.id %>"
-                  class="inline-block rounded bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700"
+                  class="btn-primary inline-block px-4 py-1 text-xs font-medium rounded-md"
                   >View</a
                 >
               </td>
@@ -135,23 +153,21 @@
         </table>
       </div>
       <% } else { %>
-      <p class="mt-3 text-gray-700">You haven't posted any jobs yet.</p>
+      <p class="mt-3 text-gray-300">You haven't posted any jobs yet.</p>
       <% } %>
 
       <p class="mt-4">
         <a
-          class="inline-block rounded bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700"
+          class="btn-primary rounded px-4 py-2 text-xs font-medium"
           href="/company/jobs/new"
           >Post New Job</a
         >
       </p>
     </div>
 
-    <p class="mt-8 text-right text-sm">
+    <p class="mt-8 text-right text-sm text-gray-300">
       Go to
-      <a
-        href="/company/profile/settings"
-        class="text-purple-700 bg-purple-100 hover:bg-purple-50 px-3 py-1 rounded-md"
+      <a href="/company/profile/settings" class="btn-outline px-3 py-1"
         >Profile Settings</a
       >
     </p>

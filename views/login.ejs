@@ -1,11 +1,11 @@
 <%- include("./partials/header", {title: "Login"}) %>
 
-<section class="py-12 bg-gray-50 sm:py-16">
+<section class="py-12 sm:py-16">
   <div class="text-center mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <h1 class="text-4xl font-bold text-gray-900 sm:text-5xl lg:text-6xl">
+    <h1 class="text-4xl font-bold text-gray-50 sm:text-5xl lg:text-6xl">
       Login
     </h1>
-    <p class="mt-5 text-lg text-gray-600">
+    <p class="mt-5 text-lg text-gray-200">
       Please login to your account to continue.
     </p>
     <% if (locals.error) { %>
@@ -13,25 +13,27 @@
     <% } %>
     <form method="POST" class="max-w-sm mx-auto mt-8">
       <label class="block">
-        <span class="block text-xs font-medium text-gray-500 text-left"
+        <span class="block text-xs font-medium text-gray-200 text-left"
           >Email:</span
         >
         <input
           type="email"
           name="email"
           class="w-full p-3 mt-1 text-sm input-primary"
+          placeholder="Enter your email"
           required
         />
       </label>
 
       <label class="block mt-6">
-        <span class="block text-xs font-medium text-gray-500 text-left">
+        <span class="block text-xs font-medium text-gray-200 text-left">
           Password:</span
         >
         <input
           class="w-full p-3 mt-1 text-sm input-primary"
           type="password"
           name="password"
+          placeholder="Enter your password"
           required
         />
       </label>
@@ -41,7 +43,7 @@
       </button>
     </form>
 
-    <p class="mt-9">
+    <p class="mt-9 text-gray-200">
       Don't have an account?
       <a class="underline font-bold" href="/signup-as">Create Account</a>
     </p>
