@@ -9,7 +9,21 @@ const postDetail = async (req, res) => {
     where: {
       id: req.params.postId,
     },
+    include: {
+      comments: {
+        select: {
+          body: true,
+          createdAt: true,
+          User: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
+    },
   });
+
   if (!post) return res.sendStatus(404);
 
   res.render("post", { post });
