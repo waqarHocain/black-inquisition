@@ -15,7 +15,26 @@ const postDetail = async (req, res) => {
   res.render("post", { post });
 };
 
+const createComment = async (req, res) => {
+  const { postId } = req.params;
+  const userId = req.session.id;
+  const { comment } = req.body;
+
+  if (!comment.trim() || comment.length < 2) return res.sendStatus(400);
+
+  await db.comment.create({
+    data: {
+      body: comment,
+      userId,
+      postId,
+    },
+  });
+
+  res.redirect(`/posts/${postId}`);
+};
+
 module.exports = {
   listPosts,
   postDetail,
+  createComment,
 };

@@ -1,0 +1,13 @@
+<form method="POST" action="/posts/<%= postId %>/comments">
+  <div class="max-w-prose">
+    <textarea
+      name="comment"
+      class="w-full block h-[150px] p-3 mt-1 text-sm input-primary"
+      placeholder="Enter your comment..."
+      required
+    ></textarea>
+  </div>
+  <button type="submit" class="btn-primary rounded-md px-3 py-1 text-sm mt-2">
+    Add Comment
+  </button>
+</form>
