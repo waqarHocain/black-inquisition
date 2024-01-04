@@ -15,6 +15,7 @@ const userRouter = require("./routes/user");
 const companyRouter = require("./routes/company");
 const accountRouter = require("./routes/account");
 const adminRouter = require("./routes/admin");
+const postRouter = require("./routes/post");
 
 const config = require("./config");
 const requireAuth = require("./middleware/requireAuth");
@@ -72,6 +73,7 @@ app.use(function (req, res, next) {
 // -- Public Routes
 app.use("/", publicRouter);
 app.use("/auth", authRouter);
+app.use("/posts", postRouter); // semi-public
 
 // -- Protected Routes
 app.use(
