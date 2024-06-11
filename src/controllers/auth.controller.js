@@ -214,6 +214,11 @@ const adminLogin = async (req, res) => {
     },
   });
 
+  if (!admin) {
+    res.locals.error = "Incorrect email or password.";
+    return res.render("adminLogin");
+  }
+
   if (admin && admin.role !== config.ROLES.ADMIN) {
     res.locals.error = "Incorrect email or password.";
     return res.render("adminLogin");
