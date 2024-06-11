@@ -8,23 +8,53 @@ datasource db {
 }
 
 model User {
-  id          BigInt            @id @default(autoincrement())
-  email       String            @unique
-  name        String
-  password    String
-  bio         String
-  photo       String?
-  phone       String?
-  active      Boolean           @default(false)
-  verified    Boolean           @default(false)
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
-  role        Role
-  posts       Post[]
-  sources     ReputalbeSource[]
-  jobs        Job[]
-  jobsApplied Application[]
-  comments    Comment[]
+  id                     BigInt            @id @default(autoincrement())
+  email                  String            @unique
+  name                   String
+  password               String
+  bio                    String
+  photo                  String?
+  phone                  String?
+  active                 Boolean           @default(false)
+  verified               Boolean           @default(false)
+  createdAt              DateTime          @default(now())
+  updatedAt              DateTime          @updatedAt
+  role                   Role
+  posts                  Post[]
+  sources                ReputalbeSource[]
+  jobs                   Job[]
+  jobsApplied            Application[]
+  comments               Comment[]
+  friends                Friend[]
+  sentFriendRequests     FriendRequest[]   @relation("requester")
+  receivedFriendRequests FriendRequest[]   @relation("receiver")
+}
+
+model Friend {
+  id           BigInt             @id @default(autoincrement())
+  User         User               @relation(fields: [userId], references: [id])
+  userId       BigInt
+  relationship RelationshipStatus @default(Friend)
+}
+
+model FriendRequest {
+  id          BigInt @id @default(autoincrement())
+  requester   User   @relation("requester", fields: [requesterId], references: [id])
+  receiver    User   @relation("receiver", fields: [receiverId], references: [id])
+  requesterId BigInt
+  receiverId  BigInt
+
+  @@unique([requesterId, receiverId])
+}
+
+enum RelationshipStatus {
+  Acquaintance
+  Colleague
+  Friend
+  BestFriend
+  FamilyFriend
+  BusinessPartner
+  LovedOne
 }
 
 model Job {
