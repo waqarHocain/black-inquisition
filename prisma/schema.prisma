@@ -38,13 +38,20 @@ model Friend {
 }
 
 model FriendRequest {
-  id          BigInt @id @default(autoincrement())
-  requester   User   @relation("requester", fields: [requesterId], references: [id])
-  receiver    User   @relation("receiver", fields: [receiverId], references: [id])
+  id          BigInt        @id @default(autoincrement())
+  requester   User          @relation("requester", fields: [requesterId], references: [id])
+  receiver    User          @relation("receiver", fields: [receiverId], references: [id])
   requesterId BigInt
   receiverId  BigInt
+  status      RequestStatus
 
   @@unique([requesterId, receiverId])
+}
+
+enum RequestStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
 }
 
 enum RelationshipStatus {
