@@ -15,6 +15,7 @@ const userRouter = require("./routes/user");
 const companyRouter = require("./routes/company");
 const accountRouter = require("./routes/account");
 const adminRouter = require("./routes/admin");
+const socialRouter = require("./routes/social");
 
 const config = require("./config");
 const requireAuth = require("./middleware/requireAuth");
@@ -60,6 +61,7 @@ app.use(morgan("tiny"));
 
 // parse form data
 app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 // for templates rendering (for logged in/out users)
 app.use(function (req, res, next) {
@@ -72,6 +74,8 @@ app.use(function (req, res, next) {
 // -- Public Routes
 app.use("/", publicRouter);
 app.use("/auth", authRouter);
+
+app.use("/social", socialRouter);
 
 // -- Protected Routes
 app.use(

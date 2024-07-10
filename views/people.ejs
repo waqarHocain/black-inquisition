@@ -1,0 +1,118 @@
+<%- include("./partials/header", {title: "Job Detail"}) %>
+
+<section class="py-12 sm:py-16 relative">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div
+      class="error-container hidden absolute px-2 py-1 rounded w-[400px] left-2/4 -ml-[200px] bg-red-600 border-red-600 border-2"
+    >
+      <div class="relative">
+        <p class="error-msg text-white"></p>
+        <button
+          class="close-btn absolute -top-2 -right-2 bg-black text-white text-xs px-1 pb-[2px]"
+        >
+          Close [x]
+        </button>
+      </div>
+    </div>
+    <h1 class="text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
+      People
+    </h1>
+    <p class="mt-2 text-gray-300">Some of the recently created profiles.</p>
+
+    <% if (people.length === 0) { %>
+    <p class="text-lg text-gray-300 text-center mt-5">
+      No profiles for now, please check back later.
+    </p>
+    <% } else { %>
+    <ul class="max-w-3xl mt-6">
+      <% people.forEach(person => { %>
+      <li
+        class="my-3 border-2 border-gray-700 bg-gray-800 rounded shadow-sm w-full px-5 py-2 flex flex-col sm:flex-row sm:items-center justify-between"
+      >
+        <div>
+          <h3 class="text-lg font-semibold text-gray-100 underline">
+            <a href="/social/people/<%= person.id %>"> <%= person.name %> </a>
+          </h3>
+          <p class="text-sm text-gray-300 break-words my-1">
+            <%= person.bio.substring(0, 100) %>...
+          </p>
+        </div>
+
+        <div class="sm:ml-2">
+          <% if (locals.userId) { %>
+          <form
+            method="post"
+            action="/social/people/friend"
+            class="inline reqForm"
+          >
+            <input
+              type="text"
+              hidden
+              value="<%= person.id %>"
+              name="personId"
+            />
+            <button
+              class="btn-primary text-sm rounded px-3 py-1 mr-2 disabled:bg-blue-400"
+              type="submit"
+            >
+              Add Friend
+            </button>
+          </form>
+          <% } %>
+          <a
+            href="/social/people/<%= person.id %>"
+            class="underline font-bold text-golden text-sm"
+            >View Profile</a
+          >
+        </div>
+      </li>
+      <% }) %>
+    </ul>
+    <% } %>
+  </div>
+</section>
+
+<script>
+  const forms = document.querySelectorAll(".reqForm");
+  forms.forEach((f) => f.addEventListener("submit", handleSubmit));
+
+  async function handleSubmit(event) {
+    const form = event.target;
+    event.preventDefault();
+    const formData = new FormData(form);
+    const personId = formData.get("personId");
+
+    try {
+      const res = await fetch("/social/people/friend", {
+        method: "POST",
+        body: JSON.stringify({ personId }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const json = await res.json();
+
+      if (json.status === "success") {
+        const btn = form.querySelector("button");
+        btn.innerText = "Request Sent";
+        btn.setAttribute("disabled", "");
+      } else if (json.status === "error") {
+        const errContainer = document.querySelector(".error-container");
+        const errMsg = document.querySelector(".error-msg");
+
+        errContainer.style.display = "block";
+        errMsg.innerText = json.message;
+
+        const closeBtn = document.querySelector(".close-btn");
+        closeBtn.addEventListener("click", () => {
+          errMsg.innerText = "";
+          errContainer.style.display = "none";
+        });
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
+</script>
+
+<%- include("./partials/footer") %>
