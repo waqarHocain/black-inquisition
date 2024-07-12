@@ -10,10 +10,21 @@ router.get("/people", async (req, res) => {
     },
   });
   // filter out the current user if he's logged in
-  // if (req.session.id) {
-  //   const filteredList = people.filter((p) => p.id === req.session.id);
-  //   return res.render("people", { people: filteredList });
-  // }
+  if (req.session.id) {
+    const filteredList = people.filter((p) => p.id !== BigInt(req.session.id));
+    const requests = await db.friendRequest.findMany({
+      where: {
+        requesterId: req.session.id,
+      },
+    });
+    const friends = requests.map((r) => {
+      if (r.status === "ACCEPTED") return r.receiverId;
+    });
+    const pendingReqs = requests.map((r) => {
+      if (r.status === "PENDING") return r.receiverId;
+    });
+    return res.render("people", { people: filteredList, friends, pendingReqs });
+  }
   return res.render("people", { people });
 });
 
@@ -50,8 +61,6 @@ router.post("/people/friend", async (req, res) => {
       message: "You've already sent a request.",
     });
   }
-
-  // check if the person is already a friend
 
   // send friend request
   try {

@@ -39,7 +39,19 @@
         </div>
 
         <div class="sm:ml-2">
-          <% if (locals.userId) { %>
+          <% if (locals.userId) { %> <% if (friends.includes(person.id)) { %>
+          <button
+            class="btn-primary text-sm rounded px-3 py-1 mr-2 opacity-75 bg-blueDark pointer-events-none"
+          >
+            Friend
+          </button>
+          <% } else if (pendingReqs.includes(person.id)) { %>
+          <button
+            class="btn-primary text-sm rounded px-3 py-1 mr-2 opacity-75 pointer-events-none"
+          >
+            Request Sent
+          </button>
+          <% } else { %>
           <form
             method="post"
             action="/social/people/friend"
@@ -58,7 +70,7 @@
               Add Friend
             </button>
           </form>
-          <% } %>
+          <% } %> <% } %>
           <a
             href="/social/people/<%= person.id %>"
             class="underline font-bold text-golden text-sm"
