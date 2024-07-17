@@ -23,7 +23,28 @@ router.get("/people", async (req, res) => {
     const pendingReqs = requests.map((r) => {
       if (r.status === "PENDING") return r.receiverId;
     });
-    return res.render("people", { people: filteredList, friends, pendingReqs });
+
+    const reqsReceived = await db.friendRequest.findMany({
+      where: {
+        receiverId: req.session.id,
+      },
+      include: {
+        requester: {
+          select: {
+            photo: true,
+            name: true,
+            bio: true,
+          },
+        },
+      },
+    });
+
+    return res.render("people", {
+      people: filteredList,
+      friends,
+      pendingReqs,
+      reqsReceived,
+    });
   }
   return res.render("people", { people });
 });

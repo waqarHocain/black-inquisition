@@ -18,13 +18,54 @@
       People
     </h1>
     <p class="mt-2 text-gray-300">Some of the recently created profiles.</p>
+    <% if (locals.userId) { %>
+    <h3 class="text-xl mt-5 font-bold text-gray-300 sm:text-2xl lg:text-2xl">
+      Friend Requests
+    </h3>
+    <% if (reqsReceived.length === 0) { %>
+    <p class="text-lg text-gray-300 text-center mt-5">
+      You haven't received any friend requests yet, please check back later.
+    </p>
+    <% } else { %>
+    <ul class="max-w-4xl mt-6">
+      <% reqsReceived.forEach(req => { %>
+      <li
+        class="my-3 border-2 border-gray-700 bg-gray-800 rounded shadow-sm w-full px-5 py-2 flex flex-col sm:flex-row sm:items-center justify-between"
+      >
+        <div>
+          <h3 class="text-lg font-semibold text-gray-100 underline">
+            <a href="/social/people/<%= req.requesterId %>">
+              <%= req.requester.name %>
+            </a>
+          </h3>
+          <p class="text-sm text-gray-300 break-words my-1">
+            <%= req.requester.bio.substring(0, 100) %>...
+          </p>
+        </div>
 
-    <% if (people.length === 0) { %>
+        <div class="sm:ml-2 flex flex-row">
+          <button
+            class="btn-accept btn-primary text-sm rounded px-3 py-1 mr-2"
+            data-id="<%= req.requesterId %>"
+          >
+            Accept Request
+          </button>
+          <button
+            class="btn-delete btn-outline text-red-600 border-red-600 hover:bg-red-500 hover:border-white text-sm rounded px-3 py-1"
+            data-id="<%= req.requesterId %>"
+          >
+            Delete Request
+          </button>
+        </div>
+      </li>
+      <% }) %>
+    </ul>
+    <% } %> <% } %> <% if (people.length === 0) { %>
     <p class="text-lg text-gray-300 text-center mt-5">
       No profiles for now, please check back later.
     </p>
     <% } else { %>
-    <ul class="max-w-3xl mt-6">
+    <ul class="max-w-4xl mt-6">
       <% people.forEach(person => { %>
       <li
         class="my-3 border-2 border-gray-700 bg-gray-800 rounded shadow-sm w-full px-5 py-2 flex flex-col sm:flex-row sm:items-center justify-between"
@@ -124,6 +165,21 @@
     } catch (e) {
       console.error(e);
     }
+  }
+
+  const acceptBtns = document.querySelectorAll(".btn-accept");
+  const deleteBtns = document.querySelectorAll(".btn-delete");
+
+  acceptBtns.forEach((btn) => btn.addEventListener("click", acceptRequest));
+  deleteBtns.forEach((btn) => btn.addEventListener("click", deleteRequest));
+
+  async function acceptRequest(event) {
+    const personId = event.target.getAttribute("data-id");
+    console.log(personId);
+  }
+
+  async function deleteRequest(event) {
+    console.log(event.target);
   }
 </script>
 
