@@ -473,6 +473,19 @@ const viewPost = async (req, res) => {
     where: {
       id: postId,
     },
+    include: {
+      comments: {
+        select: {
+          body: true,
+          createdAt: true,
+          User: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
+    },
   });
 
   if (!post) return res.sendStatus(404);

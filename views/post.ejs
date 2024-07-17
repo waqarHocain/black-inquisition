@@ -11,6 +11,27 @@
     <p class="post-content text-lg mt-5 text-gray-100 max-w-prose">
       <%= post.body %>
     </p>
+
+    <div class="mt-8">
+      <h4 class="text-gray-200 font-semibold text-xl">Comments:</h4>
+
+      <% if (locals.userId) { %> <%- include("./partials/commentForm", {postId:
+      post.id}) %> <% } else { %>
+      <p class="mt-3 text-gray-400 text-lg">Login to post a new comment.</p>
+      <% } %><% if (post.comments.length === 0) { %>
+      <p class="mt-3 text-gray-400 text-lg">No one has commented yet.</p>
+      <% } else { %> <% post.comments.forEach(comment => { %>
+      <div
+        class="backdrop-blur bg-white/10 text-gray-300 max-w-prose rounded-md px-3 py-2 mt-4"
+      >
+        <p class="text-sm border-b-[1px] border-gray-400 pb-1 mb-1">
+          <strong><%= comment.User.name %></strong> @
+          <em><%= comment.createdAt.toDateString() %></em>
+        </p>
+        <p><span class="text-gray-500">>></span> <%= comment.body %></p>
+      </div>
+      <% }) %> <% } %>
+    </div>
   </div>
 </section>
 
