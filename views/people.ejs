@@ -46,13 +46,13 @@
         <div class="sm:ml-2 flex flex-row">
           <button
             class="btn-accept btn-primary text-sm rounded px-3 py-1 mr-2"
-            data-id="<%= req.requesterId %>"
+            data-id="<%= req.id %>"
           >
             Accept Request
           </button>
           <button
             class="btn-delete btn-outline text-red-600 border-red-600 hover:bg-red-500 hover:border-white text-sm rounded px-3 py-1"
-            data-id="<%= req.requesterId %>"
+            data-id="<%= req.id %>"
           >
             Delete Request
           </button>
@@ -174,12 +174,80 @@
   deleteBtns.forEach((btn) => btn.addEventListener("click", deleteRequest));
 
   async function acceptRequest(event) {
-    const personId = event.target.getAttribute("data-id");
-    console.log(personId);
+    const requestId = event.target.getAttribute("data-id");
+
+    try {
+      const res = await fetch("/social/acceptRequest", {
+        method: "POST",
+        body: JSON.stringify({ requestId }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const json = await res.json();
+
+      if (json.status === "success") {
+        // remove the old buttons and add a new disabled button with updated status
+        const parentEl = event.target.parentNode;
+        const innerBtns = parentEl.querySelectorAll("button");
+        innerBtns.forEach((btn) => btn.remove);
+
+        parentEl.innerHTML =
+          '<button class="btn-primary text-sm rounded px-3 py-1" disabled>Friend</button>';
+      } else if (json.status === "error") {
+        const errContainer = document.querySelector(".error-container");
+        const errMsg = document.querySelector(".error-msg");
+
+        errContainer.style.display = "block";
+        errMsg.innerText = json.message;
+
+        const closeBtn = document.querySelector(".close-btn");
+        closeBtn.addEventListener("click", () => {
+          errMsg.innerText = "";
+          errContainer.style.display = "none";
+        });
+      }
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   async function deleteRequest(event) {
-    console.log(event.target);
+    const requestId = event.target.getAttribute("data-id");
+
+    try {
+      const res = await fetch("/social/deleteRequest", {
+        method: "DELETE",
+        body: JSON.stringify({ requestId }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const json = await res.json();
+      if (json.status === "success") {
+        // remove the old buttons and add a new disabled button with updated status
+        const parentEl = event.target.parentNode;
+        const innerBtns = parentEl.querySelectorAll("button");
+        innerBtns.forEach((btn) => btn.remove);
+
+        parentEl.innerHTML =
+          '<button class="bg-red-500 text-sm text-white rounded px-3 py-1" disabled>Deleted</button>';
+      } else if (json.status === "error") {
+        const errContainer = document.querySelector(".error-container");
+        const errMsg = document.querySelector(".error-msg");
+
+        errContainer.style.display = "block";
+        errMsg.innerText = json.message;
+
+        const closeBtn = document.querySelector(".close-btn");
+        closeBtn.addEventListener("click", () => {
+          errMsg.innerText = "";
+          errContainer.style.display = "none";
+        });
+      }
+    } catch (e) {
+      console.error(e);
+    }
   }
 </script>
 

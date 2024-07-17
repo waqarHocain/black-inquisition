@@ -49,6 +49,7 @@ router.get("/people", async (req, res) => {
   return res.render("people", { people });
 });
 
+// TODO: require auth
 router.post("/people/friend", async (req, res) => {
   const { personId } = req.body;
   // check personId is present and valid
@@ -103,6 +104,77 @@ router.post("/people/friend", async (req, res) => {
   // TODO: send different responses for request type, json for fetch and template for form submission
   // include a viaFetch key/value when making a fetch request
   res.json({ status: "success" });
+});
+
+router.post("/acceptRequest", async (req, res) => {
+  const { requestId } = req.body;
+
+  try {
+    const request = await db.friendRequest.findUnique({
+      where: {
+        id: requestId,
+      },
+    });
+    if (!request)
+      return res.status(400).json({
+        status: "error",
+        message: "Invalid Request ID.",
+      });
+
+    if (request && request.status === "ACCEPTED")
+      return res.status(400).json({
+        status: "error",
+        message: "You're already friends.",
+      });
+    await db.friendRequest.update({
+      where: {
+        id: requestId,
+      },
+      data: {
+        status: "ACCEPTED",
+      },
+    });
+    return res.json({ status: "success" });
+  } catch (e) {
+    console.error(e);
+    return res.status(500).json({
+      status: "error",
+      message: "Internal Server Error.",
+    });
+  }
+});
+
+router.delete("/deleteRequest", async (req, res) => {
+  const { requestId } = req.body;
+
+  try {
+    const request = await db.friendRequest.findUnique({
+      where: {
+        id: requestId,
+      },
+    });
+    if (!request)
+      return res.status(400).json({
+        status: "error",
+        message: "Invalid Request ID.",
+      });
+
+    await db.friendRequest.update({
+      where: {
+        id: requestId,
+      },
+      data: {
+        status: "REJECTED",
+      },
+    });
+    return res.json({ status: "success" });
+  } catch (e) {
+    console.error(e);
+    return res.status(500).json({
+      status: "error",
+      message: "Internal Server Error.",
+    });
+  }
 });
 
 router.get("/people/:id", async (req, res) => {
