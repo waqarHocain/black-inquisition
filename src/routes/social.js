@@ -83,4 +83,33 @@ router.post("/people/friend", async (req, res) => {
   // include a viaFetch key/value when making a fetch request
   res.json({ status: "success" });
 });
+
+router.get("/people/:id", async (req, res) => {
+  let id;
+  try {
+    id = BigInt(req.params.id);
+  } catch (e) {
+    console.error(e);
+    return res.sendStatus(404);
+  }
+
+  const user = await db.user.findUnique({
+    where: { id },
+  });
+  if (!user) return res.status(404).json({ message: "NOT FOUND.", code: 404 });
+
+  const recentJobs = await db.job.findMany({
+    where: {
+      userId: id,
+    },
+  });
+
+  const posts = await db.post.findMany({
+    where: {
+      userId: id,
+    },
+  });
+
+  res.render("publicProfile", { user, recentJobs, posts });
+});
 module.exports = router;

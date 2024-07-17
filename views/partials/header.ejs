@@ -38,6 +38,13 @@
                 Updates
               </a>
 
+              <a
+                href="/social/people"
+                class="text-base font-medium text-gray-100 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-90 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
+              >
+                People
+              </a>
+
               <% if (locals.role == "USER") { %>
               <a
                 href="/user/profile"
@@ -83,6 +90,12 @@
                 Logout
               </a>
               <% } else { %>
+              <a
+                href="/social/people"
+                class="text-base font-medium text-gray-100 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-90 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
+              >
+                People
+              </a>
 
               <a
                 href="/updates"
