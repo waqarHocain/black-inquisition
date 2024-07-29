@@ -11,22 +11,25 @@ router.get("/people", async (req, res) => {
   });
   // filter out the current user if he's logged in
   if (req.session.id) {
+    const userId = req.session.id;
     const filteredList = people.filter((p) => p.id !== BigInt(req.session.id));
     const requests = await db.friendRequest.findMany({
       where: {
         requesterId: req.session.id,
       },
     });
-    const friends = requests.map((r) => {
-      if (r.status === "ACCEPTED") return r.receiverId;
-    });
-    const pendingReqs = requests.map((r) => {
+
+    const pendingReqsIds = requests.map((r) => {
       if (r.status === "PENDING") return r.receiverId;
     });
 
+    // pending requests, but with more info
     const reqsReceived = await db.friendRequest.findMany({
       where: {
         receiverId: req.session.id,
+        AND: {
+          status: "PENDING",
+        },
       },
       include: {
         requester: {
@@ -39,10 +42,27 @@ router.get("/people", async (req, res) => {
       },
     });
 
+    // get the target user ids
+    const friendships = await db.friend.findMany({
+      where: {
+        OR: [{ friendId: userId }, { userId }],
+      },
+    });
+    let friendsBySending = friendships.filter(
+      (f) => f.userId === BigInt(userId)
+    );
+    friendsBySending = friendsBySending.map((f) => f.friendId);
+
+    let friendsByAccepting = friendships.filter(
+      (f) => f.friendId === BigInt(userId)
+    );
+    friendsByAccepting = friendsByAccepting.map((f) => f.userId);
+    const friends = [...friendsByAccepting, ...friendsBySending];
+
     return res.render("people", {
       people: filteredList,
       friends,
-      pendingReqs,
+      pendingReqsIds,
       reqsReceived,
     });
   }
@@ -107,7 +127,7 @@ router.post("/people/friend", async (req, res) => {
 });
 
 router.post("/acceptRequest", async (req, res) => {
-  const { requestId } = req.body;
+  const { requestId, requesterId } = req.body;
 
   try {
     const request = await db.friendRequest.findUnique({
@@ -126,14 +146,23 @@ router.post("/acceptRequest", async (req, res) => {
         status: "error",
         message: "You're already friends.",
       });
-    await db.friendRequest.update({
-      where: {
-        id: requestId,
-      },
-      data: {
-        status: "ACCEPTED",
-      },
-    });
+
+    await db.$transaction([
+      db.friendRequest.update({
+        where: {
+          id: requestId,
+        },
+        data: {
+          status: "ACCEPTED",
+        },
+      }),
+      db.friend.create({
+        data: {
+          userId: req.session.id,
+          friendId: requesterId,
+        },
+      }),
+    ]);
     return res.json({ status: "success" });
   } catch (e) {
     console.error(e);

@@ -47,6 +47,7 @@
           <button
             class="btn-accept btn-primary text-sm rounded px-3 py-1 mr-2"
             data-id="<%= req.id %>"
+            data-req-id="<%= req.requesterId%>"
           >
             Accept Request
           </button>
@@ -86,7 +87,7 @@
           >
             Friend
           </button>
-          <% } else if (pendingReqs.includes(person.id)) { %>
+          <% } else if (pendingReqsIds.includes(person.id)) { %>
           <button
             class="btn-primary text-sm rounded px-3 py-1 mr-2 opacity-75 pointer-events-none"
           >
@@ -175,11 +176,12 @@
 
   async function acceptRequest(event) {
     const requestId = event.target.getAttribute("data-id");
+    const requesterId = event.target.getAttribute("data-req-id");
 
     try {
       const res = await fetch("/social/acceptRequest", {
         method: "POST",
-        body: JSON.stringify({ requestId }),
+        body: JSON.stringify({ requestId, requesterId }),
         headers: {
           "Content-Type": "application/json",
         },
