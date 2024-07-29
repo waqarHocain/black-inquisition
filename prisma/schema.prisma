@@ -25,17 +25,23 @@ model User {
   jobs                   Job[]
   jobsApplied            Application[]
   comments               Comment[]
-  friends                Friend[]
+  friends                Friend[]          @relation("friends")
+  usersFriends           Friend[]          @relation("usersFriends")
   sentFriendRequests     FriendRequest[]   @relation("requester")
   receivedFriendRequests FriendRequest[]   @relation("receiver")
 }
 
 model Friend {
   id           BigInt             @id @default(autoincrement())
-  User         User               @relation(fields: [userId], references: [id])
   userId       BigInt
-  relationship RelationshipStatus @default(Friend)
+  User         User               @relation("friends", fields: [userId], references: [id])
   friendId     BigInt
+  friend       User               @relation("usersFriends", fields: [friendId], references: [id])
+  relationship RelationshipStatus @default(Friend)
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+
+  @@unique([userId, friendId])
 }
 
 model FriendRequest {
