@@ -18,50 +18,59 @@
       People
     </h1>
     <p class="mt-2 text-gray-300">Some of the recently created profiles.</p>
-    <% if (locals.userId) { %>
-    <h3 class="text-xl mt-5 font-bold text-gray-300 sm:text-2xl lg:text-2xl">
-      Friend Requests
-    </h3>
-    <% if (reqsReceived.length === 0) { %>
-    <p class="text-lg text-gray-300 text-center mt-5">
-      You haven't received any friend requests yet, please check back later.
-    </p>
-    <% } else { %>
-    <ul class="max-w-4xl mt-6">
-      <% reqsReceived.forEach(req => { %>
-      <li
-        class="my-3 border-2 border-gray-700 bg-gray-800 rounded shadow-sm w-full px-5 py-2 flex flex-col sm:flex-row sm:items-center justify-between"
-      >
-        <div>
-          <h3 class="text-lg font-semibold text-gray-100 underline">
-            <a href="/social/people/<%= req.requesterId %>">
-              <%= req.requester.name %>
-            </a>
-          </h3>
-          <p class="text-sm text-gray-300 break-words my-1">
-            <%= req.requester.bio.substring(0, 100) %>...
-          </p>
-        </div>
 
-        <div class="sm:ml-2 flex flex-row">
-          <button
-            class="btn-accept btn-primary text-sm rounded px-3 py-1 mr-2"
-            data-id="<%= req.id %>"
-            data-req-id="<%= req.requesterId%>"
-          >
-            Accept Request
-          </button>
-          <button
-            class="btn-delete btn-outline text-red-600 border-red-600 hover:bg-red-500 hover:border-white text-sm rounded px-3 py-1"
-            data-id="<%= req.id %>"
-          >
-            Delete Request
-          </button>
-        </div>
-      </li>
-      <% }) %>
-    </ul>
-    <% } %> <% } %> <% if (people.length === 0) { %>
+    <% if (locals.userId) { %>
+    <div
+      class="max-w-4xl bg-gray-800 border-[1px] border-gray-700 rounded p-4 mt-8 text-gray-100"
+    >
+      <h3
+        class="font-semibold border-b-[1px] border-gray-500 pb-2 text-gray-300"
+      >
+        Friend Requests
+      </h3>
+
+      <% if (reqsReceived.length === 0) { %>
+      <p class="pt-3 max-w-3xl">
+        You haven't received any friend requests yet, please check back later.
+      </p>
+      <% } else { %>
+      <ul class="max-w-4xl mt-6">
+        <% reqsReceived.forEach(req => { %>
+        <li
+          class="my-3 border-2 border-gray-700 bg-gray-800 rounded shadow-sm w-full px-5 py-2 flex flex-col sm:flex-row sm:items-center justify-between"
+        >
+          <div>
+            <h3 class="text-lg font-semibold text-gray-100 underline">
+              <a href="/social/people/<%= req.requesterId %>">
+                <%= req.requester.name %>
+              </a>
+            </h3>
+            <p class="text-sm text-gray-300 break-words my-1">
+              <%= req.requester.bio.substring(0, 100) %>...
+            </p>
+          </div>
+
+          <div class="sm:ml-2 flex flex-row">
+            <button
+              class="btn-accept btn-primary text-sm rounded px-3 py-1 mr-2"
+              data-id="<%= req.id %>"
+              data-req-id="<%= req.requesterId%>"
+            >
+              Accept Request
+            </button>
+            <button
+              class="btn-delete btn-outline text-red-600 border-red-600 hover:bg-red-500 hover:border-white text-sm rounded px-3 py-1"
+              data-id="<%= req.id %>"
+            >
+              Delete Request
+            </button>
+          </div>
+        </li>
+        <% }) %>
+      </ul>
+      <% } %>
+    </div>
+    <% } %> <% if (people.length === 0) { %>
     <p class="text-lg text-gray-300 text-center mt-5">
       No profiles for now, please check back later.
     </p>
@@ -80,7 +89,7 @@
           </p>
         </div>
 
-        <div class="sm:ml-2">
+        <div class="sm:ml-2 flex flex-row">
           <% if (locals.userId) { %> <% if (friends.includes(person.id)) { %>
           <button
             class="btn-primary text-sm rounded px-3 py-1 mr-2 opacity-75 bg-blueDark pointer-events-none"
