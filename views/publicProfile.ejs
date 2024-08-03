@@ -32,6 +32,12 @@
         <h4 class="text-sm text-gray-300">Account Status:</h4>
         <p><%= user.verified ? "Approved" : "Pending" %></p>
       </div>
+
+      <% if (locals.userId) { %>
+      <div class="sm:border-l-2 border-gray-500 sm:pl-4">
+        <button class="btn-primary px-2 py-1 rounded">Add Friend</button>
+      </div>
+      <% } %>
     </div>
 
     <div

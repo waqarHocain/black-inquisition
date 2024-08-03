@@ -87,46 +87,89 @@
           <p class="text-sm text-gray-300 break-words my-1">
             <%= person.bio.substring(0, 100) %>...
           </p>
-        </div>
 
-        <div class="sm:ml-2 flex flex-row">
-          <% if (locals.userId) { %> <% if (friends.includes(person.id)) { %>
-          <button
-            class="btn-primary text-sm rounded px-3 py-1 mr-2 opacity-75 bg-blueDark pointer-events-none"
-          >
-            Friend
-          </button>
-          <% } else if (pendingReqsIds.includes(person.id)) { %>
-          <button
-            class="btn-primary text-sm rounded px-3 py-1 mr-2 opacity-75 pointer-events-none"
-          >
-            Request Sent
-          </button>
-          <% } else { %>
-          <form
-            method="post"
-            action="/social/people/friend"
-            class="inline reqForm"
-          >
-            <input
-              type="text"
-              hidden
-              value="<%= person.id %>"
-              name="personId"
-            />
+          <div class="mt-2">
+            <% if (locals.userId) { %> <% if (friends.includes(person.id)) { %>
             <button
-              class="btn-primary text-sm rounded px-3 py-1 mr-2 disabled:bg-blue-400"
-              type="submit"
+              class="inline-flex items-center btn-primary border-white border-[1px] text-sm rounded px-3 py-1 mr-2 opacity-75 bg-transparent pointer-events-none"
             >
-              Add Friend
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-4 h-4 mr-2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                />
+              </svg>
+
+              <span class="">Friend</span>
             </button>
-          </form>
-          <% } %> <% } %>
-          <a
-            href="/social/people/<%= person.id %>"
-            class="underline font-bold text-golden text-sm"
-            >View Profile</a
-          >
+            <% } else if (pendingReqsIds.includes(person.id)) { %>
+            <button
+              class="inline-flex items-center bg-blue-400 btn-primary text-sm rounded px-3 py-1 mr-2 opacity-75 pointer-events-none"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="lime"
+                class="w-4 h-4 mr-2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                />
+              </svg>
+              <span>Request Sent</span>
+            </button>
+            <% } else { %>
+            <form
+              method="post"
+              action="/social/people/friend"
+              class="inline reqForm"
+            >
+              <input
+                type="text"
+                hidden
+                value="<%= person.id %>"
+                name="personId"
+              />
+              <button
+                class="inline-flex items-center btn-primary text-sm rounded px-3 py-1 mr-2 disabled:bg-blue-400"
+                type="submit"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-4 h-4 mr-2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z"
+                  />
+                </svg>
+                <span>Add Friend</span>
+              </button>
+            </form>
+            <% } %> <% } %>
+            <a
+              href="/social/people/<%= person.id %>"
+              class="underline font-bold text-golden text-sm"
+              >View Profile</a
+            >
+          </div>
         </div>
       </li>
       <% }) %>
