@@ -94,7 +94,37 @@ const getPublicProfile = async (req, res) => {
     },
   });
 
-  res.render("publicProfile", { user, recentJobs, posts });
+  // check friendship in case user is logged in
+  let isFriend = false;
+  let hasSentRequest = false;
+  const userId = req.session.id;
+  if (userId) {
+    const fRequest = await db.friendRequest.findFirst({
+      where: {
+        OR: [
+          {
+            requesterId: userId,
+            receiverId: id,
+          },
+          {
+            requesterId: id,
+            receiverId: userId,
+          },
+        ],
+      },
+    });
+
+    if (fRequest && fRequest.status === "ACCEPTED") isFriend = true;
+    if (fRequest && fRequest.status === "PENDING") hasSentRequest = true;
+  }
+
+  res.render("publicProfile", {
+    user,
+    recentJobs,
+    posts,
+    isFriend,
+    hasSentRequest,
+  });
 };
 
 const sendFriendRequest = async (req, res) => {
