@@ -1,10 +1,9 @@
 # syntax = docker/dockerfile:1
-
 # Adjust NODE_VERSION as desired
-ARG NODE_VERSION=16.17.1
+ARG NODE_VERSION=18.17.0
 FROM node:${NODE_VERSION}-slim as base
 
-LABEL fly_launch_runtime="Node.js"
+LABEL fly_launch_runtime="NodeJS/Prisma"
 
 # Node.js app lives here
 WORKDIR /app
@@ -18,18 +17,27 @@ FROM base as build
 
 # Install packages needed to build node modules
 RUN apt-get update -qq && \
-    apt-get install -y build-essential pkg-config python
+    apt-get install -y python-is-python3 pkg-config build-essential openssl
 
 # Install node modules
-COPY --link package-lock.json package.json ./
-RUN npm ci
+COPY --link package.json .
+RUN npm install --production=false
 
 # Copy application code
 COPY --link . .
 
+# Remove development dependencies
+RUN npm prune --production
+
+# generate prisma client
+# COPY --link prisma .
+# RUN npx prisma migrate dev && npx prisma generate
 
 # Final stage for app image
 FROM base
+
+RUN apt-get update -qq && \
+    apt-get install -y openssl
 
 # Copy built application
 COPY --from=build /app /app
