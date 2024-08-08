@@ -263,10 +263,131 @@ const deleteFriendRequest = async (req, res) => {
   }
 };
 
+const renderRelationshipTemplate = async (req, res) => {
+  const { id } = req.params;
+  const userId = req.session.id;
+
+  // check if there's friendship
+  const friend = await db.friend.findFirst({
+    where: {
+      OR: [
+        {},
+        {
+          friendId: id,
+          userId: userId,
+        },
+        {
+          userId: id,
+          friendId: userId,
+        },
+      ],
+    },
+  });
+
+  if (!friend)
+    return res.status(403).json({
+      error: "You are not friends with this user.",
+    });
+
+  const user = await db.user.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  // serialize to user friendly format
+  const relations = {
+    Acquaintance: "Acquaintance",
+    Colleague: "Colleague",
+    Friend: "Friend",
+    BestFriend: "Best Friend",
+    FamilyFriend: "Family Friend",
+    BusinessPartner: "Business Partner",
+    LovedOne: "Loved One",
+  };
+
+  res.render("relationship", {
+    user: { id: user.id, name: user.name },
+    relationshipStatus: relations[friend.relationship],
+    relationships: [
+      "Acquaintance",
+      "Colleague",
+      "Friend",
+      "Best Friend",
+      "Family Friend",
+      "Business Partner",
+      "Loved One",
+    ],
+  });
+};
+
+const changeRelationship = async (req, res) => {
+  const { relation } = req.body;
+  const { id } = req.params;
+  const userId = req.session.id;
+
+  // check if there's friendship
+  const friend = await db.friend.findFirst({
+    where: {
+      OR: [
+        {
+          friendId: id,
+          userId: userId,
+        },
+        {
+          userId: id,
+          friendId: userId,
+        },
+      ],
+    },
+  });
+
+  if (!friend)
+    return res.status(403).json({
+      error: "You are not friends with this user.",
+    });
+
+  // serialize to user friendly format
+  const relations = {
+    Acquaintance: "Acquaintance",
+    Colleague: "Colleague",
+    Friend: "Friend",
+    "Best Friend": "BestFriend",
+    "Family Friend": "FamilyFriend",
+    "Business Partner": "BusinessPartner",
+    "Loved One": "LovedOne",
+  };
+
+  if (!relations[relation])
+    res
+      .status(400)
+      .json({ status: "error", message: "Invalid relation value." });
+
+  try {
+    await db.friend.update({
+      where: {
+        id: friend.id,
+      },
+      data: {
+        relationship: relations[relation],
+      },
+    });
+    return res.json({ status: "success" });
+  } catch (e) {
+    console.error(e);
+    return res
+      .status(500)
+      .json({ status: "error", message: "Unable to update database." });
+  }
+  return res.json({ status: "success" });
+};
+
 module.exports = {
   getPublicProfile,
   getAllProfiles,
   sendFriendRequest,
   acceptFriendRequest,
   deleteFriendRequest,
+  renderRelationshipTemplate,
+  changeRelationship,
 };
