@@ -22,4 +22,9 @@ router.delete(
   socialController.deleteFriendRequest
 );
 
+router
+  .route("/people/:id/edit-relationship")
+  .get(requireAuth, socialController.renderRelationshipTemplate)
+  .post(requireAuth, socialController.changeRelationship);
+
 module.exports = router;

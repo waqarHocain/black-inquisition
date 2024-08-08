@@ -47,9 +47,9 @@
       </div>
 
       <% if (locals.userId) { %> <% if (isFriend) { %>
-      <div class="sm:border-l-2 border-gray-500 sm:pl-4">
+      <div class="flex items-center sm:border-l-2 border-gray-500 sm:pl-4">
         <button
-          class="inline-flex items-center btn-primary border-white border-[1px] text-sm rounded px-3 py-1 mr-2 opacity-75 bg-transparent pointer-events-none"
+          class="inline-flex items-center btn-primary border-white border-[1px] text-sm rounded px-3 py-1 mr-2 bg-transparent pointer-events-none"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -68,6 +68,12 @@
 
           <span class="">Friend</span>
         </button>
+
+        <a
+          href="/social/people/<%= user.id %>/edit-relationship"
+          class="btn-primary rounded px-2 py-1 text-sm border-[1px]"
+          >Edit Relationship</a
+        >
       </div>
       <% } else if (hasSentRequest) { %>
       <div class="sm:border-l-2 border-gray-500 sm:pl-4">
