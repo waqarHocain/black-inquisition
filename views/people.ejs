@@ -89,7 +89,8 @@
           </p>
 
           <div class="mt-2">
-            <% if (locals.userId) { %> <% if (friends.includes(person.id)) { %>
+            <% if (locals.userId) { %> <% if
+            (Object.keys(friends).includes(String(person.id))) { %>
             <button
               class="inline-flex items-center btn-primary border-white border-[1px] text-sm rounded px-3 py-1 mr-2 bg-transparent pointer-events-none"
             >
@@ -108,7 +109,7 @@
                 />
               </svg>
 
-              <span class="">Friend</span>
+              <span class=""><%= friends[person.id] %></span>
             </button>
             <% } else if (pendingReqsIds.includes(person.id)) { %>
             <button

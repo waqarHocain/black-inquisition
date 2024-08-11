@@ -1,4 +1,8 @@
 const db = require("../services/db");
+const {
+  serializeRelation,
+  deserializeRelation,
+} = require("../utils/relationships");
 
 const getAllProfiles = async (req, res) => {
   const people = await db.user.findMany({
@@ -50,13 +54,21 @@ const getAllProfiles = async (req, res) => {
     let friendsBySending = friendships.filter(
       (f) => f.userId === BigInt(userId)
     );
-    friendsBySending = friendsBySending.map((f) => f.friendId);
+    friendsBySending = friendsBySending.map((f) => {
+      return { id: f.friendId, relation: f.relationship };
+    });
 
     let friendsByAccepting = friendships.filter(
       (f) => f.friendId === BigInt(userId)
     );
-    friendsByAccepting = friendsByAccepting.map((f) => f.userId);
-    const friends = [...friendsByAccepting, ...friendsBySending];
+    friendsByAccepting = friendsByAccepting.map((f) => {
+      return { id: f.userId, relation: f.relationship };
+    });
+    // populate friends object
+    const friends = {};
+    [...friendsByAccepting, ...friendsBySending].forEach((f) => {
+      friends[f.id] = deserializeRelation(f.relation);
+    });
 
     return res.render("people", {
       people: filteredList,
@@ -97,6 +109,8 @@ const getPublicProfile = async (req, res) => {
   // check friendship in case user is logged in
   let isFriend = false;
   let hasSentRequest = false;
+  let relationship = null;
+
   const userId = req.session.id;
   if (userId) {
     const fRequest = await db.friendRequest.findFirst({
@@ -114,7 +128,15 @@ const getPublicProfile = async (req, res) => {
       },
     });
 
-    if (fRequest && fRequest.status === "ACCEPTED") isFriend = true;
+    if (fRequest && fRequest.status === "ACCEPTED") {
+      isFriend = true;
+      const friend = await db.friend.findFirst({
+        where: {
+          OR: [{ userId }, { friendId: userId }],
+        },
+      });
+      relationship = deserializeRelation(friend.relationship);
+    }
     if (fRequest && fRequest.status === "PENDING") hasSentRequest = true;
   }
 
@@ -124,6 +146,7 @@ const getPublicProfile = async (req, res) => {
     posts,
     isFriend,
     hasSentRequest,
+    relationship,
   });
 };
 
@@ -295,20 +318,12 @@ const renderRelationshipTemplate = async (req, res) => {
     },
   });
 
-  // serialize to user friendly format
-  const relations = {
-    Acquaintance: "Acquaintance",
-    Colleague: "Colleague",
-    Friend: "Friend",
-    BestFriend: "Best Friend",
-    FamilyFriend: "Family Friend",
-    BusinessPartner: "Business Partner",
-    LovedOne: "Loved One",
-  };
+  // deserialize relation for displaying in UI
+  const relationshipStatus = deserializeRelation(friend.relationship);
 
   res.render("relationship", {
     user: { id: user.id, name: user.name },
-    relationshipStatus: relations[friend.relationship],
+    relationshipStatus,
     relationships: [
       "Acquaintance",
       "Colleague",
@@ -347,18 +362,10 @@ const changeRelationship = async (req, res) => {
       error: "You are not friends with this user.",
     });
 
-  // serialize to user friendly format
-  const relations = {
-    Acquaintance: "Acquaintance",
-    Colleague: "Colleague",
-    Friend: "Friend",
-    "Best Friend": "BestFriend",
-    "Family Friend": "FamilyFriend",
-    "Business Partner": "BusinessPartner",
-    "Loved One": "LovedOne",
-  };
+  // serialize relation value for storing in db
+  const sRelation = serializeRelation(relation);
 
-  if (!relations[relation])
+  if (!sRelation)
     res
       .status(400)
       .json({ status: "error", message: "Invalid relation value." });
@@ -369,7 +376,7 @@ const changeRelationship = async (req, res) => {
         id: friend.id,
       },
       data: {
-        relationship: relations[relation],
+        relationship: sRelation,
       },
     });
     return res.json({ status: "success" });
@@ -379,7 +386,6 @@ const changeRelationship = async (req, res) => {
       .status(500)
       .json({ status: "error", message: "Unable to update database." });
   }
-  return res.json({ status: "success" });
 };
 
 module.exports = {
