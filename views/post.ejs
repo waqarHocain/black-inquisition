@@ -8,9 +8,35 @@
     <p class="mt-2 text-gray-300 text-sm">
       Last Updated: <%= post.updatedAt.toDateString() %>
     </p>
-    <p class="post-content text-lg mt-5 text-gray-100 max-w-prose">
+    <article class="post-content text-lg mt-5 text-gray-100 max-w-prose">
       <%= post.body %>
-    </p>
+    </article>
+
+    <% if (locals.userId) { %>
+    <div class="mt-5">
+      <form method="post" id="post-like-form">
+        <input type="text" name="postId" value="<%= post.id %>" hidden />
+        <button
+          type="submit"
+          class="like-btn-normal px-3 py-1 border-[1px] rounded-md text-sm"
+        >
+          <svg
+            width="800px"
+            height="800px"
+            viewBox="0 0 24 24"
+            class="like-icon h-4 w-4 inline mr-2"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M15.9 4.5C15.9 3 14.418 2 13.26 2c-.806 0-.869.612-.993 1.82-.055.53-.121 1.174-.267 1.93-.386 2.002-1.72 4.56-2.996 5.325V17C9 19.25 9.75 20 13 20h3.773c2.176 0 2.703-1.433 2.899-1.964l.013-.036c.114-.306.358-.547.638-.82.31-.306.664-.653.927-1.18.311-.623.27-1.177.233-1.67-.023-.299-.044-.575.017-.83.064-.27.146-.475.225-.671.143-.356.275-.686.275-1.329 0-1.5-.748-2.498-2.315-2.498H15.5S15.9 6 15.9 4.5zM5.5 10A1.5 1.5 0 0 0 4 11.5v7a1.5 1.5 0 0 0 3 0v-7A1.5 1.5 0 0 0 5.5 10z"
+            />
+          </svg>
+          <span>Like Post</span>
+        </button>
+      </form>
+    </div>
+    <% } %>
 
     <div class="mt-8">
       <h4 class="text-gray-200 font-semibold text-xl">Comments:</h4>
@@ -88,24 +114,99 @@
     margin-left: 10px;
     list-style-position: inside;
   }
+
+  .like-btn-normal {
+    background-color: transparent;
+    border-color: #d1d5db;
+    color: #d1d5db;
+  }
+  .like-btn-normal:hover {
+    border-color: white;
+    color: white;
+  }
+
+  .like-btn-liked {
+    background-color: #617bff;
+    border-color: #617bff;
+    color: white;
+  }
+  .like-btn-liked:hover {
+    background-color: #4766ff;
+  }
+
+  .like-icon {
+    fill: #d1d5db;
+  }
 </style>
 
 <script>
-  const paraNode = document.querySelector(".post-content");
-  const outElms = [];
+  parsePost();
 
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(paraNode.textContent, "text/html");
-  const allNodes = doc.querySelectorAll("body > *");
+  const postLikeForm = document.getElementById("post-like-form");
+  postLikeForm.addEventListener("submit", likePost);
 
-  for (node of allNodes) {
-    if (node.innerHTML !== "&nbsp;") outElms.push(node.outerHTML);
+  async function likePost(e) {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+    const postId = formData.get("postId");
+    const likeBtn = form.querySelector("button");
+    likeBtn.disabled = true;
+
+    try {
+      const res = await fetch(`/user/posts/${postId}/like`, {
+        method: "POST",
+        body: JSON.stringify({ postId }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const json = await res.json();
+
+      if (json.status !== "success") {
+        // TODO: display error in UI
+        console.error("couldn't like/dislike post, something went wrong...");
+        return;
+      }
+
+      if (json.type === "add") {
+        likeBtn.classList.remove("like-btn-normal");
+        likeBtn.classList.add("like-btn-liked");
+
+        const textElm = likeBtn.querySelector("span");
+        textElm.innerHTML = "Liked";
+      } else if (json.type === "remove") {
+        likeBtn.classList.remove("like-btn-liked");
+        likeBtn.classList.add("like-btn-normal");
+
+        const textElm = likeBtn.querySelector("span");
+        textElm.innerHTML = "Like Post";
+      }
+
+      // activate button again
+      likeBtn.disabled = false;
+    } catch (e) {
+      console.error(e);
+    }
   }
 
-  // clear content
-  paraNode.innerHTML = " ";
+  function parsePost() {
+    const paraNode = document.querySelector(".post-content");
+    const outElms = [];
 
-  // populate again
-  outElms.forEach((node) => (paraNode.innerHTML += node));
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(paraNode.textContent, "text/html");
+    const allNodes = doc.querySelectorAll("body > *");
+
+    for (node of allNodes) {
+      if (node.innerHTML !== "&nbsp;") outElms.push(node.outerHTML);
+    }
+
+    // clear content
+    paraNode.innerHTML = " ";
+
+    // populate again
+    outElms.forEach((node) => (paraNode.innerHTML += node));
+  }
 </script>
 <%- include("./partials/footer") %>

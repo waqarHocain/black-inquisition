@@ -21,5 +21,6 @@ router
   .post(userController.createPost);
 router.get("/posts/new", userController.createPostForm);
 router.get("/posts/:postId", userController.viewPost);
+router.post("/posts/:postId/like", userController.likePost);
 
 module.exports = router;

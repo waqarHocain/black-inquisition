@@ -249,6 +249,64 @@ const viewPost = async (req, res) => {
   return res.render("post", { post });
 };
 
+const likePost = async (req, res) => {
+  const { postId } = req.body;
+  const userId = req.session.id;
+
+  const post = await db.post.findUnique({
+    where: {
+      id: postId,
+    },
+  });
+  if (!post)
+    return res
+      .status(400)
+      .json({ message: "Invalid post id.", status: "error" });
+
+  try {
+    const like = await db.like.findUnique({
+      where: {
+        userId_postId: {
+          userId,
+          postId,
+        },
+      },
+    });
+
+    if (!like) {
+      // add like
+      await db.like.create({
+        data: {
+          postId,
+          userId,
+        },
+      });
+      return res.json({
+        status: "success",
+        message: "Post liked.",
+        type: "add",
+      });
+    }
+
+    // remove like
+    await db.like.delete({
+      where: {
+        userId_postId: {
+          userId,
+          postId,
+        },
+      },
+    });
+    return res.json({
+      status: "success",
+      message: "Like removed.",
+      type: "remove",
+    });
+  } catch (e) {
+    console.error(e);
+  }
+};
+
 module.exports = {
   profile,
   applyJob,
@@ -260,4 +318,5 @@ module.exports = {
   createPostForm,
   listPosts,
   viewPost,
+  likePost,
 };
