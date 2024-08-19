@@ -241,12 +241,27 @@ const viewPost = async (req, res) => {
           },
         },
       },
+      _count: {
+        select: {
+          likes: true,
+        },
+      },
     },
   });
 
   if (!post) return res.sendStatus(404);
 
-  return res.render("post", { post });
+  const like = await db.like.findUnique({
+    where: {
+      userId_postId: {
+        postId,
+        userId: req.session.id,
+      },
+    },
+  });
+  const isLiked = like ? true : false;
+
+  return res.render("post", { post, isLiked });
 };
 
 const likePost = async (req, res) => {
