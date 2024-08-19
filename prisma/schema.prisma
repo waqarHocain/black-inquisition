@@ -29,6 +29,7 @@ model User {
   usersFriends           Friend[]          @relation("usersFriends")
   sentFriendRequests     FriendRequest[]   @relation("requester")
   receivedFriendRequests FriendRequest[]   @relation("receiver")
+  likedPosts             Like[]
 }
 
 model Friend {
@@ -102,6 +103,7 @@ model Post {
   User      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    BigInt
   comments  Comment[]
+  likes     Like[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 }
@@ -115,6 +117,17 @@ model Comment {
   userId    BigInt
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Like {
+  id      BigInt @id @default(autoincrement())
+  count   Int
+  likedBy User   @relation(fields: [userId], references: [id])
+  userId  BigInt
+  post    Post   @relation(fields: [postId], references: [id])
+  postId  BigInt
+
+  @@unique([userId, postId])
 }
 
 model ReputalbeSource {
