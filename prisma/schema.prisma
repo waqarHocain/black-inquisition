@@ -117,6 +117,10 @@ model Comment {
   userId    BigInt
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  parent   Comment?  @relation("comment_children", fields: [parentId], references: [id])
+  parentId BigInt?
+  Children Comment[] @relation("comment_children")
 }
 
 model Like {
