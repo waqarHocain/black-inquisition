@@ -15,11 +15,24 @@ const postDetail = async (req, res) => {
     include: {
       comments: {
         select: {
+          id: true,
           body: true,
           createdAt: true,
           User: {
             select: {
               name: true,
+            },
+          },
+          Children: {
+            select: {
+              id: true,
+              body: true,
+              createdAt: true,
+              User: {
+                select: {
+                  name: true,
+                },
+              },
             },
           },
         },
@@ -31,6 +44,8 @@ const postDetail = async (req, res) => {
       },
     },
   });
+
+  console.log(post);
 
   // check if user has liked the post, if logged in
   let isLiked = false;
@@ -69,8 +84,38 @@ const createComment = async (req, res) => {
   res.redirect(`/posts/${postId}`);
 };
 
+const replyToComment = async (req, res) => {
+  const { postId } = req.params;
+  const userId = req.session.id;
+  const { comment, parentCommentId } = req.body;
+
+  if (!comment.trim() || comment.length < 2)
+    return res.status(400).json({
+      error: "Comment should be 2 or more characters long.",
+    });
+
+  try {
+    await db.comment.create({
+      data: {
+        body: comment,
+        userId,
+        postId,
+        parentId: parentCommentId,
+      },
+    });
+  } catch (e) {
+    console.error(e);
+    return res.status(500).json({
+      error: "Internal Server Error",
+    });
+  }
+
+  res.redirect(`/posts/${postId}`);
+};
+
 module.exports = {
   listPosts,
   postDetail,
   createComment,
+  replyToComment,
 };

@@ -16,4 +16,11 @@ router.post(
   postController.createComment
 );
 
+router.post(
+  "/:postId/comments/:commentId",
+  requireAuth,
+  checkVerified,
+  postController.replyToComment
+);
+
 module.exports = router;
