@@ -77,7 +77,38 @@
           <strong><%= comment.User.name %></strong> @
           <em><%= comment.createdAt.toDateString() %></em>
         </p>
-        <p><span class="text-gray-500">>></span> <%= comment.body %></p>
+        <p><span class="text-gray-400">>></span> <%= comment.body %></p>
+
+        <% if (locals.userId) { %>
+        <form
+          method="POST"
+          action="/posts/<%= post.id %>/comments"
+          class="comment-reply-form hidden mt-3"
+        >
+          <div class="max-w-md">
+            <textarea
+              name="comment"
+              class="w-full block h-[150px] p-3 mt-1 text-sm input-primary text-black"
+              placeholder="Reply to comment..."
+              required
+            ></textarea>
+          </div>
+          <button
+            type="submit"
+            class="btn-primary rounded-md px-3 py-1 text-sm mt-2"
+          >
+            Reply
+          </button>
+        </form>
+
+        <p class="mt-3">
+          <button
+            class="reply-btn text-sm px-2 py-[2px] border-[1px] border-white rounded-md"
+          >
+            Reply
+          </button>
+        </p>
+        <% } %>
       </div>
       <% }) %> <% } %>
     </div>
@@ -166,7 +197,7 @@
   parsePost();
 
   const postLikeForm = document.getElementById("post-like-form");
-  postLikeForm.addEventListener("submit", likePost);
+  postLikeForm && postLikeForm.addEventListener("submit", likePost);
 
   async function likePost(e) {
     e.preventDefault();
@@ -230,6 +261,18 @@
 
     // populate again
     outElms.forEach((node) => (paraNode.innerHTML += node));
+  }
+
+  const replyBtn = document.querySelectorAll(".reply-btn");
+  replyBtn &&
+    replyBtn.forEach((btn) => btn.addEventListener("click", showCommentBox));
+
+  function showCommentBox(e) {
+    const btn = e.target;
+    const form = btn.parentElement.previousElementSibling;
+
+    btn.style.display = "none";
+    form.style.display = "block";
   }
 </script>
 <%- include("./partials/footer") %>
