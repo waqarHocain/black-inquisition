@@ -36,6 +36,9 @@ const postDetail = async (req, res) => {
             },
           },
         },
+        where: {
+          parentId: null,
+        },
       },
       _count: {
         select: {
@@ -44,8 +47,6 @@ const postDetail = async (req, res) => {
       },
     },
   });
-
-  console.log(post);
 
   // check if user has liked the post, if logged in
   let isLiked = false;

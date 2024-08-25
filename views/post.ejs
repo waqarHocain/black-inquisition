@@ -114,10 +114,10 @@
         <% comment.Children.forEach(commentReply => { %>
         <div class="ml-5 mt-4">
           <p class="text-sm border-b-[1px] border-gray-400 pb-1 mb-1">
-            <strong><%= comment.User.name %></strong> @
-            <em><%= comment.createdAt.toDateString() %></em>
+            <strong><%= commentReply.User.name %></strong> @
+            <em><%= commentReply.createdAt.toDateString() %></em>
           </p>
-          <p><span class="text-gray-400">>></span> <%= comment.body %></p>
+          <p><span class="text-gray-400">>></span> <%= commentReply.body %></p>
         </div>
         <% }) %> <% } %>
       </div>
