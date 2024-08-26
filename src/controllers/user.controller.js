@@ -225,13 +225,14 @@ const listPosts = async (req, res) => {
 
 const viewPost = async (req, res) => {
   const { postId } = req.params;
-  const post = await db.post.findUnique({
+  const post = await db.post.findFirst({
     where: {
       id: postId,
     },
     include: {
       comments: {
         select: {
+          id: true,
           body: true,
           createdAt: true,
           User: {
@@ -239,6 +240,21 @@ const viewPost = async (req, res) => {
               name: true,
             },
           },
+          Children: {
+            select: {
+              id: true,
+              body: true,
+              createdAt: true,
+              User: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
+        },
+        where: {
+          parentId: null,
         },
       },
       _count: {
