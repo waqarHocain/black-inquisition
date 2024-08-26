@@ -53,6 +53,74 @@
     <div
       class="bg-gray-800 border-[1px] border-gray-700 rounded p-4 mt-8 text-gray-100"
     >
+      <h3
+        class="font-semibold border-b-[1px] border-gray-500 pb-2 text-gray-300"
+      >
+        Posts
+      </h3>
+      <p class="mt-2 text-gray-300 text-sm">
+        Recent blog posts that you've published,
+        <a href="/user/posts/new" class="text-golden hover:underline"
+          >click here</a
+        >
+        to create a new blog post.
+      </p>
+
+      <% if (posts.length === 0) { %>
+      <p class="pt-3 max-w-3xl">
+        You have not posted yet, start by
+        <a href="/user/posts/new" class="underline">creating a post.</a>
+      </p>
+      <% } else { %>
+      <div class="overflow-x-auto mt-4">
+        <table class="min-w-full divide-y-2 divide-gray-400 text-sm">
+          <thead>
+            <tr class="text-left">
+              <th
+                class="whitespace-nowrap px-4 py-2 font-semibold text-gray-100"
+              >
+                #
+              </th>
+
+              <th
+                class="whitespace-nowrap px-4 py-2 font-semibold text-gray-100"
+              >
+                Title
+              </th>
+
+              <th class="px-4 py-2"></th>
+            </tr>
+          </thead>
+
+          <tbody class="divide-y divide-gray-400">
+            <% posts.forEach((post, index) => { %>
+            <tr class="text-left">
+              <td class="whitespace-nowrap px-4 py-2 text-gray-300">
+                <%= index + 1 %>
+              </td>
+
+              <td class="whitespace-nowrap px-4 py-2 text-gray-300">
+                <a href="/user/posts/<%= post.id %>"> <%= post.title %> </a>
+              </td>
+
+              <td class="whitespace-nowrap px-4 py-2">
+                <a
+                  href="/user/posts/<%= post.id %>"
+                  class="btn-primary inline-block px-4 py-1 text-xs font-medium rounded-md"
+                  >View</a
+                >
+              </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+      <% } %>
+    </div>
+
+    <div
+      class="bg-gray-800 border-[1px] border-gray-700 rounded p-4 mt-8 text-gray-100"
+    >
       <h3 class="font-semibold border-b-[1px] border-gray-500 pb-2">Jobs</h3>
 
       <div class="bg-gray-800 border-[1px] border-gray-700 rounded-md p-4 mt-8">

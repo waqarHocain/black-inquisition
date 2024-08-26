@@ -13,18 +13,29 @@ const profile = async (req, res) => {
 
   if (!user) throw new Error("Couldn't find user");
 
-  const recentJobs = await db.job.findMany({
-    take: 5,
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-
-  const userApplications = await db.application.findMany({
-    where: {
-      userId: user.id,
-    },
-  });
+  const [recentJobs, userApplications, posts] = await db.$transaction([
+    db.job.findMany({
+      take: 5,
+      orderBy: {
+        createdAt: "desc",
+      },
+    }),
+    db.application.findMany({
+      where: {
+        userId: user.id,
+      },
+    }),
+    db.post.findMany({
+      where: {
+        userId: user.id,
+      },
+      select: {
+        id: true,
+        title: true,
+      },
+      take: 5,
+    }),
+  ]);
 
   let jobsApplied = [];
   if (userApplications.length > 0) {
@@ -37,7 +48,7 @@ const profile = async (req, res) => {
     });
   }
 
-  res.render("profile", { user, recentJobs, jobsApplied });
+  res.render("profile", { user, recentJobs, jobsApplied, posts });
 };
 
 const renderSettingsTemplate = async (req, res) => {
