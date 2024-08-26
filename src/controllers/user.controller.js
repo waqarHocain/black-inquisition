@@ -323,10 +323,17 @@ const likePost = async (req, res) => {
           userId,
         },
       });
+      const likesCount = await db.like.count({
+        where: {
+          postId,
+        },
+      });
+
       return res.json({
         status: "success",
         message: "Post liked.",
         type: "add",
+        likes_counter: likesCount,
       });
     }
 
@@ -339,10 +346,18 @@ const likePost = async (req, res) => {
         },
       },
     });
+
+    const likesCount = await db.like.count({
+      where: {
+        postId,
+      },
+    });
+
     return res.json({
       status: "success",
       message: "Like removed.",
       type: "remove",
+      likes_counter: likesCount,
     });
   } catch (e) {
     console.error(e);

@@ -14,7 +14,12 @@
 
     <% if (locals.userId) { %>
     <div class="mt-5">
-      <form method="post" id="post-like-form" class="inline">
+      <form
+        method="post"
+        action="/user/posts/<%= post.id %>/like"
+        id="post-like-form"
+        class="inline"
+      >
         <input type="text" name="postId" value="<%= post.id %>" hidden />
         <button
           type="submit"
@@ -37,7 +42,8 @@
       </form>
 
       <p class="inline text-gray-300 text-sm ml-2">
-        <%= post._count.likes %> likes
+        <span id="likes-counter"><%= post._count.likes %> </span> <%=
+        post._count.likes > 1 ? "likes" : "like" %>
       </p>
     </div>
     <% } else {%>
@@ -56,7 +62,8 @@
       </svg>
 
       <span class="inline text-gray-300 text-sm ml-2">
-        <%= post._count.likes %> likes</span
+        <%= post._count.likes %> <%= post._count.likes > 1 ? "likes" : "like"
+        %></span
       >
     </p>
     <% } %>
@@ -234,18 +241,24 @@
         return;
       }
 
+      const likesCounterElm = document.getElementById("likes-counter");
+
       if (json.type === "add") {
         likeBtn.classList.remove("like-btn-normal");
         likeBtn.classList.add("like-btn-liked");
 
         const textElm = likeBtn.querySelector("span");
         textElm.innerHTML = "Liked";
+
+        likesCounterElm.innerHTML = json.likes_counter;
       } else if (json.type === "remove") {
         likeBtn.classList.remove("like-btn-liked");
         likeBtn.classList.add("like-btn-normal");
 
         const textElm = likeBtn.querySelector("span");
         textElm.innerHTML = "Like Post";
+
+        likesCounterElm.innerHTML = json.likes_counter;
       }
 
       // activate button again
