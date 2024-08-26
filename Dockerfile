@@ -32,6 +32,7 @@ RUN npm prune --production
 # generate prisma client
 # COPY --link prisma .
 # RUN npx prisma migrate dev && npx prisma generate
+RUN npx prisma generate
 
 # Final stage for app image
 FROM base
