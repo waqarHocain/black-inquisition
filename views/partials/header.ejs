@@ -31,18 +31,26 @@
           <div class="md:ml-auto mt-4 md:mt-0">
             <nav class="space-x-4">
               <% if (locals.userId) { %>
-              <a
-                href="/updates"
-                class="text-base font-medium text-gray-100 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-90 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
-              >
-                Updates
-              </a>
 
               <a
                 href="/social/people"
                 class="text-base font-medium text-gray-100 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-90 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
               >
                 People
+              </a>
+
+              <a
+                href="/posts"
+                class="text-base font-medium text-gray-100 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-90 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
+              >
+                Posts
+              </a>
+
+              <a
+                href="/updates"
+                class="text-base font-medium text-gray-100 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-90 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
+              >
+                Updates
               </a>
 
               <% if (locals.role == "USER") { %>
@@ -53,13 +61,6 @@
                 Profile
               </a>
 
-              <a
-                href="/user/posts"
-                class="text-base font-medium text-gray-100 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-90 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
-              >
-                Posts
-              </a>
-
               <% } else if (locals.role == "COMPANY") { %>
               <a
                 href="/company/profile"
@@ -68,12 +69,6 @@
                 Profile
               </a>
 
-              <a
-                href="/company/posts"
-                class="text-base font-medium text-gray-100 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-90 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
-              >
-                Posts
-              </a>
               <% } else if (locals.role == "ADMIN") { %>
               <a
                 href="/admin/dashboard"
@@ -95,6 +90,13 @@
                 class="text-base font-medium text-gray-100 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-90 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
               >
                 People
+              </a>
+
+              <a
+                href="/posts"
+                class="text-base font-medium text-gray-100 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-90 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
+              >
+                Posts
               </a>
 
               <a
