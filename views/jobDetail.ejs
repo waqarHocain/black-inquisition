@@ -1,57 +1,57 @@
 <%- include("./partials/header", {title: "Job Detail"}) %>
 
 <section class="py-12 sm:py-16">
-  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
     <h1 class="text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
       <%= job.title %>
     </h1>
-    <p class="mt-4 text-gray-300"><em>by</em> <%= job.company %></p>
+    <p class="mt-4 text-neutral-300"><em>by</em> <%= job.company %></p>
 
     <div class="flex flex-col gap-4 mt-8 text-white">
       <div class="flex flex-col sm:flex-row gap-1 sm:gap-3 items-baseline">
-        <h4 class="font-semibold text-gray-300">Company:</h4>
+        <h4 class="font-semibold text-neutral-300">Company:</h4>
         <p class="flex-1"><%= job.company %></p>
       </div>
 
       <div class="flex flex-col sm:flex-row gap-1 sm:gap-3 items-baseline">
-        <h4 class="font-semibold text-gray-300">Location:</h4>
+        <h4 class="font-semibold text-neutral-300">Location:</h4>
         <p class="flex-1"><%= job.location %></p>
       </div>
 
       <div class="flex flex-col sm:flex-row gap-1 sm:gap-3 items-baseline">
-        <h4 class="font-semibold text-gray-300">Workplace type:</h4>
+        <h4 class="font-semibold text-neutral-300">Workplace type:</h4>
         <p class="flex-1"><%= job.workplace %></p>
       </div>
 
       <div class="flex flex-col sm:flex-row gap-1 sm:gap-3 items-baseline">
-        <h4 class="font-semibold text-gray-300">Job type:</h4>
+        <h4 class="font-semibold text-neutral-300">Job type:</h4>
         <p class="flex-1"><%= job.type %></p>
       </div>
     </div>
 
     <div class="mt-4">
-      <h4 class="font-semibold text-gray-300">Job Description:</h4>
+      <h4 class="font-semibold text-neutral-300">Job Description:</h4>
       <p class="max-w-3xl mt-1 text-white"><%= job.description %></p>
     </div>
 
     <div class="mt-4">
-      <h3 class="text-gray-300 font-semibold text-xl">Candidates:</h3>
-      <p class="mt-1 text-gray-100">
+      <h3 class="text-neutral-300 font-semibold text-xl">Candidates:</h3>
+      <p class="mt-1 text-neutral-100">
         Total applications received: <%= job.applications.length %>
       </p>
       <% if (acceptedCandidate) { %>
-      <h4 class="mt-2 font-medium text-gray-300">Selected Candidate:</h4>
+      <h4 class="mt-2 font-medium text-neutral-300">Selected Candidate:</h4>
       <div class="overflow-x-auto mt-2 max-w-3xl">
-        <table class="min-w-full divide-y-2 divide-gray-400 text-sm">
+        <table class="min-w-full divide-y-2 divide-neutral-400 text-sm">
           <thead>
             <tr>
               <th
-                class="whitespace-nowrap px-4 py-2 font-medium text-gray-300 text-left"
+                class="whitespace-nowrap px-4 py-2 font-medium text-neutral-300 text-left"
               >
                 Name
               </th>
               <th
-                class="whitespace-nowrap px-4 py-2 font-medium text-gray-300 text-left"
+                class="whitespace-nowrap px-4 py-2 font-medium text-neutral-300 text-left"
               >
                 Email
               </th>
@@ -59,10 +59,10 @@
           </thead>
           <tbody>
             <tr>
-              <td class="whitespace-nowrap px-4 py-2 text-gray-100">
+              <td class="whitespace-nowrap px-4 py-2 text-neutral-100">
                 <%= acceptedCandidate.name %>
               </td>
-              <td class="whitespace-nowrap px-4 py-2 text-gray-100">
+              <td class="whitespace-nowrap px-4 py-2 text-neutral-100">
                 <%= acceptedCandidate.email %>
               </td>
             </tr>
@@ -70,52 +70,52 @@
         </table>
       </div>
       <% } %> <% if (job.applications.length == 0) { %>
-      <p class="font-semibold text-gray-300">
+      <p class="font-semibold text-neutral-300">
         No one has applied for this job yet.
       </p>
       <% } else {%>
-      <h4 class="mt-4 font-medium text-gray-300">All Candidates:</h4>
+      <h4 class="mt-4 font-medium text-neutral-300">All Candidates:</h4>
       <div class="overflow-x-auto mt-2 max-w-3xl">
-        <table class="min-w-full divide-y-2 divide-gray-400 text-sm">
+        <table class="min-w-full divide-y-2 divide-neutral-400 text-sm">
           <thead>
             <tr>
               <th
-                class="whitespace-nowrap px-4 py-2 font-medium text-gray-300 text-left"
+                class="whitespace-nowrap px-4 py-2 font-medium text-neutral-300 text-left"
               >
                 Serial No.
               </th>
               <th
-                class="whitespace-nowrap px-4 py-2 font-medium text-gray-300 text-left"
+                class="whitespace-nowrap px-4 py-2 font-medium text-neutral-300 text-left"
               >
                 Candidate Name
               </th>
               <th
-                class="whitespace-nowrap px-4 py-2 font-medium text-gray-300 text-left"
+                class="whitespace-nowrap px-4 py-2 font-medium text-neutral-300 text-left"
               >
                 Candidate Email
               </th>
               <th
-                class="whitespace-nowrap px-4 py-2 font-medium text-gray-300 text-left"
+                class="whitespace-nowrap px-4 py-2 font-medium text-neutral-300 text-left"
               >
                 Accept Candidate
               </th>
             </tr>
           </thead>
 
-          <tbody class="divide-y divide-gray-400">
+          <tbody class="divide-y divide-neutral-400">
             <% job.applications.forEach((application, index) => { %>
 
             <tr>
-              <td class="whitespace-nowrap px-4 py-2 text-gray-100">
+              <td class="whitespace-nowrap px-4 py-2 text-neutral-100">
                 <%= index + 1 %>
               </td>
-              <td class="whitespace-nowrap px-4 py-2 text-gray-100">
+              <td class="whitespace-nowrap px-4 py-2 text-neutral-100">
                 <%= application.User.name %>
               </td>
-              <td class="whitespace-nowrap px-4 py-2 text-gray-100">
+              <td class="whitespace-nowrap px-4 py-2 text-neutral-100">
                 <%= application.User.email %>
               </td>
-              <td class="whitespace-nowrap px-4 py-2 text-gray-100">
+              <td class="whitespace-nowrap px-4 py-2 text-neutral-100">
                 <% if (!isApplicationAccepted) { %>
                 <form
                   method="post"
@@ -129,7 +129,7 @@
                   </button>
                 </form>
                 <% } else { %>
-                <button class="bg-gray-400 px-3 py-1 rounded" disabled>
+                <button class="bg-neutral-400 px-3 py-1 rounded" disabled>
                   Aready Selected
                 </button>
                 <% } %>
@@ -147,7 +147,7 @@
       <p class="inline-block">
         <a
           href="/company/jobs/<%= job.id %>/edit"
-          class="btn-primary rounded px-3 py-1 font-semibold text-sm"
+          class="btn-primary px-3 py-1 font-semibold text-sm"
         >
           Edit
         </a>
@@ -158,7 +158,7 @@
         action="/company/jobs/<%= job.id %>/delete"
       >
         <button
-          class="border-red-400 border-2 rounded px-3 py-1 ml-3 text-red-400 font-semibold text-sm hover:border-red-500 hover:bg-red-500 hover:text-white transition-colors"
+          class="border-red-400 border-2 px-3 py-1 ml-3 rounded-full text-red-400 font-semibold text-sm hover:border-red-500 hover:bg-red-500 hover:text-white transition-colors"
         >
           Delete
         </button>

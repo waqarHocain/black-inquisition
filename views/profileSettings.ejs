@@ -1,127 +1,126 @@
 <%- include("./partials/header", {title: "Settings"}) %>
 
-<section class="py-12 sm:py-16">
-  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <div
-      class="flex flex-col items-center gap-y-4 sm:flex-row sm:gap-x-3 bg-gray-800 border-[1px] border-gray-700 rounded p-4"
-    >
-      <img
-        src="<%= user.photo %>"
-        alt="Your profile picture"
-        class="rounded-full w-20 h-20 sm:w-12 sm:h-12 inline ring-4"
-      />
-      <div>
-        <h1 class="text-white text-3xl font-semibold"><%= user.name %></h1>
-        <p class="text-center sm:text-left text-xs">
-          <a href="/user/profile/" class="btn-outline px-2 rounded-md">
-            Profile
-          </a>
-        </p>
-      </div>
-    </div>
-
-    <div
-      class="flex flex-col gap-4 sm:flex-row sm:gap-12 text-gray-50 bg-gray-800 border-[1px] border-gray-700 border-t-0 rounded p-4"
-    >
-      <div class="sm:border-r-2 border-gray-500 sm:pr-4">
-        <h4 class="text-sm text-gray-300">Email:</h4>
-        <p><%= user.email %></p>
-      </div>
-
-      <div class="sm:border-r-2 border-gray-500 sm:pr-4">
-        <h4 class="text-sm text-gray-300">Joined:</h4>
-        <p><%= user.createdAt.toDateString() %></p>
-      </div>
-
-      <div>
-        <h4 class="text-sm text-gray-300">Account Status:</h4>
-        <p><%= user.verified ? "Approved" : "Pending" %></p>
-      </div>
-    </div>
-
-    <div
-      class="bg-gray-800 border-[1px] border-gray-700 rounded p-4 mt-8 text-gray-100"
-    >
-      <form
-        method="POST"
-        enctype="multipart/form-data"
-        action="/user/profile/settings/avatar"
+<main>
+  <section class="py-12 sm:py-16">
+    <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+      <div
+        class="flex flex-col items-center gap-y-4 sm:flex-row sm:gap-x-3 bg-neutral-800 border-[1px] border-neutral-700 rounded p-4"
       >
-        <h3 class="font-semibold border-b-[1px] border-gray-500 pb-2">
-          Update Profile Picture:
-        </h3>
-        <label class="block">
-          <input
-            type="file"
-            name="avatar"
-            accept="image/*"
-            class="mt-4 text-sm"
-            placeholder="Select your profile picture"
-            required
-          />
-        </label>
-        <% if (errors && errors.avatar) { %>
-        <p class="text-red-600 text-sm mt-1"><%= errors.avatar %></p>
-        <% } %>
-
-        <div class="mt-2 text-right">
-          <button
-            type="submit"
-            class="btn-primary rounded text-sm px-4 py-1 transition-all duration-200"
-          >
-            Change Picture
-          </button>
-          <button
-            class="btn-outline text-sm px-4 py-1 rounded transition-all duration-200"
-            type="reset"
-          >
-            Cancel
-          </button>
+        <img
+          src="<%= user.photo %>"
+          alt="Your profile picture"
+          class="rounded-full w-20 h-20 sm:w-12 sm:h-12 inline ring-4"
+        />
+        <div>
+          <h1 class="text-white text-3xl font-semibold"><%= user.name %></h1>
+          <p class="text-center sm:text-left text-xs">
+            <a href="/user/profile/" class="btn-outline px-2 rounded-md">
+              Profile
+            </a>
+          </p>
         </div>
-      </form>
-    </div>
+      </div>
 
-    <div
-      class="bg-gray-800 border-[1px] border-gray-700 text-gray-100 rounded p-4 mt-8"
-    >
-      <form method="POST" action="/user/profile/settings/bio">
-        <h3 class="font-semibold border-b-[1px] border-gray-500 pb-2">
-          Update Bio:
-        </h3>
-        <textarea
-          class="w-full min-h-[150px] p-3 mt-1 text-sm border-[1px] border-gray-400 text-gray-900"
-          name="bio"
+      <div
+        class="flex flex-col gap-4 sm:flex-row sm:gap-12 text-neutral-50 bg-neutral-800 border-[1px] border-neutral-700 border-t-0 rounded p-4"
+      >
+        <div class="sm:border-r-2 border-neutral-500 sm:pr-4">
+          <h4 class="text-sm text-neutral-300">Email:</h4>
+          <p><%= user.email %></p>
+        </div>
+
+        <div class="sm:border-r-2 border-neutral-500 sm:pr-4">
+          <h4 class="text-sm text-neutral-300">Joined:</h4>
+          <p><%= user.createdAt.toDateString() %></p>
+        </div>
+
+        <div>
+          <h4 class="text-sm text-neutral-300">Account Status:</h4>
+          <p><%= user.verified ? "Approved" : "Pending" %></p>
+        </div>
+      </div>
+
+      <div
+        class="bg-neutral-800 border-[1px] border-neutral-700 rounded p-4 mt-8 text-neutral-100"
+      >
+        <form
+          method="POST"
+          enctype="multipart/form-data"
+          action="/user/profile/settings/avatar"
         >
+          <h3 class="font-semibold border-b-[1px] border-neutral-500 pb-2">
+            Update Profile Picture:
+          </h3>
+          <label class="block">
+            <input
+              type="file"
+              name="avatar"
+              accept="image/*"
+              class="block w-full mt-4 cursor-pointer border shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none bg-neutral-900 border-neutral-700 text-neutral-400 file:border-0 file:me-4 file:py-3 file:px-4 file:bg-neutral-700 file:text-neutral-400"
+              placeholder="Select your profile picture"
+              required
+            />
+          </label>
+          <% if (errors && errors.avatar) { %>
+          <p class="text-red-600 text-sm mt-1"><%= errors.avatar %></p>
+          <% } %>
+
+          <div class="mt-5 text-right">
+            <button
+              type="submit"
+              class="btn-primary rounded text-sm px-4 py-1 transition-all duration-200"
+            >
+              Change Picture
+            </button>
+            <button
+              class="btn-outline text-sm px-4 py-1 rounded transition-all duration-200 ml-3"
+              type="reset"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div
+        class="bg-neutral-800 border-[1px] border-neutral-700 text-neutral-100 rounded p-4 mt-8"
+      >
+        <form method="POST" action="/user/profile/settings/bio">
+          <h3 class="font-semibold border-b-[1px] border-neutral-500 pb-2">
+            Update Bio:
+          </h3>
+          <textarea class="w-full h-[150px] p-3 mt-4 input-primary" name="bio">
 <%= user.bio %></textarea
-        >
-        <% if (errors && errors.bio) { %>
-        <p class="text-red-600 text-sm"><%= errors.bio %></p>
-        <% } %>
+          >
+          <% if (errors && errors.bio) { %>
+          <p class="text-red-600 text-sm"><%= errors.bio %></p>
+          <% } %>
 
-        <div class="mt-2 text-right">
-          <button
-            type="submit"
-            class="btn-primary text-sm px-4 py-1 rounded transition-all duration-200"
-          >
-            Update Bio
-          </button>
-          <button
-            class="btn-outline text-sm px-4 py-1 rounded transition-all duration-200"
-            type="reset"
-          >
-            Cancel
-          </button>
-        </div>
-      </form>
+          <div class="mt-5 text-right">
+            <button
+              type="submit"
+              class="btn-primary text-sm px-4 py-1 rounded transition-all duration-200"
+            >
+              Update Bio
+            </button>
+            <button
+              class="btn-outline text-sm px-4 py-1 rounded transition-all duration-200 ml-3"
+              type="reset"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <p class="mt-8 text-right text-sm text-neutral-100">
+        Go back to
+        <a href="/user/profile" class="btn-outline px-3 py-1 rounded-md"
+          >Profile page
+        </a>
+      </p>
     </div>
-
-    <p class="mt-8 text-right text-sm text-gray-100">
-      Go back to
-      <a href="/user/profile" class="btn-outline px-3 py-1 rounded-md"
-        >Profile page
-      </a>
-    </p>
-  </div>
-</section>
+  </section>
+</main>
 
 <%- include("./partials/footer") %>

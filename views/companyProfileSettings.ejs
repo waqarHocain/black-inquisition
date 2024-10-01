@@ -3,7 +3,7 @@
 <section class="py-12 sm:py-16">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div
-      class="flex flex-col items-center gap-y-4 sm:flex-row sm:gap-x-3 bg-gray-800 border-[1px] border-gray-700 rounded p-4"
+      class="flex flex-col items-center gap-y-4 sm:flex-row sm:gap-x-3 bg-neutral-800 border-[1px] border-neutral-700 rounded p-4"
     >
       <img
         src="<%= company.photo %>"
@@ -21,36 +21,38 @@
     </div>
 
     <div
-      class="flex flex-col gap-4 sm:flex-row sm:gap-12 text-white bg-gray-800 border-[1px] border-gray-700 border-t-0 rounded p-4"
+      class="flex flex-col gap-4 sm:flex-row sm:gap-12 text-white bg-neutral-800 border-[1px] border-neutral-700 border-t-0 rounded p-4"
     >
-      <div class="sm:border-r-2 border-gray-500 sm:pr-4">
-        <h4 class="text-sm text-gray-300">Email:</h4>
+      <div class="sm:border-r-2 border-neutral-500 sm:pr-4">
+        <h4 class="text-sm text-neutral-300">Email:</h4>
         <p><%= company.email %></p>
       </div>
 
-      <div class="sm:border-r-2 border-gray-500 sm:pr-4">
-        <h4 class="text-sm text-gray-300">Phone:</h4>
+      <div class="sm:border-r-2 border-neutral-500 sm:pr-4">
+        <h4 class="text-sm text-neutral-300">Phone:</h4>
         <p><%= company.phone %></p>
       </div>
 
-      <div class="sm:border-r-2 border-gray-500 sm:pr-4">
-        <h4 class="text-sm text-gray-300">Joined:</h4>
+      <div class="sm:border-r-2 border-neutral-500 sm:pr-4">
+        <h4 class="text-sm text-neutral-300">Joined:</h4>
         <p><%= company.createdAt.toDateString() %></p>
       </div>
 
       <div>
-        <h4 class="text-sm text-gray-300">Account Status:</h4>
+        <h4 class="text-sm text-neutral-300">Account Status:</h4>
         <p><%= company.verified ? "Approved" : "Pending" %></p>
       </div>
     </div>
-    <div class="bg-gray-800 border-[1px] border-gray-700 rounded p-4 mt-8">
+    <div
+      class="bg-neutral-800 border-[1px] border-neutral-700 rounded p-4 mt-8"
+    >
       <form
         method="POST"
         enctype="multipart/form-data"
         action="/company/profile/settings/avatar"
       >
         <h3
-          class="font-semibold border-b-[1px] text-gray-300 border-gray-500 pb-2"
+          class="font-semibold border-b-[1px] text-neutral-300 border-neutral-500 pb-2"
         >
           Update Profile Picture:
         </h3>
@@ -59,7 +61,7 @@
             type="file"
             name="avatar"
             accept="image/*"
-            class="mt-4 text-sm text-gray-300 cursor-pointer"
+            class="block w-full mt-4 cursor-pointer border shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none bg-neutral-900 border-neutral-700 text-neutral-400 file:border-0 file:me-4 file:py-3 file:px-4 file:bg-neutral-700 file:text-neutral-400"
             placeholder="Select your profile picture"
             required
           />
@@ -68,52 +70,45 @@
         <p class="text-red-600 text-sm mt-1"><%= errors.avatar %></p>
         <% } %>
 
-        <div class="mt-2 text-right">
-          <button
-            type="submit"
-            class="btn-primary px-4 py-1 text-sm rounded-md"
-          >
+        <div class="mt-5 text-right">
+          <button type="submit" class="btn-primary px-4 py-1 text-sm">
             Change Picture
           </button>
-          <button type="reset" class="btn-outline px-4 py-1 text-sm rounded-md">
+          <button type="reset" class="btn-outline px-4 py-1 text-sm ml-3">
             Cancel
           </button>
         </div>
       </form>
     </div>
 
-    <div class="bg-gray-800 border-[1px] border-gray-700 rounded p-4 mt-8">
+    <div
+      class="bg-neutral-800 border-[1px] border-neutral-700 rounded p-4 mt-8"
+    >
       <form method="POST" action="/company/profile/settings/bio">
         <h3
-          class="font-semibold border-b-[1px] text-gray-300 border-gray-500 pb-2"
+          class="font-semibold border-b-[1px] text-neutral-300 border-neutral-500 pb-2"
         >
           Update Bio:
         </h3>
-        <textarea
-          class="w-full min-h-[150px] p-3 mt-1 text-sm border-[1px] border-gray-400"
-          name="bio"
-        >
+        <textarea class="w-full h-[150px] p-3 mt-4 input-primary" name="bio">
 <%= company.bio %></textarea
         >
         <% if (errors && errors.bio) { %>
         <p class="text-red-600 text-sm"><%= errors.bio %></p>
         <% } %>
 
-        <div class="mt-2 text-right">
-          <button
-            type="submit"
-            class="btn-primary px-4 py-1 text-sm rounded-md"
-          >
+        <div class="mt-5 text-right">
+          <button type="submit" class="btn-primary px-4 py-1 text-sm">
             Update Bio
           </button>
-          <button class="btn-outline px-4 py-1 text-sm rounded-md" type="reset">
+          <button class="btn-outline px-4 py-1 text-sm ml-3" type="reset">
             Cancel
           </button>
         </div>
       </form>
     </div>
 
-    <p class="mt-8 text-right text-sm text-gray-300">
+    <p class="mt-8 text-right text-sm text-neutral-300">
       Go back to
       <a href="/company/profile" class="btn-outline px-3 py-1">Profile page </a>
     </p>

@@ -5,7 +5,7 @@
     <h1 class="text-3xl text-center font-bold text-white lg:text-4xl">Jobs</h1>
 
     <% if (jobs.length === 0) { %>
-    <p class="text-lg text-gray-300 text-center mt-5">
+    <p class="text-lg text-neutral-300 text-center mt-5">
       There are no jobs, start by creating one.
 
       <a
@@ -15,29 +15,27 @@
       >
     </p>
     <% } else { %>
-    <p class="mt-5 max-w-3xl mx-auto text-gray-300">
-      Post a
-      <a
-        href="/company/jobs/new"
-        class="btn-primary px-2 py-1 text-xs rounded-md"
-        >New Job</a
+    <p class="mt-5 max-w-3xl mx-auto text-neutral-300">
+      <a href="/company/jobs/new" class="btn-primary px-2 py-1 text-xs"
+        >+ Create New Job</a
       >
     </p>
     <ul class="max-w-3xl mx-auto mt-5">
       <% jobs.forEach(job => { %>
       <li
-        class="my-3 border-2 border-gray-700 bg-gray-800 rounded shadow-sm w-full px-5 py-2 flex flex-col sm:flex-row sm:items-center justify-between"
+        class="my-3 border-2 border-neutral-700 bg-neutral-800 rounded-xl shadow-sm w-full px-5 py-2 flex flex-col sm:flex-row sm:items-center justify-between"
       >
         <div>
-          <h3 class="text-lg font-semibold text-gray-100">
+          <h3 class="text-lg font-semibold text-neutral-100">
             <a href="/company/jobs/<%= job.id %>"> <%= job.title %> </a>
           </h3>
-          <p class="text-sm text-gray-300 break-words my-1">
+          <p class="text-sm text-neutral-300 break-words my-1">
             <%= job.description.substring(0, 100) %>...
           </p>
-          <p class="text-gray-100 text-xs">
-            <span class="font-bold text-gray-400">Job Type:</span> <%= job.type
-            %> <span class="font-bold text-gray-400">Workplace:</span> <%=
+          <p class="text-neutral-100 text-xs">
+            <span class="font-bold text-neutral-400">Job Type:</span> <%=
+            job.type %>
+            <span class="font-bold text-neutral-400">Workplace:</span> <%=
             job.workplace %>
           </p>
         </div>

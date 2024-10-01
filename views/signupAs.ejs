@@ -7,33 +7,33 @@
     </h1>
 
     <div
-      class="bg-gradient-to-r from-purple-950 via-gray-700 to-gray-900 rounded-lg max-w-md mx-auto text-gray-200 flex flex-col sm:flex-row"
+      class="grid sm:grid-cols-2 border border-neutral-700 rounded-xl divide-y sm:divide-x divide-neutral-700 max-w-md mx-auto"
     >
-      <div class="w-full sm:w-1/2 text-center py-16">
+      <div class="text-center py-16 group">
         <p>
           <a href="/auth/user/signup">
             <img
               src="/images/userIcon.svg"
               alt="Company icon"
-              class="bg-gray-50 hover:bg-gray-200 w-16 h-16 inline p-3 rounded-full"
+              class="transition-colors bg-yellowMain hover:bg-yellow-300 w-16 h-16 inline p-3 rounded-full"
             />
             <span
-              class="block w-max mx-auto mt-4 border-b-2 border-gray-300 hover:border-gray-400"
+              class="block w-max mx-auto mt-4 text-neutral-100 hover:text-yellowMain border-b-2 border-neutral-700 hover:border-yellowMain"
               >Personal Account</span
             >
           </a>
         </p>
       </div>
-      <div class="w-full sm:w-1/2 text-center py-16">
+      <div class="text-center py-16">
         <p>
           <a href="/auth/company/signup">
             <img
               src="/images/companyIcon.svg"
               alt="Company icon"
-              class="bg-gray-50 hover:bg-gray-200 w-16 h-16 inline p-3 rounded-full"
+              class="transition-colors bg-yellowMain hover:bg-yellow-300 w-16 h-16 inline p-3 rounded-full"
             />
             <span
-              class="block w-max mx-auto mt-4 border-b-2 border-gray-300 hover:border-gray-400"
+              class="block w-max mx-auto mt-4 text-neutral-100 hover:text-yellowMain border-b-2 border-neutral-700 hover:border-yellowMain"
             >
               Company Account</span
             >
@@ -41,6 +41,11 @@
         </p>
       </div>
     </div>
+
+    <p class="text-center mt-5">
+      Already have an account?
+      <a href="/auth/login" class="underline font-semibold">Login</a>
+    </p>
   </div>
 </section>
 

@@ -1,10 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./views/**/*.ejs"],
+  content: ["./views/**/*.ejs", "./node_modules/preline/dist/*.js"],
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Open Sans", "sans-serif"],
+        sans: ["Inter", "sans-serif"],
       },
       colors: {
         lightBlack: "#111827",
@@ -12,8 +12,9 @@ module.exports = {
         blueDark: "#4766FF",
         cream: "#FEF9FF",
         golden: "#F5B841",
+        yellowMain: "#ff0",
       },
     },
   },
-  plugins: [],
+  plugins: [require("preline/plugin")],
 };

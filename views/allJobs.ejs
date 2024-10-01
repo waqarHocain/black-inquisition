@@ -1,77 +1,80 @@
 <%- include("./partials/header", {title: "Jobs"}) %>
 
-<section class="py-12 sm:py-16">
-  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <h1 class="text-3xl text-center font-bold text-white sm:text-3xl">
-      Find a job
-    </h1>
+<main>
+  <section class="py-12 sm:py-16">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <h1 class="text-3xl text-center font-bold text-white sm:text-3xl">
+        Find a job
+      </h1>
 
-    <div class="bg-gray-800 max-w-4xl mx-auto mt-8 px-2 py-5 rounded-md">
-      <% if (jobs.length === 0) { %>
-      <p class="text-lg text-gray-300 text-center">
-        There are no jobs posted yet, please come back later.
-      </p>
-      <% } else { %>
-      <ul>
-        <% jobs.forEach(job => { %>
-        <li
-          class="border-2 border-gray-500 text-gray-100 rounded-xl flex px-3 py-2 items-center justify-between my-4"
-        >
-          <div class="flex flex-row items-center">
-            <a href="/jobs/<%= job.id %>">
-              <img
-                src="/images/profilePlaceholder.svg"
-                alt="company logo"
-                class="block h-14 w-14 rounded-full"
-              />
-            </a>
-
-            <div class="pl-4">
+      <div class="bg-neutral-800 max-w-5xl mx-auto mt-8 p-5 rounded-md">
+        <% if (jobs.length === 0) { %>
+        <p class="text-lg text-neutral-300 text-center">
+          There are no jobs posted yet, please come back later.
+        </p>
+        <% } else { %>
+        <ul>
+          <% jobs.forEach(job => { %>
+          <li
+            class="border-2 border-neutral-700 text-neutral-100 rounded-xl flex px-3 py-2 items-center justify-between my-4"
+          >
+            <div class="flex flex-row items-center">
               <a href="/jobs/<%= job.id %>">
-                <h4 class="font-semibold text-lg"><%= job.title %></h4>
-                <p><%= job.company %></p>
-                <p>
-                  <span
-                    class="text-xs border-[1px] border-gray-400 px-2 py-1 rounded-2xl"
-                  >
-                    <%= job.location %>
-                  </span>
-                </p>
+                <img
+                  src="/images/profilePlaceholder.svg"
+                  alt="company logo"
+                  class="block h-14 w-14 rounded-full"
+                />
               </a>
-            </div>
-          </div>
 
-          <div class="flex flex-row items-center gap-x-4">
-            <div class="hidden sm:block">
-              <p
-                class="inline-block py-1 px-3 border-2 border-gray-700 text-gray-300 text-sm rounded-2xl font-medium"
-              >
-                <%= job.workplace %>
+              <div class="pl-4">
+                <a href="/jobs/<%= job.id %>">
+                  <h4 class="font-semibold text-lg text-neutral-300">
+                    <%= job.title %>
+                  </h4>
+                  <p><%= job.company %></p>
+                  <p>
+                    <span
+                      class="text-xs border-[1px] border-neutral-400 px-2 py-1 rounded-2xl"
+                    >
+                      <%= job.location %>
+                    </span>
+                  </p>
+                </a>
+              </div>
+            </div>
+
+            <div class="flex flex-row items-center gap-x-4">
+              <div class="hidden sm:block">
+                <p
+                  class="inline-block py-1 px-3 border-2 border-neutral-700 text-neutral-300 text-sm rounded-2xl font-medium"
+                >
+                  <%= job.workplace %>
+                </p>
+                <p
+                  class="inline-block py-1 px-3 border-2 border-neutral-700 text-neutral-300 text-sm rounded-2xl font-medium"
+                >
+                  <%= job.type %>
+                </p>
+              </div>
+              <p class="text-xs text-neutral-300">
+                <%= job.createdAt.getDate() + " " +
+                job.createdAt.toLocaleString("default", {month: "long"}) %>
+                <br />
+                <%= job.createdAt.getFullYear() %>
               </p>
-              <p
-                class="inline-block py-1 px-3 border-2 border-gray-700 text-gray-300 text-sm rounded-2xl font-medium"
-              >
-                <%= job.type %>
+              <p>
+                <a class="btn-primary px-5 py-1" href="/jobs/<%= job.id %>"
+                  >Apply</a
+                >
               </p>
             </div>
-            <p class="text-xs text-gray-300">
-              <%= job.createdAt.getDate() + " " +
-              job.createdAt.toLocaleString("default", {month: "long"}) %>
-              <br />
-              <%= job.createdAt.getFullYear() %>
-            </p>
-            <p>
-              <a class="btn-primary px-5 py-1" href="/jobs/<%= job.id %>"
-                >Apply</a
-              >
-            </p>
-          </div>
-        </li>
-        <% }) %>
-      </ul>
-      <% } %>
+          </li>
+          <% }) %>
+        </ul>
+        <% } %>
+      </div>
     </div>
-  </div>
-</section>
-
+  </section>
+</main>
 <%- include("./partials/footer") %>

@@ -1,14 +1,14 @@
 <%- include("./partials/header", {title: post.title}) %>
 <section class="py-12 sm:py-16">
-  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <h1 class="text-4xl font-bold text-white lg:text-5xl max-w-prose">
+  <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+    <h1 class="text-4xl font-bold text-neutral-100 lg:text-5xl max-w-prose">
       <%= post.title %>
     </h1>
 
-    <p class="mt-2 text-gray-300 text-sm">
+    <p class="mt-2 text-neutral-400 text-sm">
       Last Updated: <%= post.updatedAt.toDateString() %>
     </p>
-    <article class="post-content text-lg mt-5 text-gray-100 max-w-prose">
+    <article class="post-content text-lg mt-5 text-neutral-300 max-w-prose">
       <%= post.body %>
     </article>
 
@@ -23,7 +23,7 @@
         <input type="text" name="postId" value="<%= post.id %>" hidden />
         <button
           type="submit"
-          class="<%= isLiked ? 'like-btn-liked' : 'like-btn-normal' %> px-3 py-1 border-[1px] rounded-md text-sm"
+          class="<%= isLiked ? 'like-btn-liked' : 'like-btn-normal' %> px-3 py-1 border-[1px] rounded-full text-sm"
         >
           <svg
             width="800px"
@@ -41,7 +41,7 @@
         </button>
       </form>
 
-      <p class="inline text-gray-300 text-sm ml-2">
+      <p class="inline text-neutral-400 text-sm ml-2">
         <span id="likes-counter"><%= post._count.likes %> </span> <%=
         post._count.likes > 1 ? "likes" : "like" %>
       </p>
@@ -61,7 +61,7 @@
         />
       </svg>
 
-      <span class="inline text-gray-300 text-sm ml-2">
+      <span class="inline text-neutral-400 text-sm ml-2 yellow-3">
         <%= post._count.likes %> <%= post._count.likes > 1 ? "likes" : "like"
         %></span
       >
@@ -69,22 +69,24 @@
     <% } %>
 
     <div class="mt-8">
-      <h4 class="text-gray-200 font-semibold text-xl">Comments:</h4>
+      <h4 class="text-neutral-400 font-semibold text-xl">Comments:</h4>
 
       <% if (locals.userId) { %> <%- include("./partials/commentForm", {postId:
       post.id}) %> <% } else { %>
-      <p class="mt-3 text-gray-400 text-lg">Login to post a new comment.</p>
+      <p class="mt-3 text-neutral-500 text-lg">Login to post a new comment.</p>
       <% } %><% if (post.comments.length === 0) { %>
-      <p class="mt-3 text-gray-400 text-lg">No one has commented yet.</p>
+      <p class="mt-3 text-neutral-400 text-lg">No one has commented yet.</p>
       <% } else { %> <% post.comments.forEach(comment => { %>
       <div
-        class="backdrop-blur bg-white/10 text-gray-300 max-w-prose rounded-md px-3 py-2 mt-4"
+        class="backdrop-blur bg-neutral-800 text-neutral-300 max-w-prose rounded-xl px-5 py-2 mt-4"
       >
-        <p class="text-sm border-b-[1px] border-gray-400 pb-1 mb-1">
+        <p
+          class="text-sm text-neutral-500 border-b-[1px] border-neutral-700 pb-1 mb-1"
+        >
           <strong><%= comment.User.name %></strong> @
           <em><%= comment.createdAt.toDateString() %></em>
         </p>
-        <p><span class="text-gray-400">>></span> <%= comment.body %></p>
+        <p><span class="text-neutral-400">>></span> <%= comment.body %></p>
 
         <% if (locals.userId) { %>
         <form
@@ -96,14 +98,14 @@
             <input name="parentCommentId" value="<%= comment.id %>" hidden />
             <textarea
               name="comment"
-              class="w-full block h-[150px] p-3 mt-1 text-sm input-primary text-black"
+              class="w-full block h-[150px] p-3 mt-1 text-sm input-primary"
               placeholder="Reply to comment..."
               required
             ></textarea>
           </div>
           <button
             type="submit"
-            class="btn-primary rounded-md px-3 py-1 text-sm mt-2"
+            class="btn-primary rounded-full px-3 py-1 text-sm mt-2"
           >
             Reply
           </button>
@@ -111,20 +113,24 @@
 
         <p class="mt-2">
           <button
-            class="reply-btn text-sm px-2 py-[2px] border-[1px] border-white rounded-md"
+            class="reply-btn text-sm px-3 py-1 border-[1px] text-neutral-400 border-neutral-500 rounded-full hover:border-neutral-300 hover:text-neutral-300"
           >
             Reply
           </button>
         </p>
         <% } %> <% if (comment.Children.length > 0) { %>
-        <p class="mt-3 text-sm italic">Replies</p>
+        <p class="mt-3 text-sm italic text-neutral-500">Replies</p>
         <% comment.Children.forEach(commentReply => { %>
         <div class="ml-5 mt-4">
-          <p class="text-sm border-b-[1px] border-gray-400 pb-1 mb-1">
+          <p
+            class="text-sm border-b-[1px] border-neutral-700 text-neutral-500 pb-1 mb-1"
+          >
             <strong><%= commentReply.User.name %></strong> @
             <em><%= commentReply.createdAt.toDateString() %></em>
           </p>
-          <p><span class="text-gray-400">>></span> <%= commentReply.body %></p>
+          <p>
+            <span class="text-neutral-400">>></span> <%= commentReply.body %>
+          </p>
         </div>
         <% }) %> <% } %>
       </div>
@@ -136,6 +142,7 @@
 <style>
   .post-content > * {
     margin-top: 20px;
+    color: #d4d4d4;
   }
   .post-content > h1,
   .post-content > h2,
@@ -189,25 +196,28 @@
 
   .like-btn-normal {
     background-color: transparent;
-    border-color: #d1d5db;
-    color: #d1d5db;
+    border-color: #ff0;
+    color: #ff0;
   }
   .like-btn-normal:hover {
-    border-color: white;
-    color: white;
+    border-color: #fde047;
+    color: #fde047;
   }
 
   .like-btn-liked {
-    background-color: #617bff;
-    border-color: #617bff;
-    color: white;
+    background-color: #ff0;
+    border-color: #ff0;
+    color: black;
   }
   .like-btn-liked:hover {
-    background-color: #4766ff;
+    background-color: #fde047;
   }
 
   .like-icon {
-    fill: #d1d5db;
+    fill: #ff0;
+  }
+  .like-btn-liked .like-icon {
+    fill: black;
   }
 </style>
 

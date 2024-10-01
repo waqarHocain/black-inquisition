@@ -1,7 +1,7 @@
 <%- include("./partials/header", {title: "Profile"}) %>
 
 <section class="py-12 sm:py-16">
-  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
     <div
       class="error-container hidden absolute px-2 py-1 rounded w-[400px] left-2/4 -ml-[200px] bg-red-600 border-red-600 border-2"
     >
@@ -16,7 +16,7 @@
     </div>
 
     <div
-      class="flex flex-col items-center gap-y-4 sm:flex-row sm:gap-x-3 bg-gray-800 border-[1px] border-gray-700 rounded p-4"
+      class="flex flex-col items-center gap-y-4 sm:flex-row sm:gap-x-3 bg-neutral-800 border-[1px] border-neutral-700 rounded p-4"
     >
       <img
         src="<%= user.photo %>"
@@ -29,27 +29,27 @@
     </div>
 
     <div
-      class="flex flex-col gap-4 sm:flex-row sm:gap-12 text-gray-50 bg-gray-800 border-[1px] border-gray-700 border-t-0 rounded p-4"
+      class="flex flex-col gap-4 sm:flex-row sm:gap-12 text-neutral-50 bg-neutral-800 border-[1px] border-neutral-700 border-t-0 rounded p-4"
     >
-      <div class="sm:border-r-2 border-gray-500 sm:pr-4">
-        <h4 class="text-sm text-gray-300">Email:</h4>
+      <div class="sm:border-r-2 border-neutral-500 sm:pr-4">
+        <h4 class="text-sm text-neutral-300">Email:</h4>
         <p><%= user.email %></p>
       </div>
 
-      <div class="sm:border-r-2 border-gray-500 sm:pr-4">
-        <h4 class="text-sm text-gray-300">Joined:</h4>
+      <div class="sm:border-r-2 border-neutral-500 sm:pr-4">
+        <h4 class="text-sm text-neutral-300">Joined:</h4>
         <p><%= user.createdAt.toDateString() %></p>
       </div>
 
       <div>
-        <h4 class="text-sm text-gray-300">Account Status:</h4>
+        <h4 class="text-sm text-neutral-300">Account Status:</h4>
         <p><%= user.verified ? "Approved" : "Pending" %></p>
       </div>
 
       <% if (locals.userId) { %> <% if (isFriend) { %>
-      <div class="flex items-center sm:border-l-2 border-gray-500 sm:pl-4">
+      <div class="flex items-center sm:border-l-2 border-neutral-500 sm:pl-4">
         <button
-          class="inline-flex items-center btn-primary border-white border-[1px] text-sm rounded px-3 py-1 mr-2 bg-transparent pointer-events-none"
+          class="inline-flex items-center btn-outline border text-sm px-3 py-1 mr-2 pointer-events-none"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -71,21 +71,21 @@
 
         <a
           href="/social/people/<%= user.id %>/edit-relationship"
-          class="btn-primary rounded px-2 py-1 text-sm border-[1px]"
+          class="btn-primary px-2 py-1 text-sm border"
           >Edit Relationship</a
         >
       </div>
       <% } else if (hasSentRequest) { %>
-      <div class="sm:border-l-2 border-gray-500 sm:pl-4">
+      <div class="sm:border-l-2 border-neutral-500 sm:pl-4">
         <button
-          class="inline-flex items-center bg-blue-400 btn-primary text-sm rounded px-3 py-1 mr-2 opacity-75 pointer-events-none"
+          class="inline-flex items-center btn-outline bg-yel text-sm px-3 py-1 mr-2 pointer-events-none"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             stroke-width="1.5"
-            stroke="lime"
+            stroke="#ffff00"
             class="w-4 h-4 mr-2"
           >
             <path
@@ -98,7 +98,7 @@
         </button>
       </div>
       <% } else { %>
-      <div class="sm:border-l-2 border-gray-500 sm:pl-4">
+      <div class="sm:border-l-2 border-neutral-500 sm:pl-4">
         <form
           method="post"
           action="/social/people/friend"
@@ -106,7 +106,7 @@
         >
           <input type="text" hidden value="<%= user.id %>" name="personId" />
           <button
-            class="btn-friend-req inline-flex items-center btn-primary text-sm rounded px-3 py-1 mr-2 disabled:bg-blue-400"
+            class="btn-friend-req inline-flex items-center btn-primary text-sm px-3 py-1 mr-2 disabled:bg-yellow-400"
             type="submit"
           >
             <svg
@@ -132,10 +132,10 @@
     </div>
 
     <div
-      class="bg-gray-800 border-[1px] border-gray-700 rounded p-4 mt-8 text-gray-100"
+      class="bg-neutral-800 border-[1px] border-neutral-700 rounded p-4 mt-8 text-neutral-100"
     >
       <h3
-        class="font-semibold border-b-[1px] border-gray-500 pb-2 text-gray-300"
+        class="font-semibold border-b-[1px] border-neutral-500 pb-2 text-neutral-300"
       >
         About
       </h3>
@@ -143,54 +143,56 @@
     </div>
 
     <div
-      class="bg-gray-800 border-[1px] border-gray-700 rounded p-4 mt-8 text-gray-100"
+      class="bg-neutral-800 border-[1px] border-neutral-700 rounded p-4 mt-8 text-neutral-100"
     >
-      <h3 class="font-semibold border-b-[1px] border-gray-500 pb-2">
+      <h3 class="font-semibold border-b-[1px] border-neutral-500 pb-2">
         Public Data
       </h3>
 
-      <div class="bg-gray-800 border-[1px] border-gray-700 rounded-md p-4 mt-8">
-        <h3 class="font-semibold border-b-[1px] border-gray-500 pb-2">
+      <div
+        class="bg-neutral-800 border-[1px] border-neutral-700 rounded-md p-4 mt-8"
+      >
+        <h3 class="font-semibold border-b-[1px] border-neutral-500 pb-2">
           Recently Posted Jobs
         </h3>
 
         <% if (recentJobs.length > 0) { %>
         <div class="overflow-x-auto mt-2">
-          <table class="min-w-full divide-y-2 divide-gray-400 text-sm">
+          <table class="min-w-full divide-y-2 divide-neutral-400 text-sm">
             <thead>
               <tr class="text-left">
                 <th
-                  class="whitespace-nowrap px-4 py-2 font-semibold text-gray-100"
+                  class="whitespace-nowrap px-4 py-2 font-semibold text-neutral-100"
                 >
                   #
                 </th>
 
                 <th
-                  class="whitespace-nowrap px-4 py-2 font-semibold text-gray-100"
+                  class="whitespace-nowrap px-4 py-2 font-semibold text-neutral-100"
                 >
                   Title
                 </th>
 
                 <th
-                  class="whitespace-nowrap px-4 py-2 font-semibold text-gray-100"
+                  class="whitespace-nowrap px-4 py-2 font-semibold text-neutral-100"
                 >
                   Location
                 </th>
 
                 <th
-                  class="whitespace-nowrap px-4 py-2 font-semibold text-gray-100"
+                  class="whitespace-nowrap px-4 py-2 font-semibold text-neutral-100"
                 >
                   Type
                 </th>
 
                 <th
-                  class="whitespace-nowrap px-4 py-2 font-semibold text-gray-100"
+                  class="whitespace-nowrap px-4 py-2 font-semibold text-neutral-100"
                 >
                   Workplace
                 </th>
 
                 <th
-                  class="whitespace-nowrap px-4 py-2 font-semibold text-gray-100"
+                  class="whitespace-nowrap px-4 py-2 font-semibold text-neutral-100"
                 >
                   Company
                 </th>
@@ -199,31 +201,31 @@
               </tr>
             </thead>
 
-            <tbody class="divide-y divide-gray-400">
+            <tbody class="divide-y divide-neutral-400">
               <% recentJobs.forEach((job, index) => { %>
               <tr class="text-left">
-                <td class="whitespace-nowrap px-4 py-2 text-gray-300">
+                <td class="whitespace-nowrap px-4 py-2 text-neutral-300">
                   <%= index + 1 %>
                 </td>
 
-                <td class="whitespace-nowrap px-4 py-2 text-gray-300">
+                <td class="whitespace-nowrap px-4 py-2 text-neutral-300">
                   <a href="/jobs/<%= job.id %>"> <%= job.title %> </a>
                 </td>
 
-                <td class="whitespace-nowrap px-4 py-2 text-gray-300">
+                <td class="whitespace-nowrap px-4 py-2 text-neutral-300">
                   <%= job.location %>
                 </td>
 
-                <td class="whitespace-nowrap px-4 py-2 text-gray-300">
+                <td class="whitespace-nowrap px-4 py-2 text-neutral-300">
                   <%= job.type == "partTime" ? "Part-time" : job.type ==
                   "fullTime" ? "Full-time" : job.type %>
                 </td>
 
-                <td class="whitespace-nowrap px-4 py-2 text-gray-300">
+                <td class="whitespace-nowrap px-4 py-2 text-neutral-300">
                   <%= job.workplace == "onSite" ? "on-site" : job.workplace %>
                 </td>
 
-                <td class="whitespace-nowrap px-4 py-2 text-gray-300">
+                <td class="whitespace-nowrap px-4 py-2 text-neutral-300">
                   <%= job.company %>
                 </td>
 
@@ -240,21 +242,27 @@
           </table>
         </div>
         <% } else { %>
-        <p class="mt-3 text-gray-300">This user hasn't posted any jobs.</p>
+        <p class="mt-3 text-neutral-300">This user hasn't posted any jobs.</p>
         <% } %>
       </div>
 
-      <div class="bg-gray-800 border-[1px] border-gray-700 rounded-md p-4 mt-8">
-        <h3 class="font-semibold border-b-[1px] border-gray-500 pb-2">
+      <div
+        class="bg-neutral-800 border-[1px] border-neutral-700 rounded-md p-4 mt-8"
+      >
+        <h3 class="font-semibold border-b-[1px] border-neutral-500 pb-2">
           Recent Blog Posts
         </h3>
 
         <% if (posts.length > 0) { %> <% posts.forEach(post => { %>
 
-        <h3><%= post.title %></h3>
+        <h3 class="my-2">
+          <a href="/posts/<%= post.id %>" class="underline"
+            ><%= post.title %></a
+          >
+        </h3>
 
         <% }) %> <% } else { %>
-        <p class="mt-3 text-gray-300">No posts found.</p>
+        <p class="mt-3 text-neutral-300">No posts found.</p>
         <% } %>
       </div>
     </div>
@@ -263,7 +271,7 @@
 
 <script>
   const spinner = `<div role="status">
-    <svg aria-hidden="true" class="inline w-4 h-4 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg aria-hidden="true" class="inline w-4 h-4 text-neutral-200 animate-spin dark:text-neutral-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
         <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
     </svg>

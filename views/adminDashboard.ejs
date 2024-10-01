@@ -5,37 +5,37 @@
     <h1 class="text-4xl font-bold text-white">Dashboard</h1>
 
     <div class="mt-5">
-      <h2 class="text-2xl font-semibold text-gray-300">Company Accounts</h2>
+      <h2 class="text-2xl font-semibold text-neutral-300">Company Accounts</h2>
       <% if (companies.length == 0) { %>
-      <p class="text-lg text-gray-300 mt-2">
+      <p class="text-lg text-neutral-400 mt-1">
         There are no new company accounts to approve, you're all good.
       </p>
       <% } else { %>
 
       <div class="overflow-x-auto mt-2">
         <table
-          class="min-w-full divide-y-2 divide-gray-400 bg-gray-800 text-sm"
+          class="min-w-full divide-y-2 divide-neutral-400 bg-neutral-800 text-sm"
         >
           <thead>
             <tr class="text-left">
               <th
-                class="whitespace-nowrap px-4 py-2 font-semibold text-gray-300"
+                class="whitespace-nowrap px-4 py-2 font-semibold text-neutral-300"
               >
                 #
               </th>
 
               <th
-                class="whitespace-nowrap px-4 py-2 font-semibold text-gray-300"
+                class="whitespace-nowrap px-4 py-2 font-semibold text-neutral-300"
               >
                 Name
               </th>
               <th
-                class="whitespace-nowrap px-4 py-2 font-semibold text-gray-300"
+                class="whitespace-nowrap px-4 py-2 font-semibold text-neutral-300"
               >
                 Email
               </th>
               <th
-                class="whitespace-nowrap px-4 py-2 font-semibold text-gray-300"
+                class="whitespace-nowrap px-4 py-2 font-semibold text-neutral-300"
               >
                 Phone
               </th>
@@ -44,14 +44,18 @@
             </tr>
           </thead>
 
-          <tbody class="divide-y divide-gray-400">
+          <tbody class="divide-y divide-neutral-400">
             <% companies.forEach((company, index) => { %>
             <tr class="text-left">
-              <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-100">
+              <td
+                class="whitespace-nowrap px-4 py-2 font-medium text-neutral-100"
+              >
                 <%= index + 1 %>
               </td>
 
-              <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-100">
+              <td
+                class="whitespace-nowrap px-4 py-2 font-medium text-neutral-100"
+              >
                 <a href="/admin/dashboard/<%= company.id %>">
                   <img
                     src="<%= company.photo %>"
@@ -62,10 +66,10 @@
                 </a>
               </td>
 
-              <td class="whitespace-nowrap px-4 py-2 text-gray-100">
+              <td class="whitespace-nowrap px-4 py-2 text-neutral-100">
                 <%= company.email %>
               </td>
-              <td class="whitespace-nowrap px-4 py-2 text-gray-100">
+              <td class="whitespace-nowrap px-4 py-2 text-neutral-100">
                 <%= company.phone %>
               </td>
               <td class="whitespace-nowrap px-4 py-2">
@@ -83,32 +87,34 @@
       <% } %>
     </div>
 
+    <hr class="border-neutral-500 my-5 max-w-3xl mx-auto" />
+
     <div class="mt-5">
-      <h2 class="text-2xl font-semibold text-gray-300">User Accounts</h2>
+      <h2 class="text-2xl font-semibold text-neutral-300">User Accounts</h2>
       <% if (users.length == 0) { %>
-      <p class="text-lg text-gray-300 mt-2">
+      <p class="text-lg text-neutral-400 mt-1">
         There are no new user accounts to approve, you're all good.
       </p>
       <% } else { %>
       <div class="overflow-x-auto mt-2">
         <table
-          class="min-w-full divide-y-2 divide-gray-400 bg-gray-800 text-sm"
+          class="min-w-full divide-y-2 divide-neutral-400 bg-neutral-800 text-sm"
         >
           <thead>
             <tr class="text-left">
               <th
-                class="whitespace-nowrap px-4 py-2 font-semibold text-gray-300"
+                class="whitespace-nowrap px-4 py-2 font-semibold text-neutral-300"
               >
                 #
               </th>
 
               <th
-                class="whitespace-nowrap px-4 py-2 font-semibold text-gray-300"
+                class="whitespace-nowrap px-4 py-2 font-semibold text-neutral-300"
               >
                 Name
               </th>
               <th
-                class="whitespace-nowrap px-4 py-2 font-semibold text-gray-300"
+                class="whitespace-nowrap px-4 py-2 font-semibold text-neutral-300"
               >
                 Email
               </th>
@@ -117,14 +123,18 @@
             </tr>
           </thead>
 
-          <tbody class="divide-y divide-gray-400">
+          <tbody class="divide-y divide-neutral-400">
             <% users.forEach((user, index) => { %>
             <tr class="text-left">
-              <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-100">
+              <td
+                class="whitespace-nowrap px-4 py-2 font-medium text-neutral-100"
+              >
                 <%= index + 1 %>
               </td>
 
-              <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-100">
+              <td
+                class="whitespace-nowrap px-4 py-2 font-medium text-neutral-100"
+              >
                 <a href="/admin/dashboard/u/<%= user.id %>">
                   <img
                     src="<%= user.photo %>"
@@ -135,7 +145,7 @@
                 </a>
               </td>
 
-              <td class="whitespace-nowrap px-4 py-2 text-gray-100">
+              <td class="whitespace-nowrap px-4 py-2 text-neutral-100">
                 <%= user.email %>
               </td>
 
@@ -155,12 +165,12 @@
     </div>
 
     <div class="mt-5">
-      <h2 class="text-2xl font-semibold text-gray-300">Stats</h2>
+      <h2 class="text-2xl font-semibold text-neutral-300">Stats</h2>
       <dl class="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-3">
         <div
-          class="px-4 py-5 bg-gray-800 shadow rounded-lg overflow-hidden sm:p-6"
+          class="px-4 py-5 bg-neutral-800 shadow rounded-lg overflow-hidden sm:p-6"
         >
-          <dt class="text-sm font-medium text-gray-300 truncate">
+          <dt class="text-sm font-medium text-neutral-300 truncate">
             Total Companies
           </dt>
           <dd class="mt-1 text-3xl font-semibold text-white">
@@ -169,9 +179,9 @@
         </div>
 
         <div
-          class="px-4 py-5 bg-gray-800 shadow rounded-lg overflow-hidden sm:p-6"
+          class="px-4 py-5 bg-neutral-800 shadow rounded-lg overflow-hidden sm:p-6"
         >
-          <dt class="text-sm font-medium text-gray-300 truncate">
+          <dt class="text-sm font-medium text-neutral-300 truncate">
             Total Users
           </dt>
           <dd class="mt-1 text-3xl font-semibold text-white">
@@ -180,9 +190,9 @@
         </div>
 
         <div
-          class="px-4 py-5 bg-gray-800 shadow rounded-lg overflow-hidden sm:p-6"
+          class="px-4 py-5 bg-neutral-800 shadow rounded-lg overflow-hidden sm:p-6"
         >
-          <dt class="text-sm font-medium text-gray-300 truncate">
+          <dt class="text-sm font-medium text-neutral-300 truncate">
             Jobs Posted
           </dt>
           <dd class="mt-1 text-3xl font-semibold text-white">
