@@ -1,0 +1,42 @@
+<%- include("./partials/header", {title: "Choose your role"}) %>
+
+<section class="py-12 sm:py-16">
+  <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+    <div
+      class="flex h-[60vh] overflow-hidden relative w-full rounded-xl border border-neutral-700 bg-neutral-900"
+    >
+      <div class="flex-1">
+        <!-- header -->
+        <div class="bg-neutral-800 px-4 py-2">
+          <p class="font-semibold text-lg">Rowdy Skr</p>
+        </div>
+
+        <!-- messages -->
+        <div class="overflow-y-auto h-full p-4 flex flex-col gap-3">
+          <p class="bg-neutral-600 max-w-fit py-1 px-3 rounded-xl">
+            Message text goes here
+          </p>
+
+          <p
+            class="bg-yellowMain text-neutral-900 max-w-fit py-1 px-3 rounded-xl"
+          >
+            Message text goes here
+          </p>
+        </div>
+
+        <!-- chat input -->
+        <div class="absolute bottom-2 px-4 flex w-full gap-2">
+          <input
+            class="block input-primary px-3 py-2 flex-1"
+            type="text"
+            placeholder="Your message"
+          />
+
+          <button class="btn-primary block px-3 py-1">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include("./partials/footer") %>

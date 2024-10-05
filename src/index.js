@@ -17,6 +17,7 @@ const accountRouter = require("./routes/account");
 const adminRouter = require("./routes/admin");
 const socialRouter = require("./routes/social");
 const postRouter = require("./routes/post");
+const messagesRouter = require("./routes/messages");
 
 const config = require("./config");
 const requireAuth = require("./middleware/requireAuth");
@@ -97,6 +98,8 @@ app.use(
 app.use("/admin", requireAuth, checkRole(config.ROLES.ADMIN), adminRouter);
 
 app.use("/account", requireAuth, accountRouter);
+
+app.use("/messages", requireAuth, messagesRouter);
 
 // enable cookies when serving behind a proxy
 app.enable("trust proxy");
