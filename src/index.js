@@ -5,6 +5,8 @@ const express = require("express");
 const morgan = require("morgan");
 const helmet = require("helmet");
 const cookieSession = require("cookie-session");
+const http = require("http");
+const { Server } = require("socket.io");
 
 require("express-async-errors"); // handle async errors
 
@@ -25,6 +27,9 @@ const checkRole = require("./middleware/checkRole");
 const checkVerified = require("./middleware/checkVerified");
 
 const app = express();
+const server = http.createServer(app);
+
+const io = new Server(server);
 
 app.set("trust proxy", 1);
 app.use(
@@ -42,7 +47,7 @@ app.use(
   helmet.contentSecurityPolicy({
     directives: {
       "img-src": ["'self'", "https: data: blob:"],
-      "script-src": ["'self'", "'unsafe-inline'"],
+      "script-src": ["'self'", "'unsafe-inline'", "https://cdn.socket.io/"],
     },
   })
 );
@@ -110,4 +115,14 @@ app.use((err, req, res, next) => {
   res.status(status).send(err);
 });
 
-app.listen(config.PORT, () => console.log("Listening on port " + config.PORT));
+io.on("connection", (socket) => {
+  console.log("user connected");
+
+  socket.on("chat-message", (msg) => {
+    io.emit("chat-message", msg);
+  });
+});
+
+server.listen(config.PORT, () =>
+  console.log("Listening on port " + config.PORT)
+);

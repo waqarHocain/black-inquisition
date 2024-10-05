@@ -1,4 +1,4 @@
-<%- include("./partials/header", {title: "Choose your role"}) %>
+<%- include("./partials/header", {title: "Chat"}) %>
 
 <section class="py-12 sm:py-16">
   <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
@@ -12,7 +12,9 @@
         </div>
 
         <!-- messages -->
-        <div class="overflow-y-auto h-full p-4 flex flex-col gap-3">
+        <div
+          class="messages-container overflow-y-auto h-full p-4 flex flex-col gap-3"
+        >
           <p class="bg-neutral-600 max-w-fit py-1 px-3 rounded-xl">
             Message text goes here
           </p>
@@ -25,18 +27,58 @@
         </div>
 
         <!-- chat input -->
-        <div class="absolute bottom-2 px-4 flex w-full gap-2">
-          <input
-            class="block input-primary px-3 py-2 flex-1"
-            type="text"
-            placeholder="Your message"
-          />
+        <div class="absolute bottom-2 px-4 w-full">
+          <form class="chat-form flex w-full gap-2">
+            <input
+              class="chat-input block input-primary px-3 py-2 flex-1"
+              type="text"
+              placeholder="Your message"
+            />
 
-          <button class="btn-primary block px-3 py-1">Send</button>
+            <button class="btn-primary block px-3 py-1" type="submit">
+              Send
+            </button>
+          </form>
         </div>
       </div>
     </div>
   </div>
 </section>
+
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script>
+  const socket = io();
+
+  const msgsContainer = document.querySelector(".messages-container");
+  const form = document.querySelector(".chat-form");
+  const input = document.querySelector(".chat-input");
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const message = input.value.trim();
+
+    // don't send empty messages
+    if (message === "") return null;
+
+    socket.emit("chat-message", message);
+
+    // clear input field
+    input.value = "";
+  });
+
+  socket.on("chat-message", (msg) => {
+    const p = document.createElement("p");
+    p.classList.add(
+      "bg-neutral-600",
+      "max-w-fit",
+      "py-1",
+      "px-3",
+      "rounded-xl"
+    );
+    p.textContent = msg;
+
+    msgsContainer.appendChild(p);
+  });
+</script>
 
 <%- include("./partials/footer") %>
