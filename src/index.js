@@ -11,6 +11,7 @@ const { Server } = require("socket.io");
 require("express-async-errors"); // handle async errors
 
 // local imports
+const db = require("./services/db");
 const publicRouter = require("./routes/public");
 const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
@@ -124,12 +125,27 @@ io.on("connection", (socket) => {
 
   console.log("user connected to socket: ", socket.request.session.email);
 
-  socket.on("chat-message", (data) => {
+  socket.on("chat-message", async (data) => {
     const userId = socket.request.session.id;
     const toUser = data.toUser;
     const roomId = [userId, toUser].sort((a, b) => a - b).join("-");
+    if (!data.from || !data.toUser || !data.message) {
+      console.error("Invalid message format");
+      return;
+    }
 
-    io.emit(roomId, data);
+    try {
+      await db.message.create({
+        data: {
+          fromUserId: data.from,
+          toUserId: data.toUser,
+          message: data.message,
+        },
+      });
+      io.emit(roomId, data);
+    } catch (e) {
+      console.error(e);
+    }
   });
 });
 

@@ -14,7 +14,23 @@ const msgUser = async (req, res) => {
   });
   if (!user) return res.status(404);
 
-  res.render("messageUser", { user });
+  const messages = await db.message.findMany({
+    where: {
+      OR: [
+        {
+          fromUserId: req.session.id,
+        },
+        {
+          toUserId: req.session.id,
+        },
+      ],
+    },
+    orderBy: {
+      createdAt: "asc",
+    },
+  });
+
+  res.render("messageUser", { user, messages });
 };
 
 const listChats = async (req, res) => {

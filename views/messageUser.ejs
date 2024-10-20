@@ -15,27 +15,24 @@
         <div
           class="messages-container overflow-y-auto h-full p-4 flex flex-col gap-3"
         >
-          <!-- chat message  -->
+          <% if (messages && messages.length > 0) { %> <% for (const msg of
+          messages) { %> <% if (String(msg.fromUserId) === locals.userId) { %>
           <div class="max-w-lg flex gap-x-2 sm:gap-x-4">
             <p
               class="bg-neutral-900 text-white border border-neutral-700 rounded-2xl px-4 py-2 space-y-3"
             >
-              Message text goes here
+              <%= msg.message %>
             </p>
           </div>
-
-          <!-- chat message -->
+          <% } else { %>
           <div class="max-w-md ms-auto flex justify-end gap-x-2 sm:gap-x-4">
             <p
               class="bg-yellowMain text-neutral-900 rounded-2xl px-4 py-2 space-y-3"
             >
-              Message text goes here without a do and crisp. Message text goes
-              here without a do and crisp. Message text goes here without a do
-              and crisp. Message text goes here without a do and crisp. Message
-              text goes here without a do and crisp. Message text goes here
-              without a do and crisp.
+              <%= msg.message %>
             </p>
           </div>
+          <% } %> <% } %> <% } %>
         </div>
 
         <!-- chat input -->
@@ -89,29 +86,14 @@
   });
 
   socket.on(roomId, (data) => {
-    const p = document.createElement("p");
+    let msgHtml;
     if (data.from === userId) {
-      p.classList.add(
-        "bg-neutral-600",
-        "max-w-fit",
-        "py-1",
-        "px-3",
-        "rounded-xl"
-      );
+      msgHtml = `<div class="max-w-lg flex gap-x-2 sm:gap-x-4"><p class="bg-neutral-900 text-white border border-neutral-700 rounded-2xl px-4 py-2 space-y-3">${data.message}</p></div>`;
     } else {
-      p.classList.add(
-        "bg-yellowMain",
-        "text-neutral-900",
-        "max-w-fit",
-        "py-1",
-        "px-3",
-        "rounded-xl"
-      );
+      msgHtml = `<div class="max-w-md ms-auto flex justify-end gap-x-2 sm:gap-x-4"><p class="bg-yellowMain text-neutral-900 rounded-2xl px-4 py-2 space-y-3">${data.message}</p></div>`;
     }
 
-    p.textContent = data.message;
-
-    msgsContainer.appendChild(p);
+    msgsContainer.innerHTML += msgHtml;
   });
 </script>
 
