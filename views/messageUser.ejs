@@ -3,27 +3,39 @@
 <section class="py-12 sm:py-16">
   <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
     <div
-      class="flex h-[60vh] overflow-hidden relative w-full rounded-xl border border-neutral-700 bg-neutral-900"
+      class="flex h-[60vh] overflow-hidden relative w-full rounded-xl border border-neutral-700 bg-neutral-800"
     >
       <div class="flex-1">
         <!-- header -->
-        <div class="bg-neutral-800 px-4 py-2">
-          <p class="font-semibold text-lg">Rowdy Skr</p>
+        <div class="bg-neutral-900 px-4 py-2">
+          <p class="font-semibold text-lg"><%= user.name %></p>
         </div>
 
         <!-- messages -->
         <div
           class="messages-container overflow-y-auto h-full p-4 flex flex-col gap-3"
         >
-          <p class="bg-neutral-600 max-w-fit py-1 px-3 rounded-xl">
-            Message text goes here
-          </p>
+          <!-- chat message  -->
+          <div class="max-w-lg flex gap-x-2 sm:gap-x-4">
+            <p
+              class="bg-neutral-900 text-white border border-neutral-700 rounded-2xl px-4 py-2 space-y-3"
+            >
+              Message text goes here
+            </p>
+          </div>
 
-          <p
-            class="bg-yellowMain text-neutral-900 max-w-fit py-1 px-3 rounded-xl"
-          >
-            Message text goes here
-          </p>
+          <!-- chat message -->
+          <div class="max-w-md ms-auto flex justify-end gap-x-2 sm:gap-x-4">
+            <p
+              class="bg-yellowMain text-neutral-900 rounded-2xl px-4 py-2 space-y-3"
+            >
+              Message text goes here without a do and crisp. Message text goes
+              here without a do and crisp. Message text goes here without a do
+              and crisp. Message text goes here without a do and crisp. Message
+              text goes here without a do and crisp. Message text goes here
+              without a do and crisp.
+            </p>
+          </div>
         </div>
 
         <!-- chat input -->
@@ -40,6 +52,11 @@
             </button>
           </form>
         </div>
+
+        <div class="hidden">
+          <input value="<%= locals.userId %>" id="userId" class="hidden" />
+          <input value="<%= user.id %>" id="toUser" class="hidden" />
+        </div>
       </div>
     </div>
   </div>
@@ -52,6 +69,11 @@
   const msgsContainer = document.querySelector(".messages-container");
   const form = document.querySelector(".chat-form");
   const input = document.querySelector(".chat-input");
+  const userId = document.getElementById("userId").value;
+  const toUser = document.getElementById("toUser").value;
+
+  const roomId = [userId, toUser].sort((a, b) => a - b).join("-");
+  console.log({ roomId });
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -60,22 +82,34 @@
     // don't send empty messages
     if (message === "") return null;
 
-    socket.emit("chat-message", message);
+    socket.emit("chat-message", { from: userId, toUser, message });
 
     // clear input field
     input.value = "";
   });
 
-  socket.on("chat-message", (msg) => {
+  socket.on(roomId, (data) => {
     const p = document.createElement("p");
-    p.classList.add(
-      "bg-neutral-600",
-      "max-w-fit",
-      "py-1",
-      "px-3",
-      "rounded-xl"
-    );
-    p.textContent = msg;
+    if (data.from === userId) {
+      p.classList.add(
+        "bg-neutral-600",
+        "max-w-fit",
+        "py-1",
+        "px-3",
+        "rounded-xl"
+      );
+    } else {
+      p.classList.add(
+        "bg-yellowMain",
+        "text-neutral-900",
+        "max-w-fit",
+        "py-1",
+        "px-3",
+        "rounded-xl"
+      );
+    }
+
+    p.textContent = data.message;
 
     msgsContainer.appendChild(p);
   });

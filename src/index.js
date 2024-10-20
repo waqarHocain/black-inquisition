@@ -31,14 +31,14 @@ const server = http.createServer(app);
 
 const io = new Server(server);
 
+const sessionMiddleware = cookieSession({
+  secret: config.SESSION_SECRET,
+  maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+  secure: process.env.NODE_ENV === "production" ? true : false,
+});
+
 app.set("trust proxy", 1);
-app.use(
-  cookieSession({
-    secret: config.SESSION_SECRET,
-    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-    secure: process.env.NODE_ENV === "production" ? true : false,
-  })
-);
+app.use(sessionMiddleware);
 
 // set different http headers for security
 app.use(helmet());
@@ -115,11 +115,21 @@ app.use((err, req, res, next) => {
   res.status(status).send(err);
 });
 
-io.on("connection", (socket) => {
-  console.log("user connected");
+io.engine.use(sessionMiddleware);
 
-  socket.on("chat-message", (msg) => {
-    io.emit("chat-message", msg);
+io.on("connection", (socket) => {
+  if (!socket.request.session.id) {
+    socket.disconnect();
+  }
+
+  console.log("user connected to socket: ", socket.request.session.email);
+
+  socket.on("chat-message", (data) => {
+    const userId = socket.request.session.id;
+    const toUser = data.toUser;
+    const roomId = [userId, toUser].sort((a, b) => a - b).join("-");
+
+    io.emit(roomId, data);
   });
 });
 
