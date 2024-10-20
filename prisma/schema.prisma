@@ -30,6 +30,18 @@ model User {
   sentFriendRequests     FriendRequest[]   @relation("requester")
   receivedFriendRequests FriendRequest[]   @relation("receiver")
   likedPosts             Like[]
+  sentMessages           Message[]         @relation("sentMessage")
+  receivedMessages       Message[]         @relation("receivedMessage")
+}
+
+model Message {
+  id         BigInt   @id @default(autoincrement())
+  from       User     @relation("sentMessage", fields: [fromUserId], references: [id])
+  fromUserId BigInt
+  to         User     @relation("receivedMessage", fields: [toUserId], references: [id])
+  toUserId   BigInt
+  message    String
+  createdAt  DateTime @default(now())
 }
 
 model Friend {
