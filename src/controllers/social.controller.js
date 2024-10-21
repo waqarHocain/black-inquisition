@@ -112,17 +112,22 @@ const getPublicProfile = async (req, res) => {
   let relationship = null;
 
   const userId = req.session.id;
+
   if (userId) {
     const fRequest = await db.friendRequest.findFirst({
       where: {
         OR: [
           {
             requesterId: userId,
-            receiverId: id,
+            AND: {
+              receiverId: id,
+            },
           },
           {
             requesterId: id,
-            receiverId: userId,
+            AND: {
+              receiverId: userId,
+            },
           },
         ],
       },
@@ -132,7 +137,10 @@ const getPublicProfile = async (req, res) => {
       isFriend = true;
       const friend = await db.friend.findFirst({
         where: {
-          OR: [{ userId }, { friendId: userId }],
+          OR: [
+            { userId, friendId: id },
+            { userId: id, friendId: userId },
+          ],
         },
       });
       relationship = deserializeRelation(friend.relationship);
