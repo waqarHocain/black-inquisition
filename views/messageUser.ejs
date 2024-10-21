@@ -248,10 +248,9 @@
             </p>
           </div>
 
-          <% if (messages && messages.length > 0) { %>
-          <ul class="messages-container mt-16 space-y-5">
-            <% for (const msg of messages) { %> <% if (String(msg.fromUserId)
-            === locals.userId) { %>
+          <ul class="messages-container max-w-3xl mx-auto mt-16 space-y-5">
+            <% if (messages && messages.length > 0) { %> <% for (const msg of
+            messages) { %> <% if (String(msg.fromUserId) === locals.userId) { %>
             <li class="flex gap-x-2 sm:gap-x-4">
               <div
                 class="border rounded-lg p-4 space-y-3 bg-neutral-900 border-neutral-700"
@@ -269,13 +268,12 @@
                 </div>
               </div>
             </li>
-            <% } } %>
+            <% } } %> <% } else { %>
+            <p class="no-msgs text-lg text-neutral-500 my-16 text-center">
+              No messages so far.
+            </p>
+            <% } %>
           </ul>
-          <% } else { %>
-          <p class="text-lg text-neutral-500 my-16 text-center">
-            No messages so far.
-          </p>
-          <% } %>
 
           <div
             class="max-w-4xl mt-5 mx-auto sticky bottom-0 z-10 border-t pt-2 pb-4 sm:pt-4 sm:pb-6 px-4 sm:px-6 lg:px-0 bg-neutral-900 border-neutral-700"
@@ -293,9 +291,10 @@
                   <div class="flex justify-end items-center">
                     <div class="flex items-center">
                       <button
-                        type="button"
+                        type="submit"
                         class="inline-flex shrink-0 justify-center items-center p-2 rounded-lg text-neutral-950 bg-yellowMain hover:bg-yellow-400 focus:z-10 focus:outline-none focus:bg-yellow-400"
                       >
+                        <span class="text-sm font-bold mr-2">Send</span>
                         <svg
                           class="shrink-0 size-3.5"
                           xmlns="http://www.w3.org/2000/svg"
@@ -461,6 +460,7 @@ c117.8,0,213.3,95.5,213.3,213.3C469.3,373.8,373.8,469.3,256,469.3z"
       const socket = io();
 
       const msgsContainer = document.querySelector(".messages-container");
+      const noMsgs = document.querySelector(".no-msgs");
       const form = document.querySelector(".chat-form");
       const input = document.querySelector(".chat-input");
       const userId = document.getElementById("userId").value;
@@ -481,6 +481,8 @@ c117.8,0,213.3,95.5,213.3,213.3C469.3,373.8,373.8,469.3,256,469.3z"
         // clear input field
         input.value = "";
         window.scrollTo(0, document.body.scrollHeight); // scroll to bottom
+        // delete no messages element, if it is visible
+        if (noMsgs) noMsgs.remove();
       });
 
       socket.on(roomId, (data) => {
@@ -502,6 +504,9 @@ c117.8,0,213.3,95.5,213.3,213.3C469.3,373.8,373.8,469.3,256,469.3z"
               </div>
             </li>`;
         }
+
+        // delete no messages element, if it is visible
+        if (noMsgs) noMsgs.remove();
 
         msgsContainer.innerHTML += msgHtml;
         window.scrollTo(0, document.body.scrollHeight); // scroll to bottom
